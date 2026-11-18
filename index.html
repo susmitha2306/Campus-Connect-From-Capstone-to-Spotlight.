@@ -1,0 +1,3848 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Connect: From Capstone to Spotlight.</title>
+    <meta name="description" content="Centralized Student Project Showcase Portal for exploring final-year projects, departments, and student achievements." />
+    <meta property="og:title" content="Campus Connect: From Capstone to Spotlight." />
+    <meta property="og:description" content="Discover Innovation. Explore Projects. Inspire the Future across six engineering and computing departments." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg-canvas: #F4F9FF;
+        --bg-secondary: #EAF4FF;
+        --bg-surface: #FFFFFF;
+        --bg-subtle: #EAF4FF;
+        --light-blue: #D6EAFE;
+        --sky-blue: #B8D9F8;
+        --navy-950: #102A47;
+        --navy-900: #193B60;
+        --navy-800: #214B78;
+        --cobalt-600: #2878C8;
+        --cobalt-700: #1E63A8;
+        --cobalt-500: #6AADE4;
+        --cobalt-50: #EAF4FF;
+        --text-primary: #193B60;
+        --text-secondary: #40546B;
+        --text-muted: #5C738D;
+        --border-hairline: #D6EAFE;
+        --border-strong: #B8D9F8;
+        --success-bg: #ECFDF5;
+        --success-text: #065F46;
+        --warning-bg: #FFFBEB;
+        --warning-text: #92400E;
+        --error-bg: #FEF2F2;
+        --error-text: #991B1B;
+        --container-max: 1220px;
+        --sidebar-width: 256px;
+        --shadow-card: 0 10px 28px -14px rgba(40, 120, 200, 0.16), 0 2px 8px -4px rgba(25, 59, 96, 0.06);
+        --shadow-card-hover: 0 20px 40px -16px rgba(40, 120, 200, 0.25), 0 6px 16px -6px rgba(25, 59, 96, 0.08);
+        --shadow-btn-glow: 0 10px 24px -6px rgba(40, 120, 200, 0.48), 0 0 0 3px rgba(106, 173, 228, 0.24);
+      }
+
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--bg-canvas);
+        color: var(--text-secondary);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      h1, h2, h3, h4, .font-display {
+        font-family: 'Poppins', system-ui, sans-serif;
+        color: var(--text-primary);
+      }
+
+      .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .tabular-nums {
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* 6. Animated Loading Screen with CampusConnect Branding */
+      .cc-loading-screen {
+        position: fixed;
+        inset: 0;
+        z-index: 120;
+        background: linear-gradient(160deg, #FFFFFF 0%, #F4F9FF 55%, #EAF4FF 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        transition: opacity 340ms cubic-bezier(0.16, 1, 0.3, 1), visibility 340ms;
+      }
+
+      .cc-loading-screen.fade-out {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      .cc-loader-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 14px;
+        max-width: 440px;
+        width: 100%;
+      }
+
+      .cc-loader-mark {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #2878C8 0%, #6AADE4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 14px 28px -10px rgba(40, 120, 200, 0.45);
+        animation: ccLogoPulse 1.8s ease-in-out infinite;
+      }
+
+      @keyframes ccLogoPulse {
+        0%, 100% { transform: translateY(0) scale(1); }
+        50% { transform: translateY(-3px) scale(1.04); }
+      }
+
+      .cc-loader-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.375rem;
+        font-weight: 700;
+        line-height: 1.3;
+        letter-spacing: -0.02em;
+        color: var(--navy-900);
+        text-wrap: balance;
+      }
+
+      .cc-loader-sub {
+        font-size: 0.84rem;
+        color: var(--text-muted);
+        margin-top: -6px;
+      }
+
+      .cc-loader-track {
+        width: 210px;
+        height: 5px;
+        border-radius: 99px;
+        background-color: var(--light-blue);
+        overflow: hidden;
+      }
+
+      .cc-loader-bar {
+        width: 45%;
+        height: 100%;
+        border-radius: 99px;
+        background: linear-gradient(90deg, #2878C8 0%, #6AADE4 100%);
+        animation: ccProgressSweep 1.15s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
+
+      @keyframes ccProgressSweep {
+        0% { transform: translateX(-110%); }
+        100% { transform: translateX(240%); }
+      }
+
+      /* 8. Subtle Floating Background Elements */
+      .app-shell {
+        position: relative;
+        display: flex;
+        min-height: 100vh;
+        background-color: var(--bg-canvas);
+      }
+
+      .bg-ambient-layer {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .bg-float-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(72px);
+        opacity: 0.55;
+        will-change: transform;
+      }
+
+      .bg-float-orb.orb-1 {
+        width: 420px;
+        height: 420px;
+        top: -120px;
+        right: -90px;
+        background: radial-gradient(circle, #D6EAFE 0%, rgba(214, 234, 254, 0) 72%);
+        animation: floatSoft 18s ease-in-out infinite alternate;
+      }
+
+      .bg-float-orb.orb-2 {
+        width: 360px;
+        height: 360px;
+        bottom: -100px;
+        left: 180px;
+        background: radial-gradient(circle, #B8D9F8 0%, rgba(184, 217, 248, 0) 72%);
+        animation: floatSoft 22s ease-in-out infinite alternate-reverse;
+      }
+
+      @keyframes floatSoft {
+        0% { transform: translate3d(0, 0, 0) scale(1); }
+        100% { transform: translate3d(20px, -18px, 0) scale(1.06); }
+      }
+
+      /* Modern White Sidebar with Blue Active Menu Indicators */
+      .portal-sidebar {
+        display: none;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        width: var(--sidebar-width);
+        flex-shrink: 0;
+        z-index: 35;
+        background-color: #FFFFFF;
+        border-right: 1px solid var(--border-hairline);
+        box-shadow: 4px 0 24px -18px rgba(40, 120, 200, 0.16);
+        padding: 22px 14px;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @media (min-width: 1024px) {
+        .portal-sidebar {
+          display: flex;
+        }
+      }
+
+      .sidebar-brand-lockup {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 4px 10px 18px;
+        margin-bottom: 14px;
+        border-bottom: 1px solid var(--border-hairline);
+        text-decoration: none;
+      }
+
+      .brand-emblem {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #2878C8 0%, #6AADE4 100%);
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        box-shadow: 0 6px 14px -6px rgba(40, 120, 200, 0.45);
+      }
+
+      .brand-wordmark {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--navy-900);
+        text-decoration: none;
+        white-space: nowrap;
+        flex-shrink: 0;
+      }
+
+      .sidebar-menu {
+        display: grid;
+        gap: 5px;
+      }
+
+      .sidebar-nav-btn {
+        position: relative;
+        appearance: none;
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 14px;
+        border: 1px solid transparent;
+        border-radius: 11px;
+        background: transparent;
+        color: var(--text-secondary);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 500;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), color 180ms, border-color 180ms, transform 180ms;
+      }
+
+      .sidebar-nav-btn::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 9px;
+        bottom: 9px;
+        width: 3.5px;
+        border-radius: 99px;
+        background-color: var(--cobalt-600);
+        opacity: 0;
+        transform: scaleY(0.4);
+        transition: opacity 180ms, transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .sidebar-nav-btn:hover {
+        background-color: var(--bg-canvas);
+        color: var(--navy-900);
+        transform: translateX(2px);
+      }
+
+      .sidebar-nav-btn.active {
+        background-color: var(--bg-secondary);
+        border-color: var(--light-blue);
+        color: var(--cobalt-600);
+        font-weight: 600;
+      }
+
+      .sidebar-nav-btn.active::before {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+
+      .sidebar-foot-box {
+        padding: 14px;
+        border-radius: 14px;
+        background-color: var(--bg-canvas);
+        border: 1px solid var(--border-hairline);
+        display: grid;
+        gap: 8px;
+      }
+
+      .sidebar-foot-title {
+        font-family: 'Poppins', sans-serif;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--navy-900);
+      }
+
+      .sidebar-foot-copy {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        line-height: 1.45;
+      }
+
+      .workspace-main {
+        position: relative;
+        z-index: 1;
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .container {
+        width: 100%;
+        max-width: var(--container-max);
+        margin: 0 auto;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      @media (min-width: 768px) {
+        .container {
+          padding-left: 28px;
+          padding-right: 28px;
+        }
+      }
+
+      /* Clean Top Navigation Bar */
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        background-color: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-hairline);
+      }
+
+      .header-inner {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .header-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        min-width: 0;
+      }
+
+      .header-mobile-brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+      }
+
+      @media (min-width: 1024px) {
+        .header-mobile-brand {
+          display: none;
+        }
+      }
+
+      .header-breadcrumb {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--navy-900);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      @media (min-width: 1024px) {
+        .header-breadcrumb {
+          display: flex;
+        }
+      }
+
+      .header-breadcrumb-muted {
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-shrink: 0;
+      }
+
+      /* 3. Soft Blue Glowing Button Hover */
+      .btn-primary-sm {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 40px;
+        padding: 8px 18px;
+        border: none;
+        border-radius: 10px;
+        background-color: var(--cobalt-600);
+        color: #FFFFFF;
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: background-color 180ms cubic-bezier(0.16, 1, 0.3, 1), transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms;
+      }
+
+      .btn-primary-sm:hover {
+        background-color: var(--cobalt-700);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-btn-glow);
+      }
+
+      .btn-outline-sm {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 40px;
+        padding: 8px 14px;
+        border: 1px solid var(--border-strong);
+        border-radius: 10px;
+        background-color: #FFFFFF;
+        color: var(--navy-900);
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: background-color 160ms, border-color 160ms, color 160ms, box-shadow 180ms, transform 160ms;
+      }
+
+      .btn-outline-sm:hover {
+        background-color: var(--bg-secondary);
+        border-color: var(--cobalt-500);
+        color: var(--cobalt-700);
+        box-shadow: 0 6px 16px -8px rgba(40, 120, 200, 0.25);
+        transform: translateY(-1px);
+      }
+
+      .mobile-menu-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border: 1px solid var(--border-strong);
+        border-radius: 10px;
+        background: #FFFFFF;
+        color: var(--navy-900);
+        cursor: pointer;
+        transition: background-color 160ms, border-color 160ms;
+      }
+
+      .mobile-menu-btn:hover {
+        background: var(--bg-secondary);
+      }
+
+      @media (min-width: 1024px) {
+        .mobile-menu-btn {
+          display: none;
+        }
+      }
+
+      /* 7. Smooth Sidebar & Drawer Transitions */
+      .mobile-drawer {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        border-top: 0 solid var(--border-hairline);
+        background: #FFFFFF;
+        padding: 0 20px;
+        transition: max-height 260ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms, padding 220ms;
+      }
+
+      .mobile-drawer.open {
+        max-height: 560px;
+        opacity: 1;
+        border-top-width: 1px;
+        padding: 14px 20px 18px;
+      }
+
+      .mobile-nav-list {
+        display: grid;
+        gap: 6px;
+      }
+
+      .mobile-nav-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 14px;
+        border: none;
+        border-radius: 10px;
+        background: transparent;
+        font-family: inherit;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--navy-900);
+        text-align: left;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background-color 150ms, color 150ms;
+      }
+
+      .mobile-nav-item.active {
+        background-color: var(--bg-secondary);
+        color: var(--cobalt-600);
+        font-weight: 600;
+      }
+
+      /* Email Verification Notice Bar */
+      .verify-bar {
+        background-color: var(--warning-bg);
+        border-bottom: 1px solid #FDE68A;
+        color: var(--warning-text);
+        padding: 10px 0;
+        font-size: 0.875rem;
+      }
+
+      .verify-bar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .verify-bar-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .verify-link-btn {
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #78350F;
+        text-decoration: underline;
+        cursor: pointer;
+        padding: 4px 2px;
+      }
+
+      /* 1. Smooth Fade-In & Slide-Up Page Transitions */
+      .main-content {
+        flex: 1;
+        padding-bottom: 64px;
+      }
+
+      .view-section {
+        display: none;
+      }
+
+      .view-section.active {
+        display: block;
+        animation: ccPageEnter 280ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes ccPageEnter {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Hero Split */
+      .hero-section {
+        padding: 32px 0 28px;
+        background: linear-gradient(180deg, #FFFFFF 0%, var(--bg-secondary) 55%, var(--bg-canvas) 100%);
+        border-bottom: 1px solid var(--border-hairline);
+      }
+
+      .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        align-items: stretch;
+        background: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: 22px;
+        padding: 26px;
+        box-shadow: var(--shadow-card);
+      }
+
+      @media (min-width: 1024px) {
+        .hero-grid {
+          grid-template-columns: 1.12fr 0.88fr;
+          gap: 36px;
+          padding: 34px;
+        }
+      }
+
+      .hero-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .hero-kicker {
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: var(--cobalt-600);
+        margin-bottom: 10px;
+      }
+
+      .hero-title {
+        margin: 0 0 14px;
+        font-size: clamp(1.9rem, 3.2vw, 2.75rem);
+        font-weight: 800;
+        line-height: 1.14;
+        letter-spacing: -0.025em;
+        color: var(--navy-900);
+        text-wrap: balance;
+      }
+
+      .hero-lead {
+        margin: 0 0 24px;
+        font-size: 1rem;
+        line-height: 1.65;
+        color: var(--text-secondary);
+        max-width: 58ch;
+      }
+
+      .hero-search-form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        background: var(--bg-canvas);
+        padding: 7px;
+        border: 1px solid var(--border-strong);
+        border-radius: 13px;
+        transition: border-color 160ms, box-shadow 180ms;
+      }
+
+      .hero-search-form:focus-within {
+        border-color: var(--cobalt-600);
+        box-shadow: 0 0 0 3.5px rgba(40, 120, 200, 0.14);
+        background: #FFFFFF;
+      }
+
+      @media (min-width: 640px) {
+        .hero-search-form {
+          flex-direction: row;
+          align-items: center;
+        }
+      }
+
+      .hero-search-input-wrap {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-left: 10px;
+      }
+
+      .hero-search-input {
+        width: 100%;
+        min-height: 40px;
+        border: none;
+        outline: none;
+        background: transparent;
+        font-family: inherit;
+        font-size: 0.9375rem;
+        color: var(--navy-900);
+      }
+
+      .hero-cta-btn {
+        min-height: 44px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        background-color: var(--cobalt-600);
+        color: #FFFFFF;
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: background-color 160ms, transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms;
+      }
+
+      .hero-cta-btn:hover {
+        background-color: var(--cobalt-700);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-btn-glow);
+      }
+
+      .hero-media-frame {
+        position: relative;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border-hairline);
+        background-color: var(--bg-secondary);
+        min-height: 260px;
+      }
+
+      .hero-media-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .hero-media-frame:hover .hero-media-img {
+        transform: scale(1.045);
+      }
+
+      .hero-media-caption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 24px 20px 14px;
+        background: linear-gradient(180deg, transparent 0%, rgba(25, 59, 96, 0.88) 100%);
+        color: #FFFFFF;
+        font-size: 0.84rem;
+      }
+
+      /* Full-Width 4-Column Stats Row */
+      .stats-strip {
+        margin-top: 24px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+
+      @media (min-width: 768px) {
+        .stats-strip {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .stat-cell {
+        padding: 18px 20px;
+        background-color: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: 16px;
+        box-shadow: var(--shadow-card);
+        transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms, box-shadow 200ms;
+      }
+
+      .stat-cell:hover {
+        transform: translateY(-2px);
+        border-color: var(--sky-blue);
+        box-shadow: var(--shadow-card-hover);
+      }
+
+      .stat-label {
+        font-size: 0.8125rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        margin-bottom: 4px;
+      }
+
+      .stat-value {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: var(--cobalt-600);
+        font-variant-numeric: tabular-nums;
+        line-height: 1.15;
+      }
+
+      /* Section Headers */
+      .section-block {
+        padding-top: 40px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .section-head h2 {
+        margin: 0 0 4px;
+        font-size: 1.45rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--navy-900);
+      }
+
+      .section-head p {
+        margin: 0;
+        font-size: 0.9375rem;
+        color: var(--text-secondary);
+      }
+
+      .section-link-btn {
+        background: none;
+        border: none;
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--cobalt-600);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 4px;
+        white-space: nowrap;
+        transition: color 150ms, transform 150ms;
+      }
+
+      .section-link-btn:hover {
+        color: var(--cobalt-700);
+        transform: translateX(2px);
+      }
+
+      /* Department Grid */
+      .dept-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      @media (min-width: 640px) {
+        .dept-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 1180px) {
+        .dept-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .dept-card {
+        background-color: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: 16px;
+        padding: 22px;
+        text-align: left;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 14px;
+        box-shadow: var(--shadow-card);
+        transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms, box-shadow 220ms;
+      }
+
+      .dept-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--cobalt-500);
+        box-shadow: var(--shadow-card-hover);
+      }
+
+      .dept-card-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .dept-code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--cobalt-600);
+      }
+
+      .dept-count {
+        font-size: 0.8125rem;
+        color: var(--text-muted);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .dept-card h3 {
+        margin: 0 0 6px;
+        font-size: 1.04rem;
+        font-weight: 700;
+        color: var(--navy-900);
+        line-height: 1.32;
+      }
+
+      .dept-card p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .dept-card-foot {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-hairline);
+        font-size: 0.8125rem;
+        color: var(--text-muted);
+      }
+
+      /* 2. Gentle 3D Hover Effects & 5. Smooth Image Zoom on Project Cards */
+      .project-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 22px;
+        perspective: 1200px;
+      }
+
+      @media (min-width: 768px) {
+        .project-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 1240px) {
+        .project-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .project-card {
+        background-color: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: 18px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        box-shadow: var(--shadow-card);
+        transform-style: preserve-3d;
+        transition: transform 240ms cubic-bezier(0.16, 1, 0.3, 1), border-color 200ms, box-shadow 240ms;
+      }
+
+      .project-card:hover {
+        transform: translateY(-5px) rotateX(1.6deg) rotateY(-1.2deg) scale(1.006);
+        border-color: var(--cobalt-500);
+        box-shadow: var(--shadow-card-hover);
+      }
+
+      .project-thumb-wrap {
+        position: relative;
+        aspect-ratio: 4 / 3;
+        background: linear-gradient(135deg, #2878C8 0%, #6AADE4 100%);
+        overflow: hidden;
+      }
+
+      .project-thumb {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .project-card:hover .project-thumb {
+        transform: scale(1.055);
+      }
+
+      .project-thumb-fallback {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        text-align: center;
+        color: #FFFFFF;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 0.95rem;
+      }
+
+      .project-card-body {
+        padding: 20px 22px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .meta-line {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        font-size: 0.8125rem;
+        color: var(--text-muted);
+      }
+
+      .meta-line strong {
+        color: var(--cobalt-600);
+        font-weight: 600;
+      }
+
+      .project-card-title {
+        margin: 0;
+        font-size: 1.08rem;
+        font-weight: 700;
+        line-height: 1.32;
+        color: var(--navy-900);
+      }
+
+      .project-card-desc {
+        margin: 0;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        line-height: 1.55;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .project-card-details {
+        margin-top: auto;
+        padding-top: 10px;
+        display: grid;
+        gap: 4px;
+        font-size: 0.8125rem;
+        color: var(--text-secondary);
+      }
+
+      .project-tech-line {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.75rem;
+        color: var(--cobalt-600);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .project-card-actions {
+        padding: 14px 22px 18px;
+        border-top: 1px solid var(--border-hairline);
+        background-color: #FAFCFF;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .card-btn-primary {
+        flex: 1;
+        min-height: 40px;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 10px;
+        background-color: var(--cobalt-600);
+        color: #FFFFFF;
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: background-color 160ms, transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms;
+      }
+
+      .card-btn-primary:hover {
+        background-color: var(--cobalt-700);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-btn-glow);
+      }
+
+      /* 9. Elegant Bookmark Animation */
+      .card-btn-icon {
+        min-width: 40px;
+        min-height: 40px;
+        padding: 8px 10px;
+        border: 1px solid var(--border-strong);
+        border-radius: 10px;
+        background-color: #FFFFFF;
+        color: var(--text-secondary);
+        font-family: inherit;
+        font-size: 0.8125rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        white-space: nowrap;
+        transition: background-color 160ms, color 160ms, border-color 160ms, transform 160ms;
+      }
+
+      .card-btn-icon:hover {
+        background-color: var(--bg-secondary);
+        border-color: var(--cobalt-500);
+        color: var(--cobalt-600);
+        transform: translateY(-1px);
+      }
+
+      .card-btn-icon.saved {
+        background-color: var(--bg-secondary);
+        border-color: var(--cobalt-600);
+        color: var(--cobalt-600);
+        box-shadow: 0 4px 12px -4px rgba(40, 120, 200, 0.28);
+      }
+
+      .card-btn-icon.bookmark-pop {
+        animation: bookmarkPop 340ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes bookmarkPop {
+        0% { transform: scale(1); }
+        40% { transform: scale(1.22); }
+        75% { transform: scale(0.94); }
+        100% { transform: scale(1); }
+      }
+
+      .share-link-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .share-link-input {
+        flex: 1;
+        min-width: 0;
+        min-height: 40px;
+        padding: 8px 12px;
+        border: 1px solid var(--border-strong);
+        border-radius: 10px;
+        background-color: var(--bg-canvas);
+        color: var(--navy-900);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+      }
+
+      .share-preview-box {
+        width: 100%;
+        min-height: 120px;
+        padding: 12px;
+        border: 1px solid var(--border-strong);
+        border-radius: 10px;
+        background-color: var(--bg-canvas);
+        color: var(--text-secondary);
+        font-family: inherit;
+        font-size: 0.84rem;
+        line-height: 1.5;
+        resize: vertical;
+      }
+
+      .share-social-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+      }
+
+      /* Filter & Search Bar */
+      .filter-toolbar {
+        background-color: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 24px;
+        display: grid;
+        gap: 14px;
+        box-shadow: var(--shadow-card);
+      }
+
+      .filter-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      @media (min-width: 768px) {
+        .filter-row {
+          grid-template-columns: 2fr 1fr 1fr 1fr;
+        }
+      }
+
+      .filter-row-secondary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding-top: 12px;
+        border-top: 1px solid var(--border-hairline);
+      }
+
+      .control-input,
+      .control-select {
+        width: 100%;
+        min-height: 42px;
+        padding: 8px 12px;
+        border: 1px solid var(--border-strong);
+        border-radius: 10px;
+        background-color: #FFFFFF;
+        color: var(--navy-900);
+        font-family: inherit;
+        font-size: 0.875rem;
+        transition: border-color 160ms, box-shadow 180ms, background-color 160ms;
+      }
+
+      .control-input:hover,
+      .control-select:hover {
+        border-color: var(--cobalt-500);
+      }
+
+      .control-input:focus,
+      .control-select:focus {
+        outline: none;
+        border-color: var(--cobalt-600);
+        box-shadow: 0 0 0 3.5px rgba(40, 120, 200, 0.14);
+      }
+
+      /* Achievements Grid */
+      .achievement-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      @media (min-width: 768px) {
+        .achievement-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 1240px) {
+        .achievement-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .achievement-card {
+        background-color: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: 16px;
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        box-shadow: var(--shadow-card);
+        transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), border-color 180ms, box-shadow 200ms;
+      }
+
+      .achievement-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--cobalt-500);
+        box-shadow: var(--shadow-card-hover);
+      }
+
+      .achievement-student-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .student-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+        object-fit: cover;
+        flex-shrink: 0;
+        border: 1px solid var(--border-hairline);
+        background-color: var(--bg-secondary);
+      }
+
+      .student-avatar-fallback {
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+        background: linear-gradient(135deg, #2878C8 0%, #6AADE4 100%);
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 700;
+        font-size: 1.05rem;
+        flex-shrink: 0;
+      }
+
+      .achievement-award-line {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--cobalt-600);
+      }
+
+      /* Empty & 10. Skeleton Loading States */
+      .state-box {
+        background-color: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: 16px;
+        padding: 48px 24px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        box-shadow: var(--shadow-card);
+      }
+
+      .state-box h3 {
+        margin: 0;
+        font-size: 1.125rem;
+        color: var(--navy-900);
+      }
+
+      .state-box p {
+        margin: 0;
+        max-width: 46ch;
+        font-size: 0.9375rem;
+        color: var(--text-secondary);
+      }
+
+      .skeleton-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+      }
+
+      .skeleton-card {
+        border-radius: 18px;
+        border: 1px solid var(--border-hairline);
+        background: #FFFFFF;
+        overflow: hidden;
+        padding: 0;
+        box-shadow: var(--shadow-card);
+      }
+
+      .skeleton-media {
+        height: 190px;
+        background: linear-gradient(90deg, #EAF4FF 25%, #D6EAFE 50%, #EAF4FF 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.35s infinite;
+      }
+
+      .skeleton-body {
+        padding: 20px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .skeleton-line {
+        height: 13px;
+        border-radius: 8px;
+        background: linear-gradient(90deg, #EAF4FF 25%, #D6EAFE 50%, #EAF4FF 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.35s infinite;
+      }
+
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+
+      /* Modals */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background-color: rgba(25, 59, 96, 0.42);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        overflow-y: auto;
+      }
+
+      .modal-overlay.open {
+        display: flex;
+      }
+
+      .modal-panel {
+        width: 100%;
+        max-width: 920px;
+        max-height: 90vh;
+        overflow-y: auto;
+        background-color: #FFFFFF;
+        border-radius: 18px;
+        border: 1px solid var(--border-hairline);
+        box-shadow: 0 24px 56px -12px rgba(25, 59, 96, 0.25);
+        animation: ccModalEnter 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes ccModalEnter {
+        from { opacity: 0; transform: translateY(10px) scale(0.985); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+      }
+
+      .modal-panel.narrow {
+        max-width: 500px;
+      }
+
+      .modal-top {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background-color: #FFFFFF;
+        border-bottom: 1px solid var(--border-hairline);
+        padding: 18px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .modal-top h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--navy-900);
+      }
+
+      .modal-close-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        border: 1px solid var(--border-hairline);
+        background: #FFFFFF;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 150ms, color 150ms;
+      }
+
+      .modal-close-btn:hover {
+        background-color: var(--bg-secondary);
+        color: var(--cobalt-600);
+      }
+
+      .modal-body {
+        padding: 24px;
+      }
+
+      .detail-hero-img {
+        width: 100%;
+        max-height: 380px;
+        object-fit: cover;
+        border-radius: 14px;
+        border: 1px solid var(--border-hairline);
+        margin-bottom: 20px;
+      }
+
+      .detail-section {
+        padding: 18px 0;
+        border-top: 1px solid var(--border-hairline);
+      }
+
+      .detail-section h4 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+        font-weight: 700;
+        color: var(--navy-900);
+      }
+
+      .detail-section p,
+      .detail-section li {
+        font-size: 0.9375rem;
+        color: var(--text-secondary);
+        line-height: 1.65;
+      }
+
+      .screenshots-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      .screenshot-thumb {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid var(--border-hairline);
+        cursor: pointer;
+        transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 220ms;
+      }
+
+      .screenshot-thumb:hover {
+        transform: scale(1.03);
+        box-shadow: var(--shadow-card-hover);
+      }
+
+      /* About Page Layout */
+      .about-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+
+      @media (min-width: 1024px) {
+        .about-grid {
+          grid-template-columns: 1.2fr 0.8fr;
+        }
+      }
+
+      .about-card {
+        background: #FFFFFF;
+        border: 1px solid var(--border-hairline);
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: var(--shadow-card);
+      }
+
+      /* Toast Notification */
+      .toast-container {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 90;
+        display: grid;
+        gap: 10px;
+        max-width: 360px;
+      }
+
+      .toast-item {
+        background-color: var(--navy-900);
+        color: #FFFFFF;
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        box-shadow: 0 14px 28px -8px rgba(25, 59, 96, 0.32);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        animation: ccPageEnter 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .toast-item.error {
+        background-color: #991B1B;
+      }
+
+      .toast-item.success {
+        background-color: var(--cobalt-600);
+      }
+
+      /* Footer */
+      .site-footer {
+        background-color: #FFFFFF;
+        border-top: 1px solid var(--border-hairline);
+        padding: 28px 0;
+        color: var(--text-secondary);
+        font-size: 0.875rem;
+      }
+
+      .footer-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .footer-links {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+
+      .footer-links a,
+      .footer-links button {
+        background: none;
+        border: none;
+        padding: 0;
+        font-family: inherit;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        cursor: pointer;
+        transition: color 150ms;
+      }
+
+      .footer-links a:hover,
+      .footer-links button:hover {
+        color: var(--cobalt-600);
+        text-decoration: underline;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Branded Loading Screen -->
+    <div id="ccLoadingScreen" class="cc-loading-screen" aria-live="polite">
+      <div class="cc-loader-card">
+        <div class="cc-loader-mark" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="M2 17l10 5 10-5" />
+            <path d="M2 12l10 5 10-5" />
+          </svg>
+        </div>
+        <div class="cc-loader-title">Campus Connect: From Capstone to Spotlight.</div>
+        <div class="cc-loader-sub">Academic Innovation &amp; Project Showcase</div>
+        <div class="cc-loader-track"><div class="cc-loader-bar"></div></div>
+      </div>
+    </div>
+
+    <!-- Subtle Floating Background Layer -->
+    <div class="bg-ambient-layer" aria-hidden="true">
+      <div class="bg-float-orb orb-1"></div>
+      <div class="bg-float-orb orb-2"></div>
+    </div>
+
+    <div class="app-shell">
+      <!-- Modern White Sidebar (Desktop) -->
+      <aside class="portal-sidebar" aria-label="Primary sidebar navigation">
+        <div>
+          <a href="#home" class="sidebar-brand-lockup" data-nav="home">
+            <span class="brand-emblem" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+              </svg>
+            </span>
+            <span class="brand-wordmark">CampusConnect</span>
+          </a>
+
+          <nav class="sidebar-menu" aria-label="Workspace navigation">
+            <button type="button" class="sidebar-nav-btn active" data-nav="home">
+              <i data-lucide="home" style="width:18px;height:18px;flex-shrink:0;"></i>
+              <span>Overview</span>
+            </button>
+            <button type="button" class="sidebar-nav-btn" data-nav="departments">
+              <i data-lucide="building-2" style="width:18px;height:18px;flex-shrink:0;"></i>
+              <span>Departments</span>
+            </button>
+            <button type="button" class="sidebar-nav-btn" data-nav="explore">
+              <i data-lucide="compass" style="width:18px;height:18px;flex-shrink:0;"></i>
+              <span>Explore Projects</span>
+            </button>
+            <button type="button" class="sidebar-nav-btn" data-nav="achievements">
+              <i data-lucide="award" style="width:18px;height:18px;flex-shrink:0;"></i>
+              <span>Achievements</span>
+            </button>
+            <button type="button" class="sidebar-nav-btn" data-nav="bookmarks">
+              <i data-lucide="bookmark" style="width:18px;height:18px;flex-shrink:0;"></i>
+              <span>Bookmarks</span>
+            </button>
+            <button type="button" class="sidebar-nav-btn" data-nav="recent">
+              <i data-lucide="history" style="width:18px;height:18px;flex-shrink:0;"></i>
+              <span>Recently Viewed</span>
+            </button>
+            <button type="button" class="sidebar-nav-btn" data-nav="about">
+              <i data-lucide="info" style="width:18px;height:18px;flex-shrink:0;"></i>
+              <span>About Us</span>
+            </button>
+          </nav>
+        </div>
+
+        <div class="sidebar-foot-box">
+          <div class="sidebar-foot-title">6 Academic Departments</div>
+          <div class="sidebar-foot-copy">CSE · IT · R&amp;A · CSECS · ECE · AI&amp;DS capstone archive &amp; verified placements.</div>
+        </div>
+      </aside>
+
+      <div class="workspace-main">
+        <!-- Top Bar -->
+        <header class="site-header">
+          <div class="container header-inner">
+            <div class="header-left">
+              <button type="button" id="mobileMenuToggle" class="mobile-menu-btn" aria-label="Open menu" aria-expanded="false">
+                <i data-lucide="menu" style="width:20px;height:20px;"></i>
+              </button>
+              <a href="#home" class="header-mobile-brand" data-nav="home">
+                <span class="brand-emblem" style="width:32px;height:32px;border-radius:9px;" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    <path d="M2 17l10 5 10-5" />
+                    <path d="M2 12l10 5 10-5" />
+                  </svg>
+                </span>
+                <span class="brand-wordmark">CampusConnect</span>
+              </a>
+              <div class="header-breadcrumb">
+                <span class="header-breadcrumb-muted">CampusConnect</span>
+                <span class="header-breadcrumb-muted" aria-hidden="true">/</span>
+                <span id="topbarPageTitle">Overview</span>
+              </div>
+            </div>
+
+            <div class="header-actions">
+              <a href="admin.html" id="headerAdminLink" class="btn-outline-sm hidden">Admin</a>
+              <button type="button" id="headerProfileBtn" class="btn-outline-sm hidden">
+                <i data-lucide="user" style="width:15px;height:15px;"></i>
+                <span id="headerProfileLabel">Profile</span>
+              </button>
+              <button type="button" id="headerLogoutBtn" class="btn-outline-sm hidden">Logout</button>
+              <a href="auth.html" id="headerSignInBtn" class="btn-primary-sm">Sign In</a>
+            </div>
+          </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div id="mobileDrawer" class="mobile-drawer" role="region" aria-label="Mobile navigation">
+        <div class="mobile-nav-list">
+          <button type="button" class="mobile-nav-item active" data-nav="home">Home</button>
+          <button type="button" class="mobile-nav-item" data-nav="departments">Departments</button>
+          <button type="button" class="mobile-nav-item" data-nav="explore">Explore Projects</button>
+          <button type="button" class="mobile-nav-item" data-nav="achievements">Achievements</button>
+          <button type="button" class="mobile-nav-item" data-nav="bookmarks">Bookmarks</button>
+          <button type="button" class="mobile-nav-item" data-nav="recent">Recently Viewed</button>
+          <button type="button" class="mobile-nav-item" data-nav="about">About Us</button>
+          <button type="button" id="mobileProfileBtn" class="mobile-nav-item hidden">Profile</button>
+          <button type="button" id="mobileLogoutBtn" class="mobile-nav-item hidden">Logout</button>
+          <a href="admin.html" id="mobileAdminLink" class="mobile-nav-item hidden">Admin Dashboard</a>
+          <a href="auth.html" id="mobileSignInLink" class="mobile-nav-item">Sign In / Register</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Email Verification Banner (shown only if signed-in with unverified email) -->
+    <div id="verifyBanner" class="verify-bar hidden" role="region" aria-label="Email verification notice">
+      <div class="container verify-bar-inner">
+        <span>Your email address is not yet verified. Verify your inbox to save bookmarks and track viewing history.</span>
+        <div class="verify-bar-actions">
+          <button type="button" id="bannerResendBtn" class="verify-link-btn">Resend verification email</button>
+          <button type="button" id="bannerReloadBtn" class="verify-link-btn">I have verified — refresh</button>
+        </div>
+      </div>
+    </div>
+
+    <main class="main-content">
+      <!-- ==================== HOME VIEW ==================== -->
+      <section id="view-home" class="view-section active">
+        <div class="hero-section">
+          <div class="container">
+            <div class="hero-grid">
+              <div class="hero-copy">
+                <div class="hero-kicker">Academic Innovation &amp; Final-Year Research Archive</div>
+                <h1 class="hero-title">Discover Innovation. Explore Projects. Inspire the Future.</h1>
+                <p class="hero-lead">
+                  CampusConnect brings together final-year engineering capstones, research prototypes, and verified student achievements across six academic departments in one searchable institutional portal.
+                </p>
+
+                <form id="heroSearchForm" class="hero-search-form">
+                  <div class="hero-search-input-wrap">
+                    <i data-lucide="search" style="width:18px;height:18px;color:#64748B;flex-shrink:0;"></i>
+                    <input
+                      type="search"
+                      id="heroSearchInput"
+                      class="hero-search-input"
+                      placeholder="Search by project title, technology, domain, department, or member..."
+                      aria-label="Search projects"
+                    />
+                  </div>
+                  <button type="submit" class="hero-cta-btn">
+                    <span>Explore Projects</span>
+                    <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+                  </button>
+                </form>
+              </div>
+
+              <div class="hero-media-frame">
+                <img
+                  src="/src/assets/images/hero_campus_innovation_1794804249865.jpg"
+                  alt="Engineering students collaborating on robotics and software prototypes"
+                  class="hero-media-img"
+                  referrerpolicy="no-referrer"
+                />
+                <div class="hero-media-caption">
+                  Cross-departmental engineering capstone showcase · Verified faculty guides &amp; approved team contacts
+                </div>
+              </div>
+            </div>
+
+            <!-- Dynamic Statistics Strip -->
+            <div class="stats-strip" aria-label="Portal statistics">
+              <div class="stat-cell">
+                <div class="stat-label">Total Projects</div>
+                <div class="stat-value" id="statProjects">0</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Total Departments</div>
+                <div class="stat-value" id="statDepartments">0</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Total Students</div>
+                <div class="stat-value" id="statStudents">0</div>
+              </div>
+              <div class="stat-cell">
+                <div class="stat-label">Total Achievements</div>
+                <div class="stat-value" id="statAchievements">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container">
+          <!-- Home: Departments Preview -->
+          <div class="section-block">
+            <div class="section-head">
+              <div>
+                <h2>Academic Departments</h2>
+                <p>Browse final-year projects organized by engineering and computing discipline.</p>
+              </div>
+              <button type="button" class="section-link-btn" data-nav="departments">
+                <span>View all departments</span>
+                <i data-lucide="arrow-right" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+            <div id="homeDepartmentsGrid" class="dept-grid"></div>
+          </div>
+
+          <!-- Home: Featured Projects -->
+          <div class="section-block">
+            <div class="section-head">
+              <div>
+                <h2>Featured Projects</h2>
+                <p>Highlighted capstone systems recognized for technical depth and real-world impact.</p>
+              </div>
+              <button type="button" class="section-link-btn" data-nav="explore">
+                <span>Browse all projects</span>
+                <i data-lucide="arrow-right" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+            <div id="homeFeaturedGrid" class="project-grid"></div>
+          </div>
+
+          <!-- Home: Latest Projects -->
+          <div class="section-block">
+            <div class="section-head">
+              <div>
+                <h2>Latest Submissions</h2>
+                <p>Recently approved projects published across campus departments.</p>
+              </div>
+              <button type="button" class="section-link-btn" data-nav="explore">
+                <span>Explore catalog</span>
+                <i data-lucide="arrow-right" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+            <div id="homeLatestGrid" class="project-grid"></div>
+          </div>
+
+          <!-- Home: Student & Faculty Achievements Preview -->
+          <div class="section-block">
+            <div class="section-head">
+              <div>
+                <h2>Student &amp; Faculty Achievements</h2>
+                <p>Campus placements, hackathon honors, sports titles, and UIT faculty research publications, funded grants &amp; NPTEL milestones.</p>
+              </div>
+              <button type="button" class="section-link-btn" data-nav="achievements">
+                <span>All achievements</span>
+                <i data-lucide="arrow-right" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+            <div id="homeAchievementsGrid" class="achievement-grid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== DEPARTMENTS VIEW ==================== -->
+      <section id="view-departments" class="view-section">
+        <div class="container section-block" style="padding-top:36px;">
+          <div class="section-head">
+            <div>
+              <h2>Departments</h2>
+              <p>Select any department to view its final-year student projects, search technologies, and filter by academic year.</p>
+            </div>
+          </div>
+          <div id="allDepartmentsGrid" class="dept-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== EXPLORE PROJECTS VIEW ==================== -->
+      <section id="view-explore" class="view-section">
+        <div class="container section-block" style="padding-top:36px;">
+          <div class="section-head">
+            <div>
+              <h2 id="exploreHeading">Explore Projects</h2>
+              <p id="exploreSubheading">Search and filter approved student projects across all departments.</p>
+            </div>
+            <button type="button" id="clearExploreFiltersBtn" class="btn-outline-sm">Reset Filters</button>
+          </div>
+
+          <div class="filter-toolbar">
+            <div class="filter-row">
+              <input
+                type="search"
+                id="exploreSearchInput"
+                class="control-input"
+                placeholder="Search title, department, technology, domain, or team member..."
+                aria-label="Global project search"
+              />
+              <select id="filterDepartment" class="control-select" aria-label="Filter by department">
+                <option value="">All Departments</option>
+              </select>
+              <select id="filterYear" class="control-select" aria-label="Filter by academic year">
+                <option value="">All Academic Years</option>
+              </select>
+              <select id="filterDomain" class="control-select" aria-label="Filter by domain">
+                <option value="">All Domains</option>
+              </select>
+            </div>
+            <div class="filter-row-secondary">
+              <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                <select id="filterTech" class="control-select" style="width:auto;min-width:180px;" aria-label="Filter by technology">
+                  <option value="">All Technologies</option>
+                </select>
+                <span id="exploreResultCount" class="font-mono" style="font-size:0.8125rem;color:var(--text-muted);">0 projects</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <label for="sortProjects" style="font-size:0.8125rem;color:var(--text-muted);white-space:nowrap;">Sort by:</label>
+                <select id="sortProjects" class="control-select" style="width:auto;min-width:170px;">
+                  <option value="latest">Latest Projects</option>
+                  <option value="alpha">Alphabetical Order (A–Z)</option>
+                  <option value="department">Department-wise</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div id="exploreProjectsGrid" class="project-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== ACHIEVEMENTS VIEW ==================== -->
+      <section id="view-achievements" class="view-section">
+        <div class="container section-block" style="padding-top:36px;">
+          <div class="section-head">
+            <div>
+              <h2>Student &amp; Faculty Achievements</h2>
+              <p>Campus placement history, hackathon &amp; sports awards, and faculty SCI/IEEE publications, funded projects &amp; NPTEL honors across all departments.</p>
+            </div>
+            <span id="achResultCount" class="font-mono" style="font-size:0.84rem;color:var(--text-muted);">0 achievements</span>
+          </div>
+
+          <div class="filter-toolbar" style="margin-bottom:24px;">
+            <div class="filter-row" style="grid-template-columns:repeat(auto-fit, minmax(195px, 1fr));">
+              <input type="search" id="achSearchInput" class="control-input" placeholder="Search student, faculty, journal, company, reg no..." aria-label="Search achievements" />
+              <select id="achFilterType" class="control-select" aria-label="Filter by student or faculty achievement">
+                <option value="">All (Student &amp; Faculty)</option>
+                <option value="student">Student Achievements</option>
+                <option value="faculty">Faculty Achievements</option>
+              </select>
+              <select id="achFilterDept" class="control-select" aria-label="Filter achievements by department">
+                <option value="">All Departments</option>
+              </select>
+              <select id="achFilterCategory" class="control-select" aria-label="Filter achievements by category">
+                <option value="">All Categories</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="achievementsFullGrid" class="achievement-grid"></div>
+        </div>
+      </section>
+
+      <!-- ==================== BOOKMARKS VIEW ==================== -->
+      <section id="view-bookmarks" class="view-section">
+        <div class="container section-block" style="padding-top:36px;">
+          <div class="section-head">
+            <div>
+              <h2>Saved Bookmarks</h2>
+              <p>Your personal collection of bookmarked projects synced with your Firebase account.</p>
+            </div>
+          </div>
+          <div id="bookmarksContainer"></div>
+        </div>
+      </section>
+
+      <!-- ==================== RECENTLY VIEWED VIEW ==================== -->
+      <section id="view-recent" class="view-section">
+        <div class="container section-block" style="padding-top:36px;">
+          <div class="section-head">
+            <div>
+              <h2>Recently Viewed Projects</h2>
+              <p>Automatically tracks up to your 10 most recently inspected projects without duplicates.</p>
+            </div>
+            <button type="button" id="clearHistoryBtn" class="btn-outline-sm hidden">Clear History</button>
+          </div>
+          <div id="recentContainer"></div>
+        </div>
+      </section>
+
+      <!-- ==================== ABOUT US VIEW ==================== -->
+      <section id="view-about" class="view-section">
+        <div class="container section-block" style="padding-top:36px;">
+          <div class="section-head">
+            <div>
+              <h2>About CampusConnect</h2>
+              <p>Institutional project archiving, academic transparency, and verified team collaboration.</p>
+            </div>
+          </div>
+
+          <div class="about-grid">
+            <div class="about-card">
+              <h3 style="margin:0 0 12px;font-size:1.25rem;color:var(--navy-900);">Built for Academic Discovery</h3>
+              <p style="color:var(--text-secondary);line-height:1.7;margin:0 0 16px;">
+                Final-year capstone projects represent months of engineering design, prototyping, and scholarly inquiry. CampusConnect preserves these projects in a centralized repository so students, faculty advisors, and visiting industry reviewers can explore prior work across all six departments.
+              </p>
+              <p style="color:var(--text-secondary);line-height:1.7;margin:0 0 20px;">
+                Every project, student &amp; faculty achievement, placement record, and team contact channel published on CampusConnect undergoes faculty and administrator review for United Institute of Technology before appearing in the public catalog.
+              </p>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                <button type="button" class="btn-primary-sm" data-nav="explore">Browse Project Catalog</button>
+                <a href="admin.html" id="aboutAdminBtn" class="btn-outline-sm hidden">Administrator Console</a>
+              </div>
+            </div>
+
+            <div class="about-card">
+              <h3 style="margin:0 0 14px;font-size:1.125rem;color:var(--navy-900);">Featured Disciplines</h3>
+              <ul style="margin:0;padding-left:18px;display:grid;gap:8px;color:var(--text-secondary);font-size:0.9375rem;">
+                <li>Computer Science and Engineering (CSE)</li>
+                <li>Information Technology (IT)</li>
+                <li>Robotics and Automation (R&amp;A)</li>
+                <li>Computer Science and Cyber Security (CSECS)</li>
+                <li>Electronics and Communication Engineering (ECE)</li>
+                <li>Artificial Intelligence and Data Science (AI&amp;DS)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>&copy; <span id="footerYear">2026</span> CampusConnect · Centralized Student Project Showcase Portal</div>
+        <div class="footer-links">
+          <button type="button" data-nav="departments">Departments</button>
+          <button type="button" data-nav="explore">Projects</button>
+          <button type="button" data-nav="achievements">Achievements</button>
+          <a href="auth.html">Student Login</a>
+          <a href="admin.html" id="footerAdminLink" class="hidden">Admin Portal</a>
+        </div>
+      </div>
+    </footer>
+      </div>
+    </div>
+
+    <!-- Project Details Modal -->
+    <div id="projectModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="pmTitle">
+      <div class="modal-panel">
+        <div class="modal-top">
+          <h3 id="pmTitle">Project Details</h3>
+          <button type="button" id="pmCloseBtn" class="modal-close-btn" aria-label="Close project details">
+            <i data-lucide="x" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+        <div id="pmBody" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Contact Project Team Modal -->
+    <div id="contactModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="cmTitle">
+      <div class="modal-panel narrow">
+        <div class="modal-top">
+          <h3 id="cmTitle">Contact Project Team</h3>
+          <button type="button" id="cmCloseBtn" class="modal-close-btn" aria-label="Close contact dialog">
+            <i data-lucide="x" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+        <div id="cmBody" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profileModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="profTitle">
+      <div class="modal-panel narrow">
+        <div class="modal-top">
+          <h3 id="profTitle">Student Profile</h3>
+          <button type="button" id="profCloseBtn" class="modal-close-btn" aria-label="Close profile dialog">
+            <i data-lucide="x" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+        <div id="profBody" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Image Lightbox Modal -->
+    <div id="lightboxModal" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Image preview">
+      <div class="modal-panel" style="max-width:960px;background:#0F172A;border-color:#1E293B;">
+        <div class="modal-top" style="background:#0F172A;border-bottom-color:#1E293B;color:#FFFFFF;">
+          <h3 id="lbCaption" style="color:#FFFFFF;font-size:1rem;">Preview</h3>
+          <button type="button" id="lbCloseBtn" class="modal-close-btn" style="background:#1E293B;border-color:#334155;color:#FFFFFF;" aria-label="Close preview">
+            <i data-lucide="x" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+        <div style="padding:16px;text-align:center;">
+          <img id="lbImg" src="" alt="Preview" style="max-width:100%;max-height:76vh;border-radius:10px;object-fit:contain;" referrerpolicy="no-referrer" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Share Project Modal -->
+    <div id="shareModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="smTitle">
+      <div class="modal-panel narrow">
+        <div class="modal-top">
+          <h3 id="smTitle">Share Project</h3>
+          <button type="button" id="smCloseBtn" class="modal-close-btn" aria-label="Close share dialog">
+            <i data-lucide="x" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+        <div class="modal-body" id="smBody"></div>
+      </div>
+    </div>
+
+    <!-- Confirmation Dialog Modal -->
+    <div id="confirmModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-panel narrow">
+        <div class="modal-top">
+          <h3 id="confirmTitle">Confirm Action</h3>
+          <button type="button" id="confirmCloseBtn" class="modal-close-btn" aria-label="Close confirmation">
+            <i data-lucide="x" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p id="confirmMessage" style="margin:0 0 20px;color:var(--text-secondary);"></p>
+          <div style="display:flex;justify-content:flex-end;gap:10px;">
+            <button type="button" id="confirmCancelBtn" class="btn-outline-sm">Cancel</button>
+            <button type="button" id="confirmAcceptBtn" class="btn-primary-sm">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <script type="module">
+      import { initializeApp } from 'firebase/app';
+      import {
+        getAuth,
+        onAuthStateChanged,
+        signOut,
+        sendEmailVerification
+      } from 'firebase/auth';
+      import {
+        getFirestore,
+        collection,
+        doc,
+        getDoc,
+        getDocs,
+        setDoc,
+        updateDoc,
+        query,
+        where,
+        getDocFromServer,
+        serverTimestamp
+      } from 'firebase/firestore';
+      import { createIcons, icons } from 'lucide';
+      import firebaseConfig from './firebase-applet-config.json';
+
+      document.getElementById('footerYear').textContent = new Date().getFullYear();
+
+      // Initialize Firebase Modular SDK
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+
+      // Test Firestore Connection on Boot
+      async function testConnection() {
+        try {
+          await getDocFromServer(doc(db, 'test', 'connection'));
+        } catch (error) {
+          if (error instanceof Error && error.message.includes('the client is offline')) {
+            console.error('Please check your Firebase configuration.');
+          }
+        }
+      }
+      testConnection();
+
+      // Structured Firestore Error Handler
+      const OperationType = {
+        CREATE: 'create',
+        UPDATE: 'update',
+        DELETE: 'delete',
+        LIST: 'list',
+        GET: 'get',
+        WRITE: 'write'
+      };
+
+      function handleFirestoreError(error, operationType, path) {
+        const errInfo = {
+          error: error instanceof Error ? error.message : String(error),
+          authInfo: {
+            userId: auth.currentUser?.uid || null,
+            email: auth.currentUser?.email || null,
+            emailVerified: auth.currentUser?.emailVerified ?? null,
+            isAnonymous: auth.currentUser?.isAnonymous ?? null,
+            tenantId: auth.currentUser?.tenantId || null,
+            providerInfo: auth.currentUser?.providerData?.map((p) => ({
+              providerId: p.providerId,
+              email: p.email
+            })) || []
+          },
+          operationType,
+          path
+        };
+        console.error('Firestore Error: ', JSON.stringify(errInfo));
+        throw new Error(JSON.stringify(errInfo));
+      }
+
+      // Application State
+      const state = {
+        user: null,
+        userProfile: null,
+        isAdmin: false,
+        departments: [],
+        projects: [],
+        achievements: [],
+        portalStats: null,
+        bookmarkedIds: [],
+        recentIds: [],
+        loading: true,
+        activeView: 'home'
+      };
+
+      const OFFICIAL_DEPARTMENTS = [
+        { departmentId: 'cse', shortCode: 'CSE', departmentName: 'Computer Science and Engineering (CSE)', description: 'Systems engineering, distributed computing, compiler design, and scalable cloud architectures.' },
+        { departmentId: 'it', shortCode: 'IT', departmentName: 'Information Technology (IT)', description: 'Enterprise web platforms, service integration, databases, and human-centered software systems.' },
+        { departmentId: 'ra', shortCode: 'R&A', departmentName: 'Robotics and Automation (R&A)', description: 'Autonomous mobile robots, industrial manipulators, kinematics, and sensor fusion.' },
+        { departmentId: 'csecs', shortCode: 'CSECS', departmentName: 'Computer Science and Cyber Security (CSECS)', description: 'Zero-trust networks, threat detection, applied cryptography, and secure infrastructure.' },
+        { departmentId: 'ece', shortCode: 'ECE', departmentName: 'Electronics and Communication Engineering (ECE)', description: 'Embedded systems, VLSI hardware, RF telemetry, and edge IoT instrumentation.' },
+        { departmentId: 'aids', shortCode: 'AI&DS', departmentName: 'Artificial Intelligence and Data Science (AI&DS)', description: 'Machine learning, computer vision, natural language processing, and predictive analytics.' }
+      ];
+
+      // Helpers
+      function escapeHtml(str) {
+        return String(str ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function safeUrl(url) {
+        if (!url || typeof url !== 'string') return '';
+        const trimmed = url.trim();
+        if (trimmed.startsWith('https://') || trimmed.startsWith('http://') || trimmed.startsWith('/')) {
+          return trimmed;
+        }
+        return '';
+      }
+
+      function showToast(message, type = 'info') {
+        const container = document.getElementById('toastContainer');
+        const el = document.createElement('div');
+        el.className = `toast-item ${type}`;
+        el.textContent = message;
+        container.appendChild(el);
+        setTimeout(() => {
+          el.remove();
+        }, 3600);
+      }
+
+      function openConfirm(title, message) {
+        return new Promise((resolve) => {
+          const modal = document.getElementById('confirmModal');
+          document.getElementById('confirmTitle').textContent = title;
+          document.getElementById('confirmMessage').textContent = message;
+          modal.classList.add('open');
+
+          const cleanup = (val) => {
+            modal.classList.remove('open');
+            acceptBtn.removeEventListener('click', onAccept);
+            cancelBtn.removeEventListener('click', onCancel);
+            closeBtn.removeEventListener('click', onCancel);
+            resolve(val);
+          };
+
+          const acceptBtn = document.getElementById('confirmAcceptBtn');
+          const cancelBtn = document.getElementById('confirmCancelBtn');
+          const closeBtn = document.getElementById('confirmCloseBtn');
+
+          const onAccept = () => cleanup(true);
+          const onCancel = () => cleanup(false);
+
+          acceptBtn.addEventListener('click', onAccept);
+          cancelBtn.addEventListener('click', onCancel);
+          closeBtn.addEventListener('click', onCancel);
+        });
+      }
+
+      function getTimestampMs(ts) {
+        if (!ts) return 0;
+        if (typeof ts.toMillis === 'function') return ts.toMillis();
+        if (ts.seconds) return ts.seconds * 1000;
+        return new Date(ts).getTime() || 0;
+      }
+
+      function hideLoadingScreen() {
+        const loader = document.getElementById('ccLoadingScreen');
+        if (loader && !loader.classList.contains('fade-out')) {
+          loader.classList.add('fade-out');
+        }
+      }
+
+      setTimeout(hideLoadingScreen, 1800);
+
+      function animateStatNumber(el, targetValue) {
+        if (!el) return;
+        const target = Math.max(0, Number(targetValue) || 0);
+        const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced || target === 0) {
+          el.textContent = target;
+          return;
+        }
+        const start = Number(el.textContent) || 0;
+        if (start === target) return;
+        const duration = 560;
+        const startTime = performance.now();
+        function step(now) {
+          const t = Math.min(1, (now - startTime) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = Math.round(start + (target - start) * eased);
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      // Navigation System
+      const VIEW_TITLES = {
+        home: 'Overview',
+        departments: 'Academic Departments',
+        explore: 'Explore Projects',
+        achievements: 'Student & Faculty Achievements',
+        bookmarks: 'Saved Bookmarks',
+        recent: 'Recently Viewed',
+        about: 'About CampusConnect'
+      };
+
+      function navigateTo(viewName) {
+        const validViews = ['home', 'departments', 'explore', 'achievements', 'bookmarks', 'recent', 'about'];
+        const target = validViews.includes(viewName) ? viewName : 'home';
+        state.activeView = target;
+
+        document.querySelectorAll('.view-section').forEach((sec) => {
+          sec.classList.toggle('active', sec.id === `view-${target}`);
+        });
+
+        document.querySelectorAll('[data-nav]').forEach((el) => {
+          el.classList.toggle('active', el.getAttribute('data-nav') === target);
+        });
+
+        const titleEl = document.getElementById('topbarPageTitle');
+        if (titleEl) titleEl.textContent = VIEW_TITLES[target] || 'Overview';
+
+        document.getElementById('mobileDrawer').classList.remove('open');
+        document.getElementById('mobileMenuToggle').setAttribute('aria-expanded', 'false');
+
+        if (window.location.hash !== `#${target}`) {
+          history.replaceState(null, '', `#${target}`);
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (target === 'bookmarks') renderBookmarksView();
+        if (target === 'recent') renderRecentView();
+      }
+
+      document.querySelectorAll('[data-nav]').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const target = btn.getAttribute('data-nav');
+          if (target) {
+            e.preventDefault();
+            navigateTo(target);
+          }
+        });
+      });
+
+      document.getElementById('mobileMenuToggle').addEventListener('click', () => {
+        const drawer = document.getElementById('mobileDrawer');
+        const open = !drawer.classList.contains('open');
+        drawer.classList.toggle('open', open);
+        document.getElementById('mobileMenuToggle').setAttribute('aria-expanded', String(open));
+      });
+
+      // Fetch Public Data from Cloud Firestore
+      async function loadPortalData() {
+        state.loading = true;
+        renderLoadingSkeletons();
+
+        try {
+          const [deptSnap, projSnap, achSnap, statsSnap] = await Promise.all([
+            getDocs(collection(db, 'departments')).catch((err) => handleFirestoreError(err, OperationType.LIST, 'departments')),
+            getDocs(query(collection(db, 'projects'), where('status', '==', 'approved'))).catch((err) => handleFirestoreError(err, OperationType.LIST, 'projects')),
+            getDocs(query(collection(db, 'achievements'), where('status', '==', 'approved'))).catch((err) => handleFirestoreError(err, OperationType.LIST, 'achievements')),
+            getDoc(doc(db, 'portalStats', 'summary')).catch(() => null)
+          ]);
+
+          state.departments = deptSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          state.projects = projSnap.docs
+            .map((d) => ({ id: d.id, ...d.data() }))
+            .sort((a, b) => getTimestampMs(b.createdAt) - getTimestampMs(a.createdAt));
+          state.achievements = achSnap.docs
+            .map((d) => ({ id: d.id, ...d.data() }))
+            .sort((a, b) => (getTimestampMs(b.createdAt) - getTimestampMs(a.createdAt)) || (a.achievementId || a.id).localeCompare(b.achievementId || b.id));
+          state.portalStats = statsSnap && statsSnap.exists() ? statsSnap.data() : null;
+        } catch (err) {
+          console.error('Failed loading portal data:', err);
+          showToast('Unable to load some records from Firebase. Please check permissions or connection.', 'error');
+        } finally {
+          state.loading = false;
+          populateFilterOptions();
+          renderAllSections();
+          hideLoadingScreen();
+          if (!state.handledDeepLink) {
+            state.handledDeepLink = true;
+            const sharedPid = new URLSearchParams(window.location.search).get('project');
+            if (sharedPid && state.projects.some((p) => (p.projectId || p.id) === sharedPid)) {
+              navigateTo('explore');
+              openProjectDetails(sharedPid, false);
+            }
+          }
+        }
+      }
+
+      async function loadUserPrivateData(user) {
+        if (!user) {
+          state.userProfile = null;
+          state.isAdmin = false;
+          state.bookmarkedIds = [];
+          state.recentIds = [];
+          updateAuthHeaderUI();
+          return;
+        }
+
+        try {
+          const [profileSnap, bmSnap, rvSnap, adminSnap] = await Promise.all([
+            getDoc(doc(db, 'users', user.uid)).catch(() => null),
+            getDoc(doc(db, 'bookmarks', user.uid)).catch(() => null),
+            getDoc(doc(db, 'recentlyViewed', user.uid)).catch(() => null),
+            getDoc(doc(db, 'admins', user.uid)).catch(() => null)
+          ]);
+
+          state.userProfile = profileSnap && profileSnap.exists() ? profileSnap.data() : null;
+          state.isAdmin = Boolean(
+            user.emailVerified &&
+              (user.email === 'sushmidhas4@gmail.com' || (adminSnap && adminSnap.exists()))
+          );
+          state.bookmarkedIds = bmSnap && bmSnap.exists() && Array.isArray(bmSnap.data().projectIds)
+            ? bmSnap.data().projectIds
+            : [];
+          state.recentIds = rvSnap && rvSnap.exists() && Array.isArray(rvSnap.data().projectIds)
+            ? rvSnap.data().projectIds
+            : [];
+        } catch (err) {
+          console.warn('Private user data load warning:', err);
+        }
+
+        updateAuthHeaderUI();
+        renderAllSections();
+      }
+
+      function updateAuthHeaderUI() {
+        const user = state.user;
+        const signedIn = Boolean(user);
+
+        document.getElementById('headerSignInBtn').classList.toggle('hidden', signedIn);
+        document.getElementById('mobileSignInLink').classList.toggle('hidden', signedIn);
+
+        document.getElementById('headerProfileBtn').classList.toggle('hidden', !signedIn);
+        document.getElementById('headerLogoutBtn').classList.toggle('hidden', !signedIn);
+        document.getElementById('mobileProfileBtn').classList.toggle('hidden', !signedIn);
+        document.getElementById('mobileLogoutBtn').classList.toggle('hidden', !signedIn);
+
+        document.getElementById('headerAdminLink').classList.toggle('hidden', !state.isAdmin);
+        document.getElementById('mobileAdminLink').classList.toggle('hidden', !state.isAdmin);
+        document.getElementById('aboutAdminBtn')?.classList.toggle('hidden', !state.isAdmin);
+        document.getElementById('footerAdminLink')?.classList.toggle('hidden', !state.isAdmin);
+
+        if (signedIn) {
+          const label = state.userProfile?.name || user.displayName || 'Profile';
+          document.getElementById('headerProfileLabel').textContent = label.split(' ')[0];
+          document.getElementById('verifyBanner').classList.toggle('hidden', user.emailVerified);
+        } else {
+          document.getElementById('verifyBanner').classList.add('hidden');
+        }
+      }
+
+      function renderLoadingSkeletons() {
+        const cardSkel = `
+          <div class="skeleton-card">
+            <div class="skeleton-media"></div>
+            <div class="skeleton-body">
+              <div class="skeleton-line" style="width:48%;"></div>
+              <div class="skeleton-line" style="width:86%;height:16px;"></div>
+              <div class="skeleton-line" style="width:100%;"></div>
+              <div class="skeleton-line" style="width:72%;"></div>
+            </div>
+          </div>
+        `;
+        const skel = `<div class="skeleton-grid">${cardSkel.repeat(3)}</div>`;
+        document.getElementById('homeFeaturedGrid').innerHTML = skel;
+        document.getElementById('homeLatestGrid').innerHTML = skel;
+        document.getElementById('exploreProjectsGrid').innerHTML = skel;
+      }
+
+      // Render Dynamic Statistics with Smooth Count-Up
+      function renderStats() {
+        const deptCount = state.departments.length > 0 ? state.departments.length : 0;
+        const projCount = state.projects.length;
+        const achCount = state.achievements.length;
+        const studentCount = state.portalStats?.totalStudents ?? 0;
+
+        animateStatNumber(document.getElementById('statProjects'), projCount);
+        animateStatNumber(document.getElementById('statDepartments'), deptCount);
+        animateStatNumber(document.getElementById('statStudents'), studentCount);
+        animateStatNumber(document.getElementById('statAchievements'), achCount);
+      }
+
+      // Render Department Cards
+      function getDepartmentCatalog() {
+        if (state.departments.length > 0) return state.departments;
+        return OFFICIAL_DEPARTMENTS.map((d) => ({ ...d, headOfDepartment: 'Department Faculty Board' }));
+      }
+
+      function renderDepartmentsGrid(containerId) {
+        const container = document.getElementById(containerId);
+        const depts = getDepartmentCatalog();
+
+        if (state.departments.length === 0 && state.projects.length === 0) {
+          container.innerHTML = `
+            <div class="state-box" style="grid-column:1 / -1;">
+              <h3>Departments Ready for Initialization</h3>
+              <p>${state.isAdmin ? 'No department records are stored in Cloud Firestore yet. Administrators can initialize all 6 official departments and starter projects from the Admin Dashboard.' : 'No department records are available in the catalog yet. Please check back once projects are published.'}</p>
+              ${state.isAdmin ? `<a href="admin.html" class="btn-primary-sm">Open Admin Dashboard</a>` : ''}
+            </div>
+          `;
+          return;
+        }
+
+        container.innerHTML = depts.map((dept) => {
+          const count = state.projects.filter(
+            (p) => p.departmentId === dept.departmentId || p.department === dept.departmentName
+          ).length;
+
+          return `
+            <button type="button" class="dept-card" data-open-dept="${escapeHtml(dept.departmentId)}">
+              <div>
+                <div class="dept-card-top">
+                  <span class="dept-code">${escapeHtml(dept.shortCode)}</span>
+                  <span class="dept-count">${count} ${count === 1 ? 'project' : 'projects'}</span>
+                </div>
+                <h3 style="margin-top:10px;">${escapeHtml(dept.departmentName)}</h3>
+                <p>${escapeHtml(dept.description || '')}</p>
+              </div>
+              <div class="dept-card-foot">
+                <span>${escapeHtml(dept.headOfDepartment || 'Faculty Review Board')}</span>
+                <span style="color:var(--cobalt-600);font-weight:600;display:inline-flex;align-items:center;gap:4px;">
+                  View Projects <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+                </span>
+              </div>
+            </button>
+          `;
+        }).join('');
+
+        container.querySelectorAll('[data-open-dept]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const deptId = btn.getAttribute('data-open-dept');
+            document.getElementById('filterDepartment').value = deptId;
+            document.getElementById('exploreSearchInput').value = '';
+            const deptObj = depts.find((d) => d.departmentId === deptId);
+            document.getElementById('exploreHeading').textContent = deptObj ? deptObj.departmentName : 'Department Projects';
+            document.getElementById('exploreSubheading').textContent = deptObj?.description || 'Filtered projects for this department.';
+            navigateTo('explore');
+            renderExploreProjects();
+          });
+        });
+
+        createIcons({ icons });
+      }
+
+      // Render Project Cards
+      function createProjectCardHtml(proj) {
+        const isBookmarked = state.bookmarkedIds.includes(proj.projectId || proj.id);
+        const pid = proj.projectId || proj.id;
+        const imgUrl = safeUrl(proj.projectImage);
+        const techs = Array.isArray(proj.technologies) ? proj.technologies.slice(0, 4).join(' · ') : '';
+        const teamText = Array.isArray(proj.teamMembers) ? proj.teamMembers.join(', ') : '';
+
+        return `
+          <article class="project-card">
+            <div class="project-thumb-wrap">
+              ${
+                imgUrl
+                  ? `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(proj.title)}" class="project-thumb" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+                     <div class="project-thumb-fallback" style="display:none;">${escapeHtml(proj.title)}</div>`
+                  : `<div class="project-thumb-fallback">${escapeHtml(proj.title)}</div>`
+              }
+            </div>
+            <div class="project-card-body">
+              <div class="meta-line">
+                <strong>${escapeHtml(proj.departmentId ? proj.departmentId.toUpperCase() : proj.department)}</strong>
+                <span aria-hidden="true">·</span>
+                <span>${escapeHtml(proj.domain)}</span>
+                <span aria-hidden="true">·</span>
+                <span class="tabular-nums">${escapeHtml(proj.academicYear)}</span>
+              </div>
+              <h3 class="project-card-title">${escapeHtml(proj.title)}</h3>
+              <p class="project-card-desc">${escapeHtml(proj.description)}</p>
+              <div class="project-card-details">
+                <div><strong style="color:var(--text-primary);font-weight:600;">Team:</strong> ${escapeHtml(teamText || 'Project Team')}</div>
+                <div><strong style="color:var(--text-primary);font-weight:600;">Guide:</strong> ${escapeHtml(proj.guide || 'Faculty Advisor')}</div>
+                ${techs ? `<div class="project-tech-line">${escapeHtml(techs)}</div>` : ''}
+              </div>
+            </div>
+            <div class="project-card-actions">
+              <button type="button" class="card-btn-primary" data-view-project="${escapeHtml(pid)}">View Details</button>
+              <button type="button" class="card-btn-icon ${isBookmarked ? 'saved' : ''}" data-bookmark-project="${escapeHtml(pid)}" title="${isBookmarked ? 'Remove bookmark' : 'Bookmark project'}" aria-label="${isBookmarked ? 'Remove bookmark' : 'Bookmark project'}">
+                <i data-lucide="bookmark" style="width:15px;height:15px;${isBookmarked ? 'fill:currentColor;' : ''}"></i>
+              </button>
+              <button type="button" class="card-btn-icon" data-share-project="${escapeHtml(pid)}" title="Share project" aria-label="Share project">
+                <i data-lucide="share-2" style="width:15px;height:15px;"></i>
+              </button>
+              <button type="button" class="card-btn-icon" data-related-project="${escapeHtml(pid)}" title="Related projects" aria-label="View related projects">
+                <i data-lucide="git-branch" style="width:15px;height:15px;"></i>
+              </button>
+            </div>
+          </article>
+        `;
+      }
+
+      function attachProjectCardHandlers(container) {
+        container.querySelectorAll('[data-view-project]').forEach((btn) => {
+          btn.addEventListener('click', () => openProjectDetails(btn.getAttribute('data-view-project'), false));
+        });
+        container.querySelectorAll('[data-share-project]').forEach((btn) => {
+          btn.addEventListener('click', () => openShareModal(btn.getAttribute('data-share-project')));
+        });
+        container.querySelectorAll('[data-related-project]').forEach((btn) => {
+          btn.addEventListener('click', () => openProjectDetails(btn.getAttribute('data-related-project'), true));
+        });
+        container.querySelectorAll('[data-bookmark-project]').forEach((btn) => {
+          btn.addEventListener('click', () => toggleBookmark(btn.getAttribute('data-bookmark-project')));
+        });
+        createIcons({ icons });
+      }
+
+      function renderProjectGrid(containerId, list, emptyTitle, emptyDesc, showAdminCta = false) {
+        const container = document.getElementById(containerId);
+        if (!list.length) {
+          container.innerHTML = `
+            <div class="state-box" style="grid-column:1 / -1;">
+              <h3>${escapeHtml(emptyTitle)}</h3>
+              <p>${escapeHtml(emptyDesc)}</p>
+              ${showAdminCta && state.isAdmin ? `<a href="admin.html" class="btn-primary-sm">Initialize Data in Admin Dashboard</a>` : ''}
+            </div>
+          `;
+          return;
+        }
+        container.innerHTML = list.map(createProjectCardHtml).join('');
+        attachProjectCardHandlers(container);
+      }
+
+      function isFacultyAchievement(ach) {
+        return String(ach?.category || '').trim().toLowerCase().startsWith('faculty');
+      }
+
+      function resolveAchievementSourceUrl(ach) {
+        const direct = safeUrl(ach?.sourceUrl);
+        if (!direct) return '';
+        if (/^https?:\/\/([^/]+\.)?uit\.ac\.in(\/|$)/i.test(direct)) return '';
+        return direct;
+      }
+
+      function getSourceLinkLabel(ach, url) {
+        const cat = String(ach?.category || '').trim().toLowerCase();
+        if (url.includes('doi.org')) return 'View DOI Paper';
+        if (url.includes('vidwan')) return 'Faculty Vidwan Profile';
+        if (cat.startsWith('faculty')) return 'Research Publication URL';
+        return 'External Link';
+      }
+
+      // Render Achievement Cards
+      function createAchievementCardHtml(ach) {
+        const imgUrl = safeUrl(ach.studentImage);
+        const certUrl = safeUrl(ach.certificateImage);
+        const sourceLink = resolveAchievementSourceUrl(ach);
+        const isFaculty = isFacultyAchievement(ach);
+        const roleLabel = isFaculty
+          ? 'Faculty Achievement'
+          : ach.category === 'Placement'
+          ? 'Student Placement'
+          : 'Student Achievement';
+        const roleBg = isFaculty ? '#EEF2FF' : '#F1F5F9';
+        const roleColor = isFaculty ? '#3730A3' : '#334155';
+        const initials = (ach.studentName || (isFaculty ? 'FC' : 'ST'))
+          .replace(/^(Dr\.|Mr\.|Mrs\.|Ms\.|Prof\.)\s*/i, '')
+          .split(' ')
+          .filter(Boolean)
+          .map((w) => w[0])
+          .slice(0, 2)
+          .join('')
+          .toUpperCase() || 'CC';
+
+        return `
+          <article class="achievement-card">
+            <div class="achievement-student-row">
+              ${
+                imgUrl
+                  ? `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(ach.studentName)}" class="student-avatar" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+                     <div class="student-avatar-fallback" style="display:none;">${escapeHtml(initials)}</div>`
+                  : `<div class="student-avatar-fallback" style="${isFaculty ? 'background:#1E293B;color:#F8FAFC;' : ''}">${escapeHtml(initials)}</div>`
+              }
+              <div style="min-width:0;flex:1;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+                  <h3 style="margin:0 0 2px;font-size:1.0625rem;color:var(--navy-900);">${escapeHtml(ach.studentName)}</h3>
+                  <span style="font-size:0.7rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:${roleBg};color:${roleColor};">${roleLabel}</span>
+                </div>
+                <div class="meta-line">
+                  <span>${escapeHtml(ach.department)}</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="tabular-nums">${escapeHtml(ach.date)}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="achievement-award-line">${escapeHtml(ach.award)} · ${escapeHtml(ach.category)}</div>
+              <h4 style="margin:4px 0 6px;font-size:1.05rem;color:var(--navy-900);">${escapeHtml(ach.achievementTitle)}</h4>
+              <p style="margin:0;font-size:0.875rem;color:var(--text-secondary);line-height:1.55;">${escapeHtml(ach.description)}</p>
+            </div>
+            <div style="margin-top:auto;padding-top:12px;border-top:1px solid var(--border-hairline);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">
+              <span style="font-size:0.8125rem;color:var(--text-muted);">${escapeHtml(ach.eventName)}</span>
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                ${
+                  sourceLink
+                    ? `<a href="${escapeHtml(sourceLink)}" target="_blank" rel="noopener noreferrer" class="btn-outline-sm" style="min-height:32px;padding:5px 10px;font-size:0.78rem;display:inline-flex;align-items:center;gap:5px;text-decoration:none;${isFaculty ? 'border-color:#C7D2FE;color:#3730A3;' : ''}">${escapeHtml(getSourceLinkLabel(ach, sourceLink))} ↗</a>`
+                    : ''
+                }
+                ${
+                  certUrl
+                    ? `<button type="button" class="btn-outline-sm" style="min-height:32px;padding:5px 10px;font-size:0.78rem;" data-cert-img="${escapeHtml(certUrl)}" data-cert-title="${escapeHtml(ach.achievementTitle)}">Certificate</button>`
+                    : ''
+                }
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderAchievementsGrid(containerId, list) {
+        const container = document.getElementById(containerId);
+        if (!list.length) {
+          container.innerHTML = `
+            <div class="state-box" style="grid-column:1 / -1;">
+              <h3>No Achievements Found</h3>
+              <p>Approved student honors and competition recognitions will appear here once published by an administrator.</p>
+            </div>
+          `;
+          return;
+        }
+        container.innerHTML = list.map(createAchievementCardHtml).join('');
+        container.querySelectorAll('[data-cert-img]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            openLightbox(btn.getAttribute('data-cert-img'), btn.getAttribute('data-cert-title'));
+          });
+        });
+      }
+
+      // Populate Explore & Achievement Filters
+      function populateFilterOptions() {
+        const depts = getDepartmentCatalog();
+        const deptSelect = document.getElementById('filterDepartment');
+        const achDeptSelect = document.getElementById('achFilterDept');
+        const curDept = deptSelect.value;
+
+        deptSelect.innerHTML = `<option value="">All Departments</option>` +
+          depts.map((d) => `<option value="${escapeHtml(d.departmentId)}">${escapeHtml(d.departmentName)}</option>`).join('');
+        deptSelect.value = curDept;
+
+        achDeptSelect.innerHTML = `<option value="">All Departments</option>` +
+          depts.map((d) => `<option value="${escapeHtml(d.departmentId)}">${escapeHtml(d.departmentName)}</option>`).join('');
+
+        const years = [...new Set(state.projects.map((p) => p.academicYear).filter(Boolean))].sort().reverse();
+        const domains = [...new Set(state.projects.map((p) => p.domain).filter(Boolean))].sort();
+        const techs = [...new Set(state.projects.flatMap((p) => Array.isArray(p.technologies) ? p.technologies : []))].sort();
+        const achCats = [...new Set(state.achievements.map((a) => a.category).filter(Boolean))].sort();
+
+        document.getElementById('filterYear').innerHTML = `<option value="">All Academic Years</option>` +
+          years.map((y) => `<option value="${escapeHtml(y)}">${escapeHtml(y)}</option>`).join('');
+        document.getElementById('filterDomain').innerHTML = `<option value="">All Domains</option>` +
+          domains.map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+        document.getElementById('filterTech').innerHTML = `<option value="">All Technologies</option>` +
+          techs.map((t) => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+        document.getElementById('achFilterCategory').innerHTML = `<option value="">All Categories</option>` +
+          achCats.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+      }
+
+      // Render Explore View with Search, Filters, and Sort
+      function renderExploreProjects() {
+        const q = document.getElementById('exploreSearchInput').value.trim().toLowerCase();
+        const deptVal = document.getElementById('filterDepartment').value;
+        const yearVal = document.getElementById('filterYear').value;
+        const domainVal = document.getElementById('filterDomain').value;
+        const techVal = document.getElementById('filterTech').value;
+        const sortVal = document.getElementById('sortProjects').value;
+
+        let filtered = state.projects.filter((p) => {
+          if (deptVal && p.departmentId !== deptVal) return false;
+          if (yearVal && p.academicYear !== yearVal) return false;
+          if (domainVal && p.domain !== domainVal) return false;
+          if (techVal && !(Array.isArray(p.technologies) && p.technologies.includes(techVal))) return false;
+
+          if (q) {
+            const haystack = [
+              p.title,
+              p.department,
+              p.departmentId,
+              p.domain,
+              p.description,
+              ...(Array.isArray(p.technologies) ? p.technologies : []),
+              ...(Array.isArray(p.teamMembers) ? p.teamMembers : [])
+            ]
+              .join(' ')
+              .toLowerCase();
+            if (!haystack.includes(q)) return false;
+          }
+          return true;
+        });
+
+        if (sortVal === 'alpha') {
+          filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+        } else if (sortVal === 'department') {
+          filtered.sort((a, b) => (a.department || '').localeCompare(b.department || '') || (a.title || '').localeCompare(b.title || ''));
+        } else {
+          filtered.sort((a, b) => getTimestampMs(b.createdAt) - getTimestampMs(a.createdAt));
+        }
+
+        document.getElementById('exploreResultCount').textContent = `${filtered.length} ${filtered.length === 1 ? 'project' : 'projects'}`;
+        renderProjectGrid(
+          'exploreProjectsGrid',
+          filtered,
+          'No Matching Projects Found',
+          'Try adjusting your search keywords or clearing department and technology filters.',
+          state.projects.length === 0
+        );
+      }
+
+      function renderFilteredAchievements() {
+        const q = document.getElementById('achSearchInput').value.trim().toLowerCase();
+        const typeVal = document.getElementById('achFilterType')?.value || '';
+        const deptVal = document.getElementById('achFilterDept').value;
+        const catVal = document.getElementById('achFilterCategory').value;
+
+        const filtered = state.achievements.filter((a) => {
+          if (typeVal === 'faculty' && !isFacultyAchievement(a)) return false;
+          if (typeVal === 'student' && isFacultyAchievement(a)) return false;
+          if (deptVal && a.departmentId !== deptVal) return false;
+          if (catVal && a.category !== catVal) return false;
+          if (q) {
+            const hay = `${a.studentName} ${a.achievementTitle} ${a.eventName} ${a.award} ${a.department} ${a.category} ${a.date} ${a.description || ''}`.toLowerCase();
+            if (!hay.includes(q)) return false;
+          }
+          return true;
+        });
+
+        const countEl = document.getElementById('achResultCount');
+        if (countEl) {
+          countEl.textContent = `${filtered.length} ${filtered.length === 1 ? 'achievement' : 'achievements'}`;
+        }
+        renderAchievementsGrid('achievementsFullGrid', filtered);
+      }
+
+      function renderAllSections() {
+        renderStats();
+        renderDepartmentsGrid('homeDepartmentsGrid');
+        renderDepartmentsGrid('allDepartmentsGrid');
+
+        const featured = state.projects.filter((p) => p.featured).slice(0, 6);
+        renderProjectGrid(
+          'homeFeaturedGrid',
+          featured,
+          'No Featured Projects Yet',
+          'Approved projects marked as featured by administrators will appear here.',
+          state.projects.length === 0
+        );
+
+        const latest = state.projects.slice(0, 6);
+        renderProjectGrid(
+          'homeLatestGrid',
+          latest,
+          'No Projects Published Yet',
+          'Once administrators publish approved student projects in Firebase, they will load here automatically.',
+          state.projects.length === 0
+        );
+
+        const studentHighlights = state.achievements.filter((a) => !isFacultyAchievement(a)).slice(0, 3);
+        const facultyHighlights = state.achievements.filter((a) => isFacultyAchievement(a)).slice(0, 3);
+        const homeAchList = facultyHighlights.length
+          ? [...studentHighlights, ...facultyHighlights]
+          : state.achievements.slice(0, 6);
+        renderAchievementsGrid('homeAchievementsGrid', homeAchList);
+        renderExploreProjects();
+        renderFilteredAchievements();
+
+        if (state.activeView === 'bookmarks') renderBookmarksView();
+        if (state.activeView === 'recent') renderRecentView();
+      }
+
+      // Compute Related Projects (same department, domain, or overlapping technologies)
+      function getRelatedProjects(currentProj) {
+        const curId = currentProj.projectId || currentProj.id;
+        const curTechs = new Set((currentProj.technologies || []).map((t) => t.toLowerCase()));
+
+        return state.projects
+          .filter((p) => (p.projectId || p.id) !== curId)
+          .map((p) => {
+            let score = 0;
+            if (p.departmentId === currentProj.departmentId) score += 3;
+            if (p.domain && currentProj.domain && p.domain.toLowerCase() === currentProj.domain.toLowerCase()) score += 4;
+            const overlap = (p.technologies || []).filter((t) => curTechs.has(t.toLowerCase())).length;
+            score += overlap * 2;
+            return { project: p, score };
+          })
+          .filter((item) => item.score > 0)
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 3)
+          .map((item) => item.project);
+      }
+
+      const PRELOADED_DOC_IDS = new Set([
+        'proj_cse_healthcare_mgmt', 'proj_it_campusconnect_portal', 'proj_ra_agriculture_robot',
+        'proj_csecs_phishing_detection', 'proj_ece_smart_home', 'proj_aids_student_performance',
+        'proj_aids_med_nlp', 'proj_cse_cloud_drive', 'proj_it_campus_events',
+        'proj_ra_obstacle_bot', 'proj_csecs_network_ids', 'proj_ece_energy_monitor',
+        'proj_aids_plant_disease'
+      ]);
+
+      function resolveDocumentationUrl(proj) {
+        const pid = proj.projectId || proj.id || '';
+        const rawDoc = safeUrl(proj.documentationLink);
+        const rawGithub = safeUrl(proj.githubLink);
+        const isGithubDoc = Boolean(
+          rawDoc && (
+            /^https?:\/\/(www\.)?github\.com\/.*(#readme)?$/i.test(rawDoc) ||
+            (rawGithub && rawDoc === rawGithub)
+          )
+        );
+        if (rawDoc && !isGithubDoc) {
+          return rawDoc;
+        }
+        if (isGithubDoc || PRELOADED_DOC_IDS.has(pid)) {
+          return `/docs/project-documentation.html?project=${encodeURIComponent(pid)}`;
+        }
+        return '';
+      }
+
+      // Open Project Details Modal & Record Recently Viewed
+      async function openProjectDetails(projectId, scrollToRelated = false) {
+        const proj = state.projects.find((p) => (p.projectId || p.id) === projectId);
+        if (!proj) return;
+
+        const pid = proj.projectId || proj.id;
+        const isBookmarked = state.bookmarkedIds.includes(pid);
+        const imgUrl = safeUrl(proj.projectImage);
+        const screenshots = Array.isArray(proj.screenshots) ? proj.screenshots.map(safeUrl).filter(Boolean) : [];
+        const objectives = Array.isArray(proj.objectives) ? proj.objectives : [];
+        const technologies = Array.isArray(proj.technologies) ? proj.technologies : [];
+        const teamMembers = Array.isArray(proj.teamMembers) ? proj.teamMembers : [];
+        const githubUrl = safeUrl(proj.githubLink);
+        const demoUrl = safeUrl(proj.demoLink);
+        const docUrl = resolveDocumentationUrl(proj);
+        const videoUrl = safeUrl(proj.videoDemoLink);
+        const hasAnyResource = Boolean(githubUrl || demoUrl || docUrl || videoUrl);
+        const related = getRelatedProjects(proj);
+
+        document.getElementById('pmTitle').textContent = proj.title;
+
+        const body = document.getElementById('pmBody');
+        body.innerHTML = `
+          ${imgUrl ? `<img src="${escapeHtml(imgUrl)}" alt="${escapeHtml(proj.title)}" class="detail-hero-img" referrerpolicy="no-referrer" onerror="this.style.display='none';" />` : ''}
+
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px;">
+            <div class="meta-line" style="font-size:0.9rem;">
+              <strong>${escapeHtml(proj.department)}</strong>
+              <span aria-hidden="true">·</span>
+              <span>${escapeHtml(proj.domain)}</span>
+              <span aria-hidden="true">·</span>
+              <span class="tabular-nums">Academic Year ${escapeHtml(proj.academicYear)}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <button type="button" id="pmShareBtn" class="btn-outline-sm">
+                <i data-lucide="share-2" style="width:15px;height:15px;"></i>
+                <span>Share</span>
+              </button>
+              <button type="button" id="pmBookmarkBtn" class="btn-outline-sm">
+                <i data-lucide="bookmark" style="width:15px;height:15px;${isBookmarked ? 'fill:currentColor;' : ''}"></i>
+                <span>${isBookmarked ? 'Bookmarked' : 'Bookmark Project'}</span>
+              </button>
+              <button type="button" id="pmContactBtn" class="btn-primary-sm">
+                <i data-lucide="mail" style="width:15px;height:15px;"></i>
+                <span>Contact Project Team</span>
+              </button>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:14px;padding:16px;background:var(--bg-subtle);border-radius:12px;margin-bottom:16px;">
+            <div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:2px;">Team Members</div>
+              <div style="font-size:0.9rem;font-weight:600;color:var(--navy-900);">${escapeHtml(teamMembers.join(', ') || 'Not listed')}</div>
+            </div>
+            <div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:2px;">Project Guide</div>
+              <div style="font-size:0.9rem;font-weight:600;color:var(--navy-900);">${escapeHtml(proj.guide || 'Not listed')}</div>
+            </div>
+            <div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:2px;">Technologies Used</div>
+              <div class="font-mono" style="font-size:0.8125rem;color:var(--cobalt-700);">${escapeHtml(technologies.join(' · ') || '—')}</div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h4>Project Abstract</h4>
+            <p>${escapeHtml(proj.abstract || proj.description)}</p>
+          </div>
+
+          ${proj.problemStatement ? `
+          <div class="detail-section">
+            <h4>Problem Statement</h4>
+            <p>${escapeHtml(proj.problemStatement)}</p>
+          </div>` : ''}
+
+          ${proj.proposedSolution ? `
+          <div class="detail-section">
+            <h4>Proposed Solution</h4>
+            <p>${escapeHtml(proj.proposedSolution)}</p>
+          </div>` : ''}
+
+          ${objectives.length ? `
+          <div class="detail-section">
+            <h4>Objectives</h4>
+            <ul style="margin:6px 0 0;padding-left:20px;display:grid;gap:6px;">
+              ${objectives.map((o) => `<li>${escapeHtml(o)}</li>`).join('')}
+            </ul>
+          </div>` : ''}
+
+          ${proj.architecture ? `
+          <div class="detail-section">
+            <h4>Project Architecture</h4>
+            <p>${escapeHtml(proj.architecture)}</p>
+          </div>` : ''}
+
+          <div class="detail-section">
+            <h4>Project Resources</h4>
+            ${
+              hasAnyResource
+                ? `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+                    ${githubUrl ? `<a href="${escapeHtml(githubUrl)}" target="_blank" rel="noopener noreferrer" class="btn-outline-sm"><i data-lucide="github" style="width:15px;height:15px;"></i><span>View Source Code (GitHub)</span></a>` : ''}
+                    ${demoUrl ? `<a href="${escapeHtml(demoUrl)}" target="_blank" rel="noopener noreferrer" class="btn-primary-sm"><i data-lucide="globe" style="width:15px;height:15px;"></i><span>Live Project Demo</span></a>` : ''}
+                    ${docUrl ? `<a href="${escapeHtml(docUrl)}" target="_blank" rel="noopener noreferrer" class="btn-outline-sm"><i data-lucide="file-text" style="width:15px;height:15px;"></i><span>Download Documentation</span></a>` : ''}
+                    ${videoUrl ? `<a href="${escapeHtml(videoUrl)}" target="_blank" rel="noopener noreferrer" class="btn-outline-sm"><i data-lucide="play-circle" style="width:15px;height:15px;"></i><span>Watch Project Demo</span></a>` : ''}
+                  </div>`
+                : `<div style="margin-top:10px;padding:12px 16px;border-radius:10px;background:var(--bg-subtle);border:1px solid var(--border-hairline);color:var(--text-muted);font-size:0.875rem;">
+                    Sample Project – Resources Not Available
+                  </div>`
+            }
+          </div>
+
+          ${screenshots.length ? `
+          <div class="detail-section">
+            <h4>Project Screenshots</h4>
+            <div class="screenshots-grid">
+              ${screenshots.map((src, i) => `<img src="${escapeHtml(src)}" alt="Screenshot ${i + 1}" class="screenshot-thumb" data-lb-src="${escapeHtml(src)}" referrerpolicy="no-referrer" />`).join('')}
+            </div>
+          </div>` : ''}
+
+          <div id="pmRelatedSection" class="detail-section">
+            <h4>Related Projects</h4>
+            ${
+              related.length
+                ? `<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:12px;margin-top:10px;">
+                    ${related.map((rp) => `
+                      <button type="button" class="dept-card" style="padding:16px;" data-switch-project="${escapeHtml(rp.projectId || rp.id)}">
+                        <div>
+                          <div class="meta-line"><strong>${escapeHtml((rp.departmentId || '').toUpperCase())}</strong><span>·</span><span>${escapeHtml(rp.domain)}</span></div>
+                          <h3 style="font-size:0.95rem;margin-top:6px;">${escapeHtml(rp.title)}</h3>
+                        </div>
+                        <span style="font-size:0.8125rem;color:var(--cobalt-600);font-weight:600;">Open Project &rarr;</span>
+                      </button>
+                    `).join('')}
+                  </div>`
+                : `<p style="margin:4px 0 0;color:var(--text-muted);">No similar projects available in this domain yet.</p>`
+            }
+          </div>
+        `;
+
+        document.getElementById('projectModal').classList.add('open');
+        createIcons({ icons });
+
+        if (scrollToRelated) {
+          setTimeout(() => {
+            document.getElementById('pmRelatedSection')?.scrollIntoView({ behavior: 'smooth' });
+          }, 80);
+        }
+
+        document.getElementById('pmShareBtn').addEventListener('click', () => {
+          openShareModal(pid);
+        });
+
+        document.getElementById('pmBookmarkBtn').addEventListener('click', async () => {
+          await toggleBookmark(pid);
+          const savedNow = state.bookmarkedIds.includes(pid);
+          const btn = document.getElementById('pmBookmarkBtn');
+          if (btn) {
+            btn.innerHTML = `<i data-lucide="bookmark" style="width:15px;height:15px;${savedNow ? 'fill:currentColor;' : ''}"></i><span>${savedNow ? 'Bookmarked' : 'Bookmark Project'}</span>`;
+            createIcons({ icons });
+          }
+        });
+
+        document.getElementById('pmContactBtn').addEventListener('click', () => {
+          openContactModal(proj);
+        });
+
+        body.querySelectorAll('[data-switch-project]').forEach((btn) => {
+          btn.addEventListener('click', () => openProjectDetails(btn.getAttribute('data-switch-project'), false));
+        });
+
+        body.querySelectorAll('[data-lb-src]').forEach((img) => {
+          img.addEventListener('click', () => openLightbox(img.getAttribute('data-lb-src'), proj.title));
+        });
+
+        // Automatically record in Recently Viewed for signed-in verified users
+        await recordRecentlyViewed(pid);
+      }
+
+      // Bookmark Toggle (Firestore)
+      async function toggleBookmark(projectId) {
+        if (!state.user) {
+          showToast('Please sign in to bookmark projects.');
+          setTimeout(() => {
+            window.location.href = 'auth.html';
+          }, 800);
+          return;
+        }
+        if (!state.user.emailVerified) {
+          showToast('Please verify your email address to save bookmarks.', 'error');
+          return;
+        }
+
+        const exists = state.bookmarkedIds.includes(projectId);
+        const nextIds = exists
+          ? state.bookmarkedIds.filter((id) => id !== projectId)
+          : [projectId, ...state.bookmarkedIds].slice(0, 200);
+
+        const bmRef = doc(db, 'bookmarks', state.user.uid);
+        try {
+          const existingSnap = await getDoc(bmRef);
+          if (existingSnap.exists()) {
+            await updateDoc(bmRef, {
+              projectIds: nextIds,
+              updatedAt: serverTimestamp()
+            });
+          } else {
+            await setDoc(bmRef, {
+              userId: state.user.uid,
+              projectIds: nextIds,
+              updatedAt: serverTimestamp()
+            });
+          }
+          state.bookmarkedIds = nextIds;
+          showToast(exists ? 'Removed from bookmarks.' : 'Project saved to bookmarks.', 'success');
+          renderAllSections();
+          if (!exists) {
+            document.querySelectorAll(`[data-bookmark-project="${CSS.escape(projectId)}"]`).forEach((btn) => {
+              btn.classList.add('bookmark-pop');
+              setTimeout(() => btn.classList.remove('bookmark-pop'), 380);
+            });
+          }
+        } catch (err) {
+          handleFirestoreError(err, OperationType.WRITE, `bookmarks/${state.user.uid}`);
+        }
+      }
+
+      // Record Recently Viewed (Max 10, No Duplicates, Firestore)
+      async function recordRecentlyViewed(projectId) {
+        if (!state.user || !state.user.emailVerified) return;
+
+        const nextIds = [projectId, ...state.recentIds.filter((id) => id !== projectId)].slice(0, 10);
+        if (JSON.stringify(nextIds) === JSON.stringify(state.recentIds)) return;
+
+        const rvRef = doc(db, 'recentlyViewed', state.user.uid);
+        try {
+          const snap = await getDoc(rvRef);
+          if (snap.exists()) {
+            await updateDoc(rvRef, {
+              projectIds: nextIds,
+              viewedAt: serverTimestamp()
+            });
+          } else {
+            await setDoc(rvRef, {
+              userId: state.user.uid,
+              projectIds: nextIds,
+              viewedAt: serverTimestamp()
+            });
+          }
+          state.recentIds = nextIds;
+          if (state.activeView === 'recent') renderRecentView();
+        } catch (err) {
+          console.warn('Recently viewed update skipped:', err);
+        }
+      }
+
+      // Render Bookmarks Section
+      function renderBookmarksView() {
+        const container = document.getElementById('bookmarksContainer');
+        if (!state.user) {
+          container.innerHTML = `
+            <div class="state-box">
+              <h3>Sign In to View Your Bookmarks</h3>
+              <p>Bookmarks are stored privately in your Firebase account so you can access them from any device.</p>
+              <a href="auth.html" class="btn-primary-sm">Sign In or Register</a>
+            </div>
+          `;
+          return;
+        }
+        if (!state.user.emailVerified) {
+          container.innerHTML = `
+            <div class="state-box">
+              <h3>Verify Your Email to Unlock Bookmarks</h3>
+              <p>Check your inbox for the verification link sent to ${escapeHtml(state.user.email)}, then refresh your session.</p>
+            </div>
+          `;
+          return;
+        }
+
+        const savedProjects = state.bookmarkedIds
+          .map((id) => state.projects.find((p) => (p.projectId || p.id) === id))
+          .filter(Boolean);
+
+        if (!savedProjects.length) {
+          container.innerHTML = `
+            <div class="state-box">
+              <h3>No Bookmarked Projects Yet</h3>
+              <p>Click the bookmark button on any project card while browsing to save it here for quick reference.</p>
+              <button type="button" class="btn-primary-sm" id="bmExploreBtn">Explore Projects</button>
+            </div>
+          `;
+          document.getElementById('bmExploreBtn').addEventListener('click', () => navigateTo('explore'));
+          return;
+        }
+
+        container.innerHTML = `<div class="project-grid">${savedProjects.map(createProjectCardHtml).join('')}</div>`;
+        attachProjectCardHandlers(container);
+      }
+
+      // Render Recently Viewed Section
+      function renderRecentView() {
+        const container = document.getElementById('recentContainer');
+        const clearBtn = document.getElementById('clearHistoryBtn');
+
+        if (!state.user) {
+          clearBtn.classList.add('hidden');
+          container.innerHTML = `
+            <div class="state-box">
+              <h3>Sign In to Track Recently Viewed Projects</h3>
+              <p>Your last 10 viewed projects are automatically synced per account in Cloud Firestore.</p>
+              <a href="auth.html" class="btn-primary-sm">Sign In or Register</a>
+            </div>
+          `;
+          return;
+        }
+
+        const recentProjects = state.recentIds
+          .map((id) => state.projects.find((p) => (p.projectId || p.id) === id))
+          .filter(Boolean);
+
+        clearBtn.classList.toggle('hidden', recentProjects.length === 0);
+
+        if (!recentProjects.length) {
+          container.innerHTML = `
+            <div class="state-box">
+              <h3>No Recently Viewed Projects</h3>
+              <p>Open any project's details to begin building your personal viewing history (up to 10 most recent projects).</p>
+              <button type="button" class="btn-primary-sm" id="rvExploreBtn">Browse Projects</button>
+            </div>
+          `;
+          document.getElementById('rvExploreBtn').addEventListener('click', () => navigateTo('explore'));
+          return;
+        }
+
+        container.innerHTML = `<div class="project-grid">${recentProjects.map(createProjectCardHtml).join('')}</div>`;
+        attachProjectCardHandlers(container);
+      }
+
+      document.getElementById('clearHistoryBtn').addEventListener('click', async () => {
+        if (!state.user) return;
+        const confirmed = await openConfirm('Clear Viewing History', 'Remove all projects from your Recently Viewed list?');
+        if (!confirmed) return;
+
+        try {
+          await updateDoc(doc(db, 'recentlyViewed', state.user.uid), {
+            projectIds: [],
+            viewedAt: serverTimestamp()
+          });
+          state.recentIds = [];
+          renderRecentView();
+          showToast('Viewing history cleared.', 'success');
+        } catch (err) {
+          showToast('Unable to clear viewing history.', 'error');
+        }
+      });
+
+      // Contact Project Team Modal (Strictly Admin-Approved Contacts Only)
+      async function openContactModal(proj) {
+        const pid = proj.projectId || proj.id;
+        const modal = document.getElementById('contactModal');
+        const body = document.getElementById('cmBody');
+        document.getElementById('cmTitle').textContent = 'Contact Project Team';
+        body.innerHTML = `<p style="color:var(--text-muted);">Loading approved contact information...</p>`;
+        modal.classList.add('open');
+
+        try {
+          const contactSnap = await getDoc(doc(db, 'projectContacts', pid));
+          if (!contactSnap.exists() || contactSnap.data().approved !== true) {
+            body.innerHTML = `
+              <div class="state-box" style="border:none;padding:16px 8px;">
+                <h3>Contact Pending Approval</h3>
+                <p>Only administrator-approved contact details are displayed on CampusConnect. This team's contact record is not yet approved.</p>
+              </div>
+            `;
+            return;
+          }
+
+          const c = contactSnap.data();
+          const mailSubject = encodeURIComponent(`CampusConnect Inquiry: ${proj.title}`);
+          body.innerHTML = `
+            <div style="display:grid;gap:14px;">
+              <div>
+                <div style="font-size:0.78rem;color:var(--text-muted);">Project</div>
+                <div style="font-weight:700;color:var(--navy-900);">${escapeHtml(proj.title)}</div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div>
+                  <div style="font-size:0.78rem;color:var(--text-muted);">Team Name</div>
+                  <div style="font-weight:600;color:var(--text-primary);">${escapeHtml(c.teamName)}</div>
+                </div>
+                <div>
+                  <div style="font-size:0.78rem;color:var(--text-muted);">Team Leader</div>
+                  <div style="font-weight:600;color:var(--text-primary);">${escapeHtml(c.teamLeader)}</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div>
+                  <div style="font-size:0.78rem;color:var(--text-muted);">Department</div>
+                  <div style="color:var(--text-primary);">${escapeHtml(c.department)}</div>
+                </div>
+                <div>
+                  <div style="font-size:0.78rem;color:var(--text-muted);">Project Guide</div>
+                  <div style="color:var(--text-primary);">${escapeHtml(c.guide || proj.guide || 'Faculty Advisor')}</div>
+                </div>
+              </div>
+              <div style="padding:14px;background:var(--bg-subtle);border-radius:10px;border:1px solid var(--border-hairline);">
+                <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:4px;">Approved Official Email</div>
+                <div class="font-mono" style="font-size:0.9rem;color:var(--navy-900);word-break:break-all;">${escapeHtml(c.officialEmail)}</div>
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
+                <a href="mailto:${escapeHtml(c.officialEmail)}?subject=${mailSubject}" class="btn-primary-sm" style="flex:1;">
+                  <i data-lucide="send" style="width:15px;height:15px;"></i>
+                  <span>Send Email</span>
+                </a>
+                <button type="button" id="copyTeamEmailBtn" class="btn-outline-sm">Copy Email</button>
+              </div>
+            </div>
+          `;
+          createIcons({ icons });
+
+          document.getElementById('copyTeamEmailBtn').addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(c.officialEmail);
+              showToast('Official email copied to clipboard.', 'success');
+            } catch {
+              showToast('Could not copy automatically.', 'error');
+            }
+          });
+        } catch (err) {
+          body.innerHTML = `
+            <div class="state-box" style="border:none;padding:16px 8px;">
+              <h3>Contact Not Available</h3>
+              <p>Verified team contact details are hidden until approved by an administrator.</p>
+            </div>
+          `;
+        }
+      }
+
+      // Clipboard & Project Share Modal
+      async function copyTextToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch {
+            // Fall through to legacy textarea copy
+          }
+        }
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        let ok = false;
+        try {
+          ok = document.execCommand('copy');
+        } catch {
+          ok = false;
+        }
+        document.body.removeChild(ta);
+        return ok;
+      }
+
+      function getProjectShareUrl(projectId) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('project', projectId);
+        url.hash = 'explore';
+        return url.toString();
+      }
+
+      function buildProjectSocialSummary(proj, shareUrl) {
+        const deptCode = proj.departmentId ? proj.departmentId.toUpperCase() : proj.department;
+        const techs = Array.isArray(proj.technologies) && proj.technologies.length
+          ? proj.technologies.slice(0, 5).join(', ')
+          : '';
+        const team = Array.isArray(proj.teamMembers) && proj.teamMembers.length
+          ? proj.teamMembers.join(', ')
+          : '';
+        const lines = [
+          `${proj.title} (${deptCode} · ${proj.domain} · ${proj.academicYear})`,
+          proj.description || '',
+          team ? `Team: ${team}` : '',
+          techs ? `Tech Stack: ${techs}` : '',
+          `Explore on CampusConnect: ${shareUrl}`
+        ].filter(Boolean);
+        return lines.join('\n\n');
+      }
+
+      function openShareModal(projectId) {
+        const proj = state.projects.find((p) => (p.projectId || p.id) === projectId);
+        if (!proj) return;
+
+        const pid = proj.projectId || proj.id;
+        const shareUrl = getProjectShareUrl(pid);
+        const socialText = buildProjectSocialSummary(proj, shareUrl);
+        const encodedUrl = encodeURIComponent(shareUrl);
+        const encodedShortText = encodeURIComponent(`Check out "${proj.title}" (${proj.domain}) on CampusConnect:`);
+        const encodedWhatsapp = encodeURIComponent(socialText);
+        const canNativeShare = typeof navigator.share === 'function';
+
+        document.getElementById('smTitle').textContent = 'Share Project';
+        const body = document.getElementById('smBody');
+        body.innerHTML = `
+          <div style="display:grid;gap:14px;">
+            <div>
+              <div style="font-weight:700;color:var(--navy-900);font-size:1rem;">${escapeHtml(proj.title)}</div>
+              <div class="meta-line" style="margin-top:4px;">
+                <strong>${escapeHtml(proj.departmentId ? proj.departmentId.toUpperCase() : proj.department)}</strong>
+                <span aria-hidden="true">·</span>
+                <span>${escapeHtml(proj.domain)}</span>
+                <span aria-hidden="true">·</span>
+                <span class="tabular-nums">${escapeHtml(proj.academicYear)}</span>
+              </div>
+            </div>
+
+            <div>
+              <label for="smUrlInput" style="display:block;font-size:0.8rem;font-weight:600;color:var(--text-secondary);margin-bottom:6px;">Shareable Project Link</label>
+              <div class="share-link-row">
+                <input type="text" id="smUrlInput" class="share-link-input" value="${escapeHtml(shareUrl)}" readonly aria-label="Shareable project URL" />
+                <button type="button" id="smCopyLinkBtn" class="btn-primary-sm" style="min-height:40px;white-space:nowrap;">
+                  <i data-lucide="link" style="width:15px;height:15px;"></i>
+                  <span>Copy Link</span>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;">
+                <label for="smSummaryInput" style="font-size:0.8rem;font-weight:600;color:var(--text-secondary);">Social Media Post Details</label>
+              </div>
+              <textarea id="smSummaryInput" class="share-preview-box" readonly aria-label="Formatted project summary for social media"></textarea>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+                <button type="button" id="smCopyDetailsBtn" class="btn-outline-sm" style="flex:1;">
+                  <i data-lucide="copy" style="width:15px;height:15px;"></i>
+                  <span>Copy Details for Social Media</span>
+                </button>
+                ${
+                  canNativeShare
+                    ? `<button type="button" id="smNativeShareBtn" class="btn-primary-sm">
+                        <i data-lucide="share-2" style="width:15px;height:15px;"></i>
+                        <span>Share Now</span>
+                      </button>`
+                    : ''
+                }
+              </div>
+            </div>
+
+            <div style="padding-top:10px;border-top:1px solid var(--border-hairline);">
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;">Share directly on</div>
+              <div class="share-social-row">
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}" target="_blank" rel="noopener noreferrer" class="btn-outline-sm" style="min-height:36px;font-size:0.8rem;">
+                  <i data-lucide="external-link" style="width:14px;height:14px;"></i>
+                  <span>LinkedIn</span>
+                </a>
+                <a href="https://twitter.com/intent/tweet?text=${encodedShortText}&url=${encodedUrl}" target="_blank" rel="noopener noreferrer" class="btn-outline-sm" style="min-height:36px;font-size:0.8rem;">
+                  <i data-lucide="external-link" style="width:14px;height:14px;"></i>
+                  <span>X (Twitter)</span>
+                </a>
+                <a href="https://wa.me/?text=${encodedWhatsapp}" target="_blank" rel="noopener noreferrer" class="btn-outline-sm" style="min-height:36px;font-size:0.8rem;">
+                  <i data-lucide="send" style="width:14px;height:14px;"></i>
+                  <span>WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const urlInput = document.getElementById('smUrlInput');
+        const summaryInput = document.getElementById('smSummaryInput');
+        summaryInput.value = socialText;
+
+        urlInput.addEventListener('click', () => urlInput.select());
+
+        const copyLinkBtn = document.getElementById('smCopyLinkBtn');
+        copyLinkBtn.addEventListener('click', async () => {
+          const ok = await copyTextToClipboard(shareUrl);
+          if (ok) {
+            copyLinkBtn.innerHTML = `<i data-lucide="check" style="width:15px;height:15px;"></i><span>Copied!</span>`;
+            createIcons({ icons });
+            showToast('Shareable project link copied to clipboard.', 'success');
+            setTimeout(() => {
+              if (document.body.contains(copyLinkBtn)) {
+                copyLinkBtn.innerHTML = `<i data-lucide="link" style="width:15px;height:15px;"></i><span>Copy Link</span>`;
+                createIcons({ icons });
+              }
+            }, 2200);
+          } else {
+            urlInput.select();
+            showToast('Select and press Ctrl+C / Cmd+C to copy the link.', 'info');
+          }
+        });
+
+        const copyDetailsBtn = document.getElementById('smCopyDetailsBtn');
+        copyDetailsBtn.addEventListener('click', async () => {
+          const ok = await copyTextToClipboard(socialText);
+          if (ok) {
+            copyDetailsBtn.innerHTML = `<i data-lucide="check" style="width:15px;height:15px;"></i><span>Copied Details!</span>`;
+            createIcons({ icons });
+            showToast('Project details copied for social media.', 'success');
+            setTimeout(() => {
+              if (document.body.contains(copyDetailsBtn)) {
+                copyDetailsBtn.innerHTML = `<i data-lucide="copy" style="width:15px;height:15px;"></i><span>Copy Details for Social Media</span>`;
+                createIcons({ icons });
+              }
+            }, 2200);
+          } else {
+            summaryInput.select();
+            showToast('Select and press Ctrl+C / Cmd+C to copy the summary.', 'info');
+          }
+        });
+
+        const nativeBtn = document.getElementById('smNativeShareBtn');
+        if (nativeBtn) {
+          nativeBtn.addEventListener('click', async () => {
+            try {
+              await navigator.share({
+                title: `${proj.title} — CampusConnect`,
+                text: `${proj.title} (${proj.domain}): ${proj.description}`,
+                url: shareUrl
+              });
+            } catch (err) {
+              if (err?.name !== 'AbortError') {
+                const ok = await copyTextToClipboard(socialText);
+                showToast(
+                  ok ? 'Project details copied to clipboard.' : 'Could not open system share sheet.',
+                  ok ? 'success' : 'error'
+                );
+              }
+            }
+          });
+        }
+
+        document.getElementById('shareModal').classList.add('open');
+        createIcons({ icons });
+      }
+
+      // Profile Modal (Strictly Read-Only Account View)
+      function openProfileModal() {
+        if (!state.user) return;
+        const modal = document.getElementById('profileModal');
+        const body = document.getElementById('profBody');
+        const p = state.userProfile || {
+          name: state.user.displayName || 'Student',
+          email: state.user.email || '',
+          department: 'Computer Science and Engineering (CSE)',
+          role: state.isAdmin ? 'admin' : 'student',
+          status: 'active'
+        };
+
+        document.getElementById('profTitle').textContent = state.isAdmin ? 'Administrator Profile' : 'Student Profile (Read-Only)';
+
+        body.innerHTML = `
+          <div style="display:grid;gap:14px;">
+            <div style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:10px;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E3A8A;font-size:0.8125rem;line-height:1.5;">
+              <i data-lucide="lock" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;"></i>
+              <span>${
+                state.isAdmin
+                  ? 'Viewing read-only profile summary. Use the Admin Dashboard to manage institutional records.'
+                  : 'Student accounts are read-only for exploring projects, viewing achievements, and sourcing repository/demo links. Profile editing and administrative options are disabled.'
+              }</span>
+            </div>
+
+            <div style="display:grid;gap:10px;padding:16px;background:var(--bg-subtle);border:1px solid var(--border-hairline);border-radius:12px;font-size:0.875rem;">
+              <div>
+                <span style="color:var(--text-muted);display:block;font-size:0.75rem;">Full Name</span>
+                <strong style="color:var(--navy-900);">${escapeHtml(p.name || 'Student Member')}</strong>
+              </div>
+              <div>
+                <span style="color:var(--text-muted);display:block;font-size:0.75rem;">Department</span>
+                <strong style="color:var(--navy-900);">${escapeHtml(p.department || 'Not assigned')}</strong>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                <div>
+                  <span style="color:var(--text-muted);display:block;font-size:0.75rem;">Student ID</span>
+                  <strong class="font-mono" style="color:var(--navy-900);">${escapeHtml(p.studentId || 'Not assigned')}</strong>
+                </div>
+                <div>
+                  <span style="color:var(--text-muted);display:block;font-size:0.75rem;">Account Status</span>
+                  <strong style="color:var(--navy-900);">${escapeHtml((p.status || 'active').toUpperCase())}</strong>
+                </div>
+              </div>
+              <div>
+                <span style="color:var(--text-muted);display:block;font-size:0.75rem;">Email Address</span>
+                <strong style="color:var(--navy-900);word-break:break-all;">${escapeHtml(state.user.email || p.email || '')}</strong>
+              </div>
+              <div>
+                <span style="color:var(--text-muted);display:block;font-size:0.75rem;">Role &amp; Verification</span>
+                <strong style="color:var(--navy-900);">${escapeHtml((p.role || (state.isAdmin ? 'admin' : 'student')).toUpperCase())} · ${state.user.emailVerified ? 'Verified' : 'Unverified'}</strong>
+              </div>
+            </div>
+
+            <button type="button" id="profDoneBtn" class="btn-outline-sm" style="min-height:42px;justify-content:center;">Close</button>
+          </div>
+        `;
+
+        document.getElementById('profDoneBtn').addEventListener('click', () => modal.classList.remove('open'));
+        modal.classList.add('open');
+        createIcons({ icons });
+      }
+
+      // Lightbox
+      function openLightbox(src, caption) {
+        document.getElementById('lbImg').src = src;
+        document.getElementById('lbCaption').textContent = caption || 'Preview';
+        document.getElementById('lightboxModal').classList.add('open');
+      }
+
+      // Modal Close Bindings
+      [
+        ['projectModal', 'pmCloseBtn'],
+        ['shareModal', 'smCloseBtn'],
+        ['contactModal', 'cmCloseBtn'],
+        ['profileModal', 'profCloseBtn'],
+        ['lightboxModal', 'lbCloseBtn']
+      ].forEach(([modalId, btnId]) => {
+        const modal = document.getElementById(modalId);
+        document.getElementById(btnId).addEventListener('click', () => modal.classList.remove('open'));
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) modal.classList.remove('open');
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.modal-overlay.open').forEach((m) => m.classList.remove('open'));
+        }
+      });
+
+      // Search & Filter Listeners
+      document.getElementById('heroSearchForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const q = document.getElementById('heroSearchInput').value.trim();
+        document.getElementById('exploreSearchInput').value = q;
+        document.getElementById('exploreHeading').textContent = 'Explore Projects';
+        document.getElementById('exploreSubheading').textContent = 'Search and filter approved student projects across all departments.';
+        navigateTo('explore');
+        renderExploreProjects();
+      });
+
+      ['exploreSearchInput', 'filterDepartment', 'filterYear', 'filterDomain', 'filterTech', 'sortProjects'].forEach((id) => {
+        const el = document.getElementById(id);
+        el.addEventListener(id === 'exploreSearchInput' ? 'input' : 'change', () => {
+          if (id === 'filterDepartment') {
+            const deptId = el.value;
+            const deptObj = getDepartmentCatalog().find((d) => d.departmentId === deptId);
+            document.getElementById('exploreHeading').textContent = deptObj ? deptObj.departmentName : 'Explore Projects';
+          }
+          renderExploreProjects();
+        });
+      });
+
+      document.getElementById('clearExploreFiltersBtn').addEventListener('click', () => {
+        document.getElementById('exploreSearchInput').value = '';
+        document.getElementById('filterDepartment').value = '';
+        document.getElementById('filterYear').value = '';
+        document.getElementById('filterDomain').value = '';
+        document.getElementById('filterTech').value = '';
+        document.getElementById('sortProjects').value = 'latest';
+        document.getElementById('exploreHeading').textContent = 'Explore Projects';
+        document.getElementById('exploreSubheading').textContent = 'Search and filter approved student projects across all departments.';
+        renderExploreProjects();
+      });
+
+      ['achSearchInput', 'achFilterType', 'achFilterDept', 'achFilterCategory'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener(id === 'achSearchInput' ? 'input' : 'change', renderFilteredAchievements);
+      });
+
+      // Profile & Logout Handlers
+      document.getElementById('headerProfileBtn').addEventListener('click', openProfileModal);
+      document.getElementById('mobileProfileBtn').addEventListener('click', () => {
+        document.getElementById('mobileDrawer').classList.remove('open');
+        openProfileModal();
+      });
+
+      async function performLogout() {
+        const ok = await openConfirm('Sign Out', 'Are you sure you want to log out of CampusConnect?');
+        if (!ok) return;
+        await signOut(auth);
+        showToast('Signed out cleanly.', 'success');
+      }
+
+      document.getElementById('headerLogoutBtn').addEventListener('click', performLogout);
+      document.getElementById('mobileLogoutBtn').addEventListener('click', performLogout);
+
+      document.getElementById('bannerResendBtn').addEventListener('click', async () => {
+        if (!auth.currentUser) return;
+        try {
+          await sendEmailVerification(auth.currentUser);
+          showToast('Verification link sent to your inbox.', 'success');
+        } catch {
+          showToast('Please wait a moment before requesting another verification email.', 'error');
+        }
+      });
+
+      document.getElementById('bannerReloadBtn').addEventListener('click', async () => {
+        if (!auth.currentUser) return;
+        await auth.currentUser.reload();
+        state.user = auth.currentUser;
+        await loadUserPrivateData(auth.currentUser);
+        if (auth.currentUser.emailVerified) {
+          showToast('Email verified! Bookmarks and viewing history are now active.', 'success');
+        } else {
+          showToast('Email is not verified yet. Please click the link in your inbox.', 'error');
+        }
+      });
+
+      // Initial Hash Routing & Boot
+      const initialHash = window.location.hash.replace('#', '');
+      if (initialHash) navigateTo(initialHash);
+
+      onAuthStateChanged(auth, async (user) => {
+        state.user = user;
+        await loadUserPrivateData(user);
+      });
+
+      loadPortalData();
+      createIcons({ icons });
+    </script>
+  </body>
+</html>

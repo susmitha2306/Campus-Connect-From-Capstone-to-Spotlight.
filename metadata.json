@@ -1,0 +1,6 @@
+{
+  "name": "CampusConnect",
+  "description": "Centralized Student Project Showcase Portal for exploring final-year projects, departments, and student achievements.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

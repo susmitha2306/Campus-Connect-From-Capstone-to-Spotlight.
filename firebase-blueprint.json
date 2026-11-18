@@ -1,0 +1,222 @@
+{
+  "entities": {
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Trusted administrator lookup record.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "maxLength": 200 },
+        "addedBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "addedBy", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Registered student or administrator account profile.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "email": { "type": "string", "format": "email", "maxLength": 200 },
+        "department": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "studentId": { "type": "string", "maxLength": 40 },
+        "role": { "type": "string", "enum": ["student", "admin"] },
+        "status": { "type": "string", "enum": ["active", "disabled"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "name", "email", "department", "role", "status", "createdAt"]
+    },
+    "Department": {
+      "title": "Department",
+      "description": "Academic engineering or computing department.",
+      "type": "object",
+      "properties": {
+        "departmentId": { "type": "string", "minLength": 2, "maxLength": 32, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "shortCode": { "type": "string", "minLength": 2, "maxLength": 16 },
+        "departmentName": { "type": "string", "minLength": 3, "maxLength": 140 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "headOfDepartment": { "type": "string", "maxLength": 120 },
+        "image": { "type": "string", "maxLength": 1500 },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["departmentId", "shortCode", "departmentName", "description", "image", "updatedAt"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Final-year student showcase project.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 3, "maxLength": 200 },
+        "departmentId": { "type": "string", "minLength": 2, "maxLength": 32, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "department": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "domain": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "description": { "type": "string", "minLength": 10, "maxLength": 1000 },
+        "abstract": { "type": "string", "minLength": 10, "maxLength": 4000 },
+        "problemStatement": { "type": "string", "maxLength": 3000 },
+        "proposedSolution": { "type": "string", "maxLength": 3000 },
+        "architecture": { "type": "string", "maxLength": 3000 },
+        "objectives": { "type": "array" },
+        "technologies": { "type": "array" },
+        "teamMembers": { "type": "array" },
+        "guide": { "type": "string", "minLength": 2, "maxLength": 150 },
+        "projectImage": { "type": "string", "maxLength": 1500 },
+        "screenshots": { "type": "array" },
+        "githubLink": { "type": "string", "maxLength": 500 },
+        "demoLink": { "type": "string", "maxLength": 500 },
+        "documentationLink": { "type": "string", "maxLength": 500 },
+        "videoDemoLink": { "type": "string", "maxLength": 500 },
+        "academicYear": { "type": "string", "minLength": 4, "maxLength": 30 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "featured": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "projectId",
+        "title",
+        "departmentId",
+        "department",
+        "domain",
+        "description",
+        "abstract",
+        "technologies",
+        "teamMembers",
+        "guide",
+        "projectImage",
+        "academicYear",
+        "status",
+        "featured",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Achievement": {
+      "title": "Achievement",
+      "description": "Student competition, award, publication, or recognition.",
+      "type": "object",
+      "properties": {
+        "achievementId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "studentName": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "departmentId": { "type": "string", "minLength": 2, "maxLength": 32, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "department": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "category": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "achievementTitle": { "type": "string", "minLength": 3, "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 2000 },
+        "eventName": { "type": "string", "minLength": 2, "maxLength": 200 },
+        "award": { "type": "string", "minLength": 2, "maxLength": 150 },
+        "date": { "type": "string", "minLength": 4, "maxLength": 40 },
+        "studentImage": { "type": "string", "maxLength": 1500 },
+        "certificateImage": { "type": "string", "maxLength": 1500 },
+        "sourceUrl": { "type": "string", "maxLength": 500 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "achievementId",
+        "studentName",
+        "departmentId",
+        "department",
+        "category",
+        "achievementTitle",
+        "description",
+        "eventName",
+        "award",
+        "date",
+        "status",
+        "createdAt"
+      ]
+    },
+    "BookmarkCollection": {
+      "title": "BookmarkCollection",
+      "description": "User-specific bookmarked project identifiers.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "projectIds": { "type": "array" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "projectIds", "updatedAt"]
+    },
+    "RecentlyViewedCollection": {
+      "title": "RecentlyViewedCollection",
+      "description": "User-specific last 10 viewed projects.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "projectIds": { "type": "array" },
+        "viewedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "projectIds", "viewedAt"]
+    },
+    "ProjectContact": {
+      "title": "ProjectContact",
+      "description": "Admin-vetted contact information for a project team.",
+      "type": "object",
+      "properties": {
+        "projectId": { "type": "string", "minLength": 2, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "teamName": { "type": "string", "minLength": 2, "maxLength": 150 },
+        "teamLeader": { "type": "string", "minLength": 2, "maxLength": 150 },
+        "officialEmail": { "type": "string", "format": "email", "maxLength": 200 },
+        "department": { "type": "string", "minLength": 2, "maxLength": 140 },
+        "guide": { "type": "string", "maxLength": 150 },
+        "approved": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "teamName", "teamLeader", "officialEmail", "department", "approved", "updatedAt"]
+    },
+    "PortalStats": {
+      "title": "PortalStats",
+      "description": "Public aggregated portal metrics without exposing user PII.",
+      "type": "object",
+      "properties": {
+        "totalProjects": { "type": "integer" },
+        "totalDepartments": { "type": "integer" },
+        "totalStudents": { "type": "integer" },
+        "totalAchievements": { "type": "integer" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["totalProjects", "totalDepartments", "totalStudents", "totalAchievements", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/admins/{adminUid}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Verified administrator UIDs for role-based access control."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Student and administrator profiles isolated by UID."
+    },
+    "/departments/{departmentId}": {
+      "schema": { "$ref": "#/entities/Department" },
+      "description": "Official academic departments."
+    },
+    "/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/Project" },
+      "description": "Student capstone and final-year projects."
+    },
+    "/achievements/{achievementId}": {
+      "schema": { "$ref": "#/entities/Achievement" },
+      "description": "Student honors, awards, and competition achievements."
+    },
+    "/bookmarks/{userId}": {
+      "schema": { "$ref": "#/entities/BookmarkCollection" },
+      "description": "Per-user saved project bookmarks."
+    },
+    "/recentlyViewed/{userId}": {
+      "schema": { "$ref": "#/entities/RecentlyViewedCollection" },
+      "description": "Per-user most recent 10 viewed project IDs."
+    },
+    "/projectContacts/{projectId}": {
+      "schema": { "$ref": "#/entities/ProjectContact" },
+      "description": "Admin-approved project team contact details."
+    },
+    "/portalStats/{statId}": {
+      "schema": { "$ref": "#/entities/PortalStats" },
+      "description": "Aggregated public statistics document."
+    }
+  }
+}

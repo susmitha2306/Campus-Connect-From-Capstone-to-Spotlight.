@@ -1,0 +1,1863 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In &amp; Register — CampusConnect</title>
+    <meta name="description" content="Sign in or create a CampusConnect account to explore final-year student projects, departments, and campus innovation." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg-main: #F4F9FF;
+        --bg-secondary: #EAF4FF;
+        --light-blue: #D6EAFE;
+        --sky-blue: #B8D9F8;
+        --navy-900: #193B60;
+        --navy-950: #102A47;
+        --royal-600: #2878C8;
+        --royal-700: #1E63A8;
+        --sky-accent: #6AADE4;
+        --blue-50: #EAF4FF;
+        --surface: #FFFFFF;
+        --text-primary: #193B60;
+        --text-secondary: #40546B;
+        --text-muted: #5C738D;
+        --border: #D6EAFE;
+        --border-input: #B8D9F8;
+        --success: #059669;
+        --success-bg: #ECFDF5;
+        --success-border: #A7F3D0;
+        --warning: #D97706;
+        --error: #DC2626;
+        --error-bg: #FEF2F2;
+        --error-border: #FECACA;
+      }
+
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        color: var(--text-secondary);
+        background: linear-gradient(145deg, #F4F9FF 0%, #EAF4FF 55%, #FFFFFF 100%);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1, h2, h3, h4, .font-display {
+        font-family: 'Poppins', system-ui, sans-serif;
+        color: var(--navy-900);
+      }
+
+      .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Split-Screen Layout */
+      .auth-shell {
+        display: grid;
+        grid-template-columns: 1fr;
+        min-height: 100vh;
+      }
+
+      @media (min-width: 1024px) {
+        .auth-shell {
+          grid-template-columns: 47% 53%;
+        }
+      }
+
+      /* ==================== LEFT BRANDING & ILLUSTRATION PANEL ==================== */
+      .brand-panel {
+        position: relative;
+        background: linear-gradient(155deg, #EAF4FF 0%, #D6EAFE 55%, #B8D9F8 100%);
+        color: var(--navy-900);
+        border-right: 1px solid var(--light-blue);
+        padding: 20px 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow: hidden;
+      }
+
+      @media (min-width: 640px) {
+        .brand-panel {
+          padding: 36px 40px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .brand-panel {
+          padding: 44px 52px;
+        }
+      }
+
+      /* Subtle Floating Sky-Blue Ambient Orbs */
+      .ambient-orb {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        filter: blur(56px);
+        opacity: 0.7;
+      }
+
+      .orb-royal {
+        width: 340px;
+        height: 340px;
+        top: -80px;
+        right: -90px;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.92) 0%, transparent 72%);
+        animation: driftSlow 14s ease-in-out infinite alternate;
+      }
+
+      .orb-violet {
+        width: 300px;
+        height: 300px;
+        bottom: -70px;
+        left: -80px;
+        background: radial-gradient(circle, rgba(106, 173, 228, 0.45) 0%, transparent 72%);
+        animation: driftSlow 18s ease-in-out infinite alternate-reverse;
+      }
+
+      .ambient-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(40, 120, 200, 0.05) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(40, 120, 200, 0.05) 1px, transparent 1px);
+        background-size: 36px 36px;
+        mask-image: radial-gradient(ellipse at center, black 35%, transparent 82%);
+        pointer-events: none;
+      }
+
+      @keyframes driftSlow {
+        0% { transform: translate3d(0, 0, 0) scale(1); }
+        100% { transform: translate3d(18px, -16px, 0) scale(1.06); }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .ambient-orb {
+          animation: none;
+        }
+      }
+
+      .brand-top {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand-lockup {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: var(--navy-900);
+        white-space: nowrap;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #2878C8 0%, #6AADE4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 8px 20px -6px rgba(40, 120, 200, 0.45);
+        flex-shrink: 0;
+      }
+
+      .brand-name {
+        font-family: 'Poppins', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--navy-900);
+      }
+
+      .portal-back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--sky-blue);
+        background: rgba(255, 255, 255, 0.85);
+        color: var(--navy-900);
+        text-decoration: none;
+        font-size: 0.84rem;
+        font-weight: 600;
+        transition: background-color 160ms, border-color 160ms, color 160ms, transform 160ms, box-shadow 180ms;
+        white-space: nowrap;
+      }
+
+      .portal-back-link:hover {
+        background: #FFFFFF;
+        border-color: var(--royal-600);
+        color: var(--royal-600);
+        transform: translateY(-1px);
+        box-shadow: 0 8px 18px -8px rgba(40, 120, 200, 0.3);
+      }
+
+      .brand-center {
+        position: relative;
+        z-index: 2;
+        margin: 28px 0 24px;
+        display: grid;
+        gap: 24px;
+      }
+
+      .brand-heading {
+        margin: 0 0 12px;
+        font-size: clamp(1.75rem, 3vw, 2.45rem);
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.025em;
+        color: var(--navy-900);
+        text-wrap: balance;
+      }
+
+      .brand-subtitle {
+        margin: 0;
+        font-size: 0.98rem;
+        line-height: 1.65;
+        color: var(--text-secondary);
+        max-width: 46ch;
+      }
+
+      .illustration-frame {
+        position: relative;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid #FFFFFF;
+        background: #FFFFFF;
+        padding: 6px;
+        box-shadow: 0 20px 44px -16px rgba(40, 120, 200, 0.25);
+        max-width: 520px;
+      }
+
+      .illustration-img {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+        border-radius: 13px;
+        display: block;
+        transition: transform 380ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .illustration-frame:hover .illustration-img {
+        transform: scale(1.04);
+      }
+
+      .brand-bottom {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 16px;
+        border-top: 1px solid rgba(40, 120, 200, 0.16);
+        font-size: 0.84rem;
+        color: var(--text-secondary);
+      }
+
+      /* Tablet & Mobile Responsiveness for Left Panel */
+      @media (max-width: 1023px) {
+        .brand-center {
+          grid-template-columns: 1.15fr 0.85fr;
+          align-items: center;
+          margin: 20px 0 16px;
+        }
+        .illustration-frame {
+          max-width: 280px;
+          justify-self: end;
+        }
+      }
+
+      @media (max-width: 639px) {
+        .brand-panel {
+          padding: 16px 20px;
+        }
+        .brand-center,
+        .brand-bottom,
+        .illustration-frame {
+          display: none;
+        }
+      }
+
+      /* ==================== RIGHT AUTH CARD PANEL ==================== */
+      .form-panel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 28px 18px 40px;
+        background-color: var(--bg-main);
+      }
+
+      @media (min-width: 640px) {
+        .form-panel {
+          padding: 40px 36px;
+        }
+      }
+
+      .auth-card {
+        width: 100%;
+        max-width: 472px;
+        background-color: var(--surface);
+        border: 1px solid var(--light-blue);
+        border-radius: 22px;
+        padding: 28px 22px;
+        box-shadow:
+          0 20px 44px -18px rgba(40, 120, 200, 0.18),
+          0 4px 12px -4px rgba(25, 59, 96, 0.05);
+        transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), opacity 200ms;
+      }
+
+      @media (min-width: 640px) {
+        .auth-card {
+          padding: 36px 38px;
+        }
+      }
+
+      .card-view {
+        animation: fadeSlideIn 260ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      @keyframes fadeSlideIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .card-view {
+          animation: none;
+        }
+      }
+
+      .card-header {
+        margin-bottom: 22px;
+      }
+
+      .card-header h2 {
+        margin: 0 0 6px;
+        font-size: 1.55rem;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+        color: var(--navy-900);
+      }
+
+      .card-header p {
+        margin: 0;
+        font-size: 0.9375rem;
+        color: var(--text-secondary);
+      }
+
+      /* Alerts */
+      .alert-banner {
+        display: none;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        font-size: 0.875rem;
+        line-height: 1.45;
+        margin-bottom: 18px;
+      }
+
+      .alert-banner.visible {
+        display: flex;
+      }
+
+      .alert-banner.error {
+        background-color: var(--error-bg);
+        color: #991B1B;
+        border: 1px solid var(--error-border);
+      }
+
+      .alert-banner.success {
+        background-color: var(--success-bg);
+        color: #065F46;
+        border: 1px solid var(--success-border);
+      }
+
+      .alert-banner.info {
+        background-color: var(--blue-50);
+        color: var(--navy-900);
+        border: 1px solid var(--sky-blue);
+      }
+
+      /* Form Inputs */
+      .form-stack {
+        display: grid;
+        gap: 15px;
+      }
+
+      .field-row-2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      @media (min-width: 520px) {
+        .field-row-2 {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .field-label {
+        font-size: 0.84rem;
+        font-weight: 600;
+        color: var(--navy-900);
+      }
+
+      .optional-tag {
+        font-weight: 400;
+        color: var(--text-muted);
+      }
+
+      .input-box {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .input-leading-icon {
+        position: absolute;
+        left: 13px;
+        color: var(--text-muted);
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+      }
+
+      .field-input,
+      .field-select {
+        width: 100%;
+        min-height: 45px;
+        padding: 10px 14px;
+        border: 1px solid var(--border-input);
+        border-radius: 11px;
+        background-color: #FFFFFF;
+        color: var(--navy-900);
+        font-family: inherit;
+        font-size: 0.9375rem;
+        transition: border-color 150ms, box-shadow 150ms, background-color 150ms;
+      }
+
+      .field-input.with-icon {
+        padding-left: 40px;
+      }
+
+      .field-input.with-toggle {
+        padding-right: 44px;
+      }
+
+      .field-input:hover,
+      .field-select:hover {
+        border-color: var(--sky-accent);
+      }
+
+      .field-input:focus,
+      .field-select:focus {
+        outline: none;
+        border-color: var(--royal-600);
+        box-shadow: 0 0 0 3.5px rgba(40, 120, 200, 0.16);
+      }
+
+      .field-input.is-invalid,
+      .field-select.is-invalid {
+        border-color: var(--error);
+      }
+
+      .pw-eye-btn {
+        position: absolute;
+        right: 8px;
+        width: 34px;
+        height: 34px;
+        border: none;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 140ms, color 140ms;
+      }
+
+      .pw-eye-btn:hover {
+        background-color: var(--bg-secondary);
+        color: var(--royal-600);
+      }
+
+      .pw-eye-btn:focus-visible {
+        outline: 2px solid var(--royal-600);
+        outline-offset: 1px;
+      }
+
+      .field-error {
+        display: none;
+        font-size: 0.8rem;
+        color: var(--error);
+      }
+
+      .field-error.visible {
+        display: block;
+      }
+
+      /* Password Strength Meter */
+      .strength-meter {
+        display: grid;
+        gap: 6px;
+        margin-top: 2px;
+      }
+
+      .strength-bars {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+      }
+
+      .strength-bar {
+        height: 5px;
+        border-radius: 99px;
+        background-color: var(--light-blue);
+        transition: background-color 180ms;
+      }
+
+      .strength-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .strength-label {
+        font-weight: 600;
+      }
+
+      /* Utility Row */
+      .utility-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .check-label {
+        display: inline-flex;
+        align-items: flex-start;
+        gap: 8px;
+        font-size: 0.86rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+        line-height: 1.4;
+      }
+
+      .check-label input[type="checkbox"] {
+        margin-top: 2px;
+        width: 16px;
+        height: 16px;
+        accent-color: var(--royal-600);
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .inline-link {
+        background: none;
+        border: none;
+        padding: 2px 0;
+        font-family: inherit;
+        font-size: 0.86rem;
+        font-weight: 600;
+        color: var(--royal-600);
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .inline-link:hover {
+        color: var(--royal-700);
+        text-decoration: underline;
+      }
+
+      /* Buttons with Soft Blue Glowing Hover */
+      .btn-submit {
+        width: 100%;
+        min-height: 46px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 11px;
+        background-color: var(--royal-600);
+        color: #FFFFFF;
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        box-shadow: 0 8px 20px -8px rgba(40, 120, 200, 0.45);
+        transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms, background-color 160ms;
+      }
+
+      .btn-submit:hover:not(:disabled) {
+        transform: translateY(-1px);
+        background-color: var(--royal-700);
+        box-shadow: 0 12px 26px -8px rgba(40, 120, 200, 0.55), 0 0 0 3px rgba(106, 173, 228, 0.24);
+      }
+
+      .btn-submit:active:not(:disabled) {
+        transform: translateY(0);
+      }
+
+      .btn-submit:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .btn-submit.admin-accent {
+        background: linear-gradient(135deg, #193B60 0%, #2878C8 100%);
+        box-shadow: 0 8px 20px -8px rgba(25, 59, 96, 0.45);
+      }
+
+      .btn-google {
+        width: 100%;
+        min-height: 45px;
+        padding: 10px 18px;
+        border: 1px solid var(--border-input);
+        border-radius: 11px;
+        background-color: #FFFFFF;
+        color: var(--navy-900);
+        font-family: inherit;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: background-color 150ms, border-color 150ms, transform 150ms, box-shadow 180ms;
+      }
+
+      .btn-google:hover:not(:disabled) {
+        background-color: var(--bg-secondary);
+        border-color: var(--sky-accent);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px -8px rgba(40, 120, 200, 0.22);
+      }
+
+      .btn-google:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+      }
+
+      .or-divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 18px 0;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.04em;
+      }
+
+      .or-divider::before,
+      .or-divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background-color: var(--border);
+      }
+
+      .card-footer-switch {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 0.88rem;
+        color: var(--text-secondary);
+      }
+
+      .admin-entry-footer {
+        margin-top: 18px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .admin-trigger-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 13px;
+        border-radius: 10px;
+        border: 1px solid var(--sky-blue);
+        background-color: var(--bg-secondary);
+        color: var(--royal-600);
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 150ms, border-color 150ms, box-shadow 150ms;
+      }
+
+      .admin-trigger-btn:hover {
+        background-color: var(--light-blue);
+        border-color: var(--sky-accent);
+        box-shadow: 0 6px 14px -8px rgba(40, 120, 200, 0.25);
+      }
+
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        border-top-color: #FFFFFF;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+      }
+
+      .spinner.dark {
+        border-color: rgba(25, 59, 96, 0.2);
+        border-top-color: var(--navy-900);
+      }
+
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+
+      /* Active Session Card */
+      .session-panel {
+        display: grid;
+        gap: 16px;
+        padding: 20px;
+        border-radius: 14px;
+        background: linear-gradient(180deg, #F4F9FF 0%, #EAF4FF 100%);
+        border: 1px solid var(--sky-blue);
+      }
+
+      .session-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .btn-secondary {
+        min-height: 43px;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 1px solid var(--border-input);
+        background: #FFFFFF;
+        color: var(--navy-900);
+        font-family: inherit;
+        font-size: 0.875rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        transition: background-color 150ms, border-color 150ms;
+      }
+
+      .btn-secondary:hover {
+        background: var(--bg-secondary);
+        border-color: var(--sky-accent);
+      }
+
+      /* Terms Modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 70;
+        background: rgba(25, 59, 96, 0.42);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+      }
+
+      .modal-overlay.open {
+        display: flex;
+      }
+
+      .modal-card {
+        width: 100%;
+        max-width: 480px;
+        background: #FFFFFF;
+        border-radius: 18px;
+        padding: 26px;
+        border: 1px solid var(--border);
+        box-shadow: 0 24px 48px -12px rgba(25, 59, 96, 0.25);
+      }
+
+      .hidden {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="auth-shell">
+      <!-- ==================== LEFT BRANDING & ILLUSTRATION PANEL ==================== -->
+      <aside class="brand-panel">
+        <div class="ambient-orb orb-royal" aria-hidden="true"></div>
+        <div class="ambient-orb orb-violet" aria-hidden="true"></div>
+        <div class="ambient-grid" aria-hidden="true"></div>
+
+        <div class="brand-top">
+          <a href="index.html" class="brand-lockup" aria-label="CampusConnect Home">
+            <div class="brand-mark" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5" />
+                <path d="M2 12l10 5 10-5" />
+              </svg>
+            </div>
+            <span class="brand-name">CampusConnect</span>
+          </a>
+
+          <a href="index.html" class="portal-back-link">
+            <i data-lucide="arrow-left" style="width:15px;height:15px;"></i>
+            <span>Explore Portal</span>
+          </a>
+        </div>
+
+        <div class="brand-center">
+          <div>
+            <h1 class="brand-heading">Welcome Back to CampusConnect</h1>
+            <p class="brand-subtitle">
+              Discover innovative ideas, explore student projects, and connect with tomorrow's innovators.
+            </p>
+          </div>
+
+          <div class="illustration-frame">
+            <img
+              src="/src/assets/images/campus_innovation_illustration_1794804705631.jpg"
+              alt="Illustration of university students collaborating on robotics, software engineering, and neural networks"
+              class="illustration-img"
+              referrerpolicy="no-referrer"
+            />
+          </div>
+        </div>
+
+        <div class="brand-bottom">
+          <span>Connecting Ideas. Inspiring Innovation.</span>
+          <span class="font-mono" style="font-size:0.78rem;color:#2878C8;font-weight:600;">6 Academic Departments</span>
+        </div>
+      </aside>
+
+      <!-- ==================== RIGHT AUTHENTICATION CARD PANEL ==================== -->
+      <main class="form-panel">
+        <div class="auth-card">
+          <!-- Active Session Panel (if user visits auth.html while signed in) -->
+          <div id="activeSessionView" class="card-view hidden">
+            <div class="card-header">
+              <h2>Active Session</h2>
+              <p>You are currently signed in to CampusConnect.</p>
+            </div>
+            <div class="session-panel">
+              <div>
+                <div id="sessionName" style="font-weight:700;font-size:1.05rem;color:var(--navy-900);"></div>
+                <div id="sessionEmail" style="font-size:0.875rem;color:var(--text-secondary);"></div>
+                <div id="sessionRoleNote" style="font-size:0.8125rem;color:var(--royal-700);margin-top:4px;font-weight:600;"></div>
+              </div>
+              <div id="sessionVerifyBox" class="alert-banner info hidden" style="margin-bottom:0;">
+                <i data-lucide="mail-warning" style="width:18px;height:18px;flex-shrink:0;"></i>
+                <div>
+                  Please verify your email address to unlock bookmarks and viewing history.
+                  <div style="margin-top:6px;display:flex;gap:12px;flex-wrap:wrap;">
+                    <button type="button" id="sessionResendBtn" class="inline-link">Resend email</button>
+                    <button type="button" id="sessionReloadBtn" class="inline-link">I've verified</button>
+                  </div>
+                </div>
+              </div>
+              <div class="session-actions">
+                <a href="index.html" id="sessionContinueBtn" class="btn-submit" style="text-decoration:none;">Go to Dashboard</a>
+                <button type="button" id="sessionSignOutBtn" class="btn-secondary">Sign Out</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Views Wrapper -->
+          <div id="authViewsContainer">
+            <!-- Global Notification Banner -->
+            <div id="authAlert" class="alert-banner" role="alert" aria-live="polite">
+              <i id="authAlertIcon" data-lucide="alert-circle" style="width:18px;height:18px;flex-shrink:0;margin-top:1px;"></i>
+              <div id="authAlertText"></div>
+            </div>
+
+            <!-- ========== VIEW 1: STUDENT LOGIN ========== -->
+            <section id="viewLogin" class="card-view">
+              <div class="card-header">
+                <h2>Welcome Back!</h2>
+                <p>Sign in to explore innovative student projects.</p>
+              </div>
+
+              <form id="loginForm" class="form-stack" novalidate>
+                <div class="field-group">
+                  <label class="field-label" for="loginEmail">Email Address</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="mail" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="email"
+                      id="loginEmail"
+                      class="field-input with-icon"
+                      placeholder="student@university.edu"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                  <span id="loginEmailErr" class="field-error">Please enter a valid email address.</span>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="loginPassword">Password</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="lock" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="password"
+                      id="loginPassword"
+                      class="field-input with-icon with-toggle"
+                      placeholder="Enter your password"
+                      autocomplete="current-password"
+                      required
+                    />
+                    <button type="button" class="pw-eye-btn" data-toggle-pw="loginPassword" aria-label="Show password">
+                      <i data-lucide="eye" style="width:17px;height:17px;"></i>
+                    </button>
+                  </div>
+                  <span id="loginPasswordErr" class="field-error">Please enter your password.</span>
+                </div>
+
+                <div class="utility-row">
+                  <label class="check-label">
+                    <input type="checkbox" id="rememberMe" checked />
+                    <span>Remember Me</span>
+                  </label>
+                  <button type="button" id="toForgotBtn" class="inline-link">Forgot Password?</button>
+                </div>
+
+                <button type="submit" id="loginSubmitBtn" class="btn-submit">
+                  <span>Login</span>
+                  <i data-lucide="arrow-right" style="width:17px;height:17px;"></i>
+                </button>
+              </form>
+
+              <div class="or-divider">OR</div>
+
+              <button type="button" id="googleLoginBtn" class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"/>
+                  <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"/>
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"/>
+                </svg>
+                <span>Continue with Google</span>
+              </button>
+
+              <div class="card-footer-switch">
+                Don't have an account?
+                <button type="button" id="toRegisterBtn" class="inline-link">Create Account</button>
+              </div>
+
+              <div class="admin-entry-footer">
+                <span style="font-size:0.8125rem;color:var(--text-muted);">Institution Administrator?</span>
+                <button type="button" id="toAdminLoginBtn" class="admin-trigger-btn">
+                  <i data-lucide="shield-check" style="width:15px;height:15px;"></i>
+                  <span>Admin Login</span>
+                </button>
+              </div>
+            </section>
+
+            <!-- ========== VIEW 2: STUDENT REGISTRATION ========== -->
+            <section id="viewRegister" class="card-view hidden">
+              <div class="card-header">
+                <h2>Create Account</h2>
+                <p>Register to explore projects, source resources, and bookmark favorites.</p>
+              </div>
+
+              <form id="registerForm" class="form-stack" novalidate>
+                <div class="field-group">
+                  <label class="field-label" for="regName">Full Name</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="user" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="text"
+                      id="regName"
+                      class="field-input with-icon"
+                      placeholder="e.g. Aarav Sharma"
+                      autocomplete="name"
+                      required
+                    />
+                  </div>
+                  <span id="regNameErr" class="field-error">Full name must be at least 2 characters.</span>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="regEmail">Email Address</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="mail" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="email"
+                      id="regEmail"
+                      class="field-input with-icon"
+                      placeholder="student@university.edu"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                  <span id="regEmailErr" class="field-error">Please enter a valid email address.</span>
+                </div>
+
+                <div class="field-row-2">
+                  <div class="field-group">
+                    <label class="field-label" for="regDept">Department</label>
+                    <select id="regDept" class="field-select" required>
+                      <option value="">Select department</option>
+                      <option value="Computer Science and Engineering (CSE)">CSE — Computer Science &amp; Eng.</option>
+                      <option value="Information Technology (IT)">IT — Information Technology</option>
+                      <option value="Robotics and Automation (R&A)">R&amp;A — Robotics &amp; Automation</option>
+                      <option value="Computer Science and Cyber Security (CSECS)">CSECS — Cyber Security</option>
+                      <option value="Electronics and Communication Engineering (ECE)">ECE — Electronics &amp; Comm.</option>
+                      <option value="Artificial Intelligence and Data Science (AI&DS)">AI&amp;DS — AI &amp; Data Science</option>
+                    </select>
+                    <span id="regDeptErr" class="field-error">Select a department.</span>
+                  </div>
+
+                  <div class="field-group">
+                    <label class="field-label" for="regStudentId">
+                      Student ID <span class="optional-tag">(optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="regStudentId"
+                      class="field-input font-mono"
+                      placeholder="e.g. CC2026-104"
+                      maxlength="40"
+                    />
+                  </div>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="regPassword">Password</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="lock" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="password"
+                      id="regPassword"
+                      class="field-input with-icon with-toggle"
+                      placeholder="Create a strong password"
+                      autocomplete="new-password"
+                      required
+                    />
+                    <button type="button" class="pw-eye-btn" data-toggle-pw="regPassword" aria-label="Show password">
+                      <i data-lucide="eye" style="width:17px;height:17px;"></i>
+                    </button>
+                  </div>
+
+                  <!-- Password Strength Indicator -->
+                  <div class="strength-meter" aria-live="polite">
+                    <div class="strength-bars">
+                      <div class="strength-bar" id="sb1"></div>
+                      <div class="strength-bar" id="sb2"></div>
+                      <div class="strength-bar" id="sb3"></div>
+                      <div class="strength-bar" id="sb4"></div>
+                    </div>
+                    <div class="strength-meta">
+                      <span>Password strength: <span id="strengthText" class="strength-label">Enter 8+ characters</span></span>
+                    </div>
+                  </div>
+                  <span id="regPasswordErr" class="field-error">Password must be at least 8 characters.</span>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="regConfirmPassword">Confirm Password</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="lock" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="password"
+                      id="regConfirmPassword"
+                      class="field-input with-icon with-toggle"
+                      placeholder="Re-enter your password"
+                      autocomplete="new-password"
+                      required
+                    />
+                    <button type="button" class="pw-eye-btn" data-toggle-pw="regConfirmPassword" aria-label="Show password">
+                      <i data-lucide="eye" style="width:17px;height:17px;"></i>
+                    </button>
+                  </div>
+                  <span id="regConfirmErr" class="field-error">Passwords do not match.</span>
+                </div>
+
+                <div class="field-group">
+                  <label class="check-label">
+                    <input type="checkbox" id="regTerms" required />
+                    <span>
+                      I agree to the
+                      <button type="button" id="openTermsBtn" class="inline-link">Terms and Conditions</button>
+                      and institutional showcase policy.
+                    </span>
+                  </label>
+                  <span id="regTermsErr" class="field-error">You must agree to the Terms and Conditions to register.</span>
+                </div>
+
+                <button type="submit" id="registerSubmitBtn" class="btn-submit">
+                  <span>Create Account</span>
+                  <i data-lucide="user-plus" style="width:17px;height:17px;"></i>
+                </button>
+              </form>
+
+              <div class="or-divider">OR</div>
+
+              <button type="button" id="googleRegisterBtn" class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"/>
+                  <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"/>
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"/>
+                </svg>
+                <span>Sign Up with Google</span>
+              </button>
+
+              <div class="card-footer-switch">
+                Already have an account?
+                <button type="button" id="toLoginFromRegBtn" class="inline-link">Sign In</button>
+              </div>
+            </section>
+
+            <!-- ========== VIEW 3: FORGOT PASSWORD ========== -->
+            <section id="viewForgot" class="card-view hidden">
+              <div class="card-header">
+                <h2>Reset Password</h2>
+                <p>Enter your registered email address to receive a Firebase password reset link.</p>
+              </div>
+
+              <form id="forgotForm" class="form-stack" novalidate>
+                <div class="field-group">
+                  <label class="field-label" for="forgotEmail">Registered Email Address</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="mail" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="email"
+                      id="forgotEmail"
+                      class="field-input with-icon"
+                      placeholder="student@university.edu"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                  <span id="forgotEmailErr" class="field-error">Please enter a valid email address.</span>
+                </div>
+
+                <button type="submit" id="forgotSubmitBtn" class="btn-submit">
+                  <span>Send Password Reset Link</span>
+                </button>
+              </form>
+
+              <div class="card-footer-switch">
+                Remembered your password?
+                <button type="button" id="toLoginFromForgotBtn" class="inline-link">Back to Login</button>
+              </div>
+            </section>
+
+            <!-- ========== VIEW 4: ADMIN LOGIN (NO PUBLIC REGISTRATION) ========== -->
+            <section id="viewAdminLogin" class="card-view hidden">
+              <div class="card-header">
+                <h2>Administrator Login</h2>
+                <p>Verified institutional administrators only. Normal student accounts are rejected.</p>
+              </div>
+
+              <form id="adminLoginForm" class="form-stack" novalidate>
+                <div class="field-group">
+                  <label class="field-label" for="adminEmail">Administrator Email</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="shield" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="email"
+                      id="adminEmail"
+                      class="field-input with-icon"
+                      placeholder="admin@university.edu"
+                      autocomplete="email"
+                      required
+                    />
+                  </div>
+                  <span id="adminEmailErr" class="field-error">Please enter a valid administrator email.</span>
+                </div>
+
+                <div class="field-group">
+                  <label class="field-label" for="adminPassword">Administrator Password</label>
+                  <div class="input-box">
+                    <span class="input-leading-icon"><i data-lucide="lock" style="width:17px;height:17px;"></i></span>
+                    <input
+                      type="password"
+                      id="adminPassword"
+                      class="field-input with-icon with-toggle"
+                      placeholder="Enter administrator password"
+                      autocomplete="current-password"
+                      required
+                    />
+                    <button type="button" class="pw-eye-btn" data-toggle-pw="adminPassword" aria-label="Show password">
+                      <i data-lucide="eye" style="width:17px;height:17px;"></i>
+                    </button>
+                  </div>
+                  <span id="adminPasswordErr" class="field-error">Password is required.</span>
+                </div>
+
+                <button type="submit" id="adminSubmitBtn" class="btn-submit admin-accent">
+                  <i data-lucide="shield-check" style="width:17px;height:17px;"></i>
+                  <span>Sign In to Admin Dashboard</span>
+                </button>
+              </form>
+
+              <div class="or-divider">OR</div>
+
+              <button type="button" id="googleAdminBtn" class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/>
+                  <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.29v3.14C3.26 21.3 7.31 24 12 24Z"/>
+                  <path fill="#FBBC05" d="M5.28 14.24c-.24-.72-.38-1.49-.38-2.24s.14-1.52.38-2.24V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.99-3.14Z"/>
+                  <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.99 3.14c.95-2.85 3.6-4.96 6.72-4.96Z"/>
+                </svg>
+                <span>Verify Admin with Google</span>
+              </button>
+
+              <div class="card-footer-switch">
+                <button type="button" id="toLoginFromAdminBtn" class="inline-link">Back to Student Login</button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Terms & Conditions Modal -->
+    <div id="termsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
+      <div class="modal-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <h3 id="termsModalTitle" style="margin:0;font-size:1.15rem;color:var(--navy-900);">CampusConnect Terms &amp; Policy</h3>
+          <button type="button" id="closeTermsBtn" class="pw-eye-btn" style="position:static;" aria-label="Close modal">
+            <i data-lucide="x" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+        <div style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;display:grid;gap:10px;">
+          <p style="margin:0;">1. Your student account grants access to save bookmarks, track recently viewed projects, and contact approved project teams.</p>
+          <p style="margin:0;">2. All project submissions, achievements, and team contact information are moderated by institutional administrators prior to public listing.</p>
+          <p style="margin:0;">3. You agree to represent your department and academic details accurately and respect intellectual property across showcased works.</p>
+        </div>
+        <div style="margin-top:18px;display:flex;justify-content:flex-end;">
+          <button type="button" id="acceptTermsBtn" class="btn-submit" style="width:auto;padding:10px 20px;min-height:40px;">Agree &amp; Close</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from 'firebase/app';
+      import {
+        getAuth,
+        onAuthStateChanged,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        signInWithPopup,
+        GoogleAuthProvider,
+        sendPasswordResetEmail,
+        sendEmailVerification,
+        updateProfile,
+        setPersistence,
+        browserLocalPersistence,
+        browserSessionPersistence,
+        signOut
+      } from 'firebase/auth';
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        setDoc,
+        updateDoc,
+        getDocFromServer,
+        serverTimestamp
+      } from 'firebase/firestore';
+      import { createIcons, icons } from 'lucide';
+      import firebaseConfig from './firebase-applet-config.json';
+
+      createIcons({ icons });
+
+      // Initialize Firebase Modular SDK with exact Firestore Database ID
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+      const googleProvider = new GoogleAuthProvider();
+      googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+      // Validate Firestore Connection on Boot
+      async function testConnection() {
+        try {
+          await getDocFromServer(doc(db, 'test', 'connection'));
+        } catch (error) {
+          if (error instanceof Error && error.message.includes('the client is offline')) {
+            console.error('Please check your Firebase configuration.');
+          }
+        }
+      }
+      testConnection();
+
+      // Structured Firestore Error Handler
+      const OperationType = {
+        CREATE: 'create',
+        UPDATE: 'update',
+        DELETE: 'delete',
+        LIST: 'list',
+        GET: 'get',
+        WRITE: 'write'
+      };
+
+      function handleFirestoreError(error, operationType, path) {
+        const errInfo = {
+          error: error instanceof Error ? error.message : String(error),
+          authInfo: {
+            userId: auth.currentUser?.uid || null,
+            email: auth.currentUser?.email || null,
+            emailVerified: auth.currentUser?.emailVerified ?? null,
+            isAnonymous: auth.currentUser?.isAnonymous ?? null,
+            tenantId: auth.currentUser?.tenantId || null,
+            providerInfo: auth.currentUser?.providerData?.map((p) => ({
+              providerId: p.providerId,
+              email: p.email
+            })) || []
+          },
+          operationType,
+          path
+        };
+        console.error('Firestore Error: ', JSON.stringify(errInfo));
+        throw new Error(JSON.stringify(errInfo));
+      }
+
+      // DOM Elements
+      const views = {
+        login: document.getElementById('viewLogin'),
+        register: document.getElementById('viewRegister'),
+        forgot: document.getElementById('viewForgot'),
+        admin: document.getElementById('viewAdminLogin')
+      };
+
+      const authViewsContainer = document.getElementById('authViewsContainer');
+      const activeSessionView = document.getElementById('activeSessionView');
+      const authAlert = document.getElementById('authAlert');
+      const authAlertText = document.getElementById('authAlertText');
+      const authAlertIcon = document.getElementById('authAlertIcon');
+
+      let isSubmittingAuth = false;
+
+      // View Switching
+      function showAuthView(targetKey) {
+        clearAlert();
+        Object.entries(views).forEach(([key, el]) => {
+          el.classList.toggle('hidden', key !== targetKey);
+        });
+      }
+
+      document.getElementById('toRegisterBtn').addEventListener('click', () => showAuthView('register'));
+      document.getElementById('toForgotBtn').addEventListener('click', () => {
+        document.getElementById('forgotEmail').value = document.getElementById('loginEmail').value.trim();
+        showAuthView('forgot');
+      });
+      document.getElementById('toAdminLoginBtn').addEventListener('click', () => showAuthView('admin'));
+      document.getElementById('toLoginFromRegBtn').addEventListener('click', () => showAuthView('login'));
+      document.getElementById('toLoginFromForgotBtn').addEventListener('click', () => showAuthView('login'));
+      document.getElementById('toLoginFromAdminBtn').addEventListener('click', () => showAuthView('login'));
+
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('mode') === 'register') showAuthView('register');
+      if (urlParams.get('mode') === 'admin') showAuthView('admin');
+
+      // Alert Helpers
+      function showAlert(type, message) {
+        authAlert.className = `alert-banner visible ${type}`;
+        authAlertText.textContent = message;
+        const iconName = type === 'success' ? 'check-circle-2' : type === 'info' ? 'info' : 'alert-circle';
+        authAlertIcon.setAttribute('data-lucide', iconName);
+        createIcons({ icons });
+      }
+
+      function clearAlert() {
+        authAlert.className = 'alert-banner';
+        authAlertText.textContent = '';
+      }
+
+      function setFieldError(inputEl, errEl, hasError) {
+        inputEl.classList.toggle('is-invalid', hasError);
+        errEl.classList.toggle('visible', hasError);
+      }
+
+      function setButtonLoading(btn, isLoading, normalHtml) {
+        btn.disabled = isLoading;
+        if (isLoading) {
+          btn.innerHTML = `<span class="spinner"></span><span>Processing...</span>`;
+        } else {
+          btn.innerHTML = normalHtml;
+          createIcons({ icons });
+        }
+      }
+
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+      }
+
+      function mapAuthError(err) {
+        const code = err?.code || '';
+        switch (code) {
+          case 'auth/email-already-in-use':
+            return 'An account with this email already exists. Please sign in instead.';
+          case 'auth/invalid-credential':
+          case 'auth/wrong-password':
+          case 'auth/user-not-found':
+            return 'Invalid email address or password. Please verify your credentials.';
+          case 'auth/weak-password':
+            return 'Password is too weak. Choose at least 8 characters with numbers or symbols.';
+          case 'auth/too-many-requests':
+            return 'Too many attempts detected. Please wait a few minutes or reset your password.';
+          case 'auth/popup-closed-by-user':
+            return 'Google sign-in popup was closed before finishing.';
+          case 'auth/operation-not-allowed':
+            return 'Email/Password sign-in is not yet enabled in Firebase Console (Authentication → Sign-in method). You can enable it there or use Google Sign-In.';
+          default:
+            return err?.message || 'Authentication failed. Please try again.';
+        }
+      }
+
+      // Password Show/Hide Toggles
+      document.querySelectorAll('[data-toggle-pw]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const targetId = btn.getAttribute('data-toggle-pw');
+          const input = document.getElementById(targetId);
+          const show = input.type === 'password';
+          input.type = show ? 'text' : 'password';
+          btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+          btn.innerHTML = `<i data-lucide="${show ? 'eye-off' : 'eye'}" style="width:17px;height:17px;"></i>`;
+          createIcons({ icons });
+        });
+      });
+
+      // Live Password Strength Indicator
+      const regPasswordInput = document.getElementById('regPassword');
+      const strengthBars = [
+        document.getElementById('sb1'),
+        document.getElementById('sb2'),
+        document.getElementById('sb3'),
+        document.getElementById('sb4')
+      ];
+      const strengthText = document.getElementById('strengthText');
+
+      function evaluatePasswordStrength(pw) {
+        if (!pw) return { score: 0, label: 'Enter 8+ characters', color: '#E2E8F0' };
+        let score = 0;
+        if (pw.length >= 8) score++;
+        if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) score++;
+        if (/\d/.test(pw)) score++;
+        if (/[^A-Za-z0-9]/.test(pw) || pw.length >= 12) score++;
+
+        if (score <= 1) return { score: 1, label: 'Weak', color: '#DC2626' };
+        if (score === 2) return { score: 2, label: 'Fair', color: '#D97706' };
+        if (score === 3) return { score: 3, label: 'Good', color: '#2563EB' };
+        return { score: 4, label: 'Strong', color: '#059669' };
+      }
+
+      regPasswordInput.addEventListener('input', () => {
+        const res = evaluatePasswordStrength(regPasswordInput.value);
+        strengthBars.forEach((bar, idx) => {
+          bar.style.backgroundColor = idx < res.score ? res.color : '#E2E8F0';
+        });
+        strengthText.textContent = res.label;
+        strengthText.style.color = res.score === 0 ? 'var(--text-muted)' : res.color;
+      });
+
+      // Terms Modal
+      const termsModal = document.getElementById('termsModal');
+      document.getElementById('openTermsBtn').addEventListener('click', () => termsModal.classList.add('open'));
+      document.getElementById('closeTermsBtn').addEventListener('click', () => termsModal.classList.remove('open'));
+      document.getElementById('acceptTermsBtn').addEventListener('click', () => {
+        document.getElementById('regTerms').checked = true;
+        setFieldError(document.getElementById('regTerms'), document.getElementById('regTermsErr'), false);
+        termsModal.classList.remove('open');
+      });
+      termsModal.addEventListener('click', (e) => {
+        if (e.target === termsModal) termsModal.classList.remove('open');
+      });
+
+      // Trusted Firestore Role Check (admins/{uid} or verified bootstrap admin email)
+      async function checkTrustedAdminRole(user) {
+        if (!user || !user.emailVerified) return false;
+        if (user.email === 'sushmidhas4@gmail.com') return true;
+        try {
+          const adminSnap = await getDoc(doc(db, 'admins', user.uid));
+          return adminSnap.exists();
+        } catch {
+          return false;
+        }
+      }
+
+      // Sync User Profile in Cloud Firestore
+      async function syncUserProfile(user, fallbackName, fallbackDept, fallbackStudentId) {
+        const userRef = doc(db, 'users', user.uid);
+        let snap;
+        try {
+          snap = await getDoc(userRef);
+        } catch (err) {
+          handleFirestoreError(err, OperationType.GET, `users/${user.uid}`);
+        }
+
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data.status === 'disabled') {
+            await signOut(auth);
+            throw new Error('This account has been disabled by an administrator.');
+          }
+          return data;
+        }
+
+        const profileData = {
+          uid: user.uid,
+          name: (fallbackName || user.displayName || 'Student Member').trim().slice(0, 120),
+          email: (user.email || '').trim().slice(0, 200),
+          department: (fallbackDept || 'Computer Science and Engineering (CSE)').trim().slice(0, 120),
+          role: 'student',
+          status: 'active',
+          createdAt: serverTimestamp()
+        };
+        if (fallbackStudentId && fallbackStudentId.trim()) {
+          profileData.studentId = fallbackStudentId.trim().slice(0, 40);
+        }
+
+        try {
+          await setDoc(userRef, profileData);
+        } catch (err) {
+          handleFirestoreError(err, OperationType.CREATE, `users/${user.uid}`);
+        }
+
+        // Increment public student counter if summary doc exists
+        try {
+          const statsRef = doc(db, 'portalStats', 'summary');
+          const statsSnap = await getDoc(statsRef);
+          if (statsSnap.exists()) {
+            const current = Number(statsSnap.data().totalStudents || 0);
+            await updateDoc(statsRef, {
+              totalStudents: current + 1,
+              updatedAt: serverTimestamp()
+            });
+          }
+        } catch (statsErr) {
+          console.warn('Stats counter increment skipped:', statsErr);
+        }
+
+        return profileData;
+      }
+
+      // ==================== STUDENT LOGIN ====================
+      const loginForm = document.getElementById('loginForm');
+      const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+      const loginBtnDefaultHtml = loginSubmitBtn.innerHTML;
+
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert();
+
+        const emailEl = document.getElementById('loginEmail');
+        const pwEl = document.getElementById('loginPassword');
+        const emailVal = emailEl.value.trim();
+        const pwVal = pwEl.value;
+        let valid = true;
+
+        setFieldError(emailEl, document.getElementById('loginEmailErr'), !isValidEmail(emailVal));
+        if (!isValidEmail(emailVal)) valid = false;
+
+        setFieldError(pwEl, document.getElementById('loginPasswordErr'), pwVal.length === 0);
+        if (pwVal.length === 0) valid = false;
+
+        if (!valid) return;
+
+        isSubmittingAuth = true;
+        setButtonLoading(loginSubmitBtn, true, loginBtnDefaultHtml);
+
+        try {
+          const remember = document.getElementById('rememberMe').checked;
+          await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+          const cred = await signInWithEmailAndPassword(auth, emailVal, pwVal);
+          await syncUserProfile(cred.user, cred.user.displayName, '', '');
+
+          const isAdmin = await checkTrustedAdminRole(cred.user);
+          showAlert('success', isAdmin ? 'Administrator verified. Redirecting to Admin Dashboard...' : 'Signed in! Redirecting to CampusConnect...');
+          setTimeout(() => {
+            window.location.href = isAdmin ? 'admin.html' : 'index.html';
+          }, 650);
+        } catch (err) {
+          showAlert('error', mapAuthError(err));
+          isSubmittingAuth = false;
+          setButtonLoading(loginSubmitBtn, false, loginBtnDefaultHtml);
+        }
+      });
+
+      // ==================== REGISTRATION ====================
+      const registerForm = document.getElementById('registerForm');
+      const registerSubmitBtn = document.getElementById('registerSubmitBtn');
+      const registerBtnDefaultHtml = registerSubmitBtn.innerHTML;
+
+      registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert();
+
+        const nameEl = document.getElementById('regName');
+        const emailEl = document.getElementById('regEmail');
+        const deptEl = document.getElementById('regDept');
+        const studentIdEl = document.getElementById('regStudentId');
+        const pwEl = document.getElementById('regPassword');
+        const confirmEl = document.getElementById('regConfirmPassword');
+        const termsEl = document.getElementById('regTerms');
+
+        const nameVal = nameEl.value.trim();
+        const emailVal = emailEl.value.trim();
+        const deptVal = deptEl.value;
+        const studentIdVal = studentIdEl.value.trim();
+        const pwVal = pwEl.value;
+        const confirmVal = confirmEl.value;
+        let valid = true;
+
+        setFieldError(nameEl, document.getElementById('regNameErr'), nameVal.length < 2);
+        if (nameVal.length < 2) valid = false;
+
+        setFieldError(emailEl, document.getElementById('regEmailErr'), !isValidEmail(emailVal));
+        if (!isValidEmail(emailVal)) valid = false;
+
+        setFieldError(deptEl, document.getElementById('regDeptErr'), !deptVal);
+        if (!deptVal) valid = false;
+
+        setFieldError(pwEl, document.getElementById('regPasswordErr'), pwVal.length < 8);
+        if (pwVal.length < 8) valid = false;
+
+        setFieldError(confirmEl, document.getElementById('regConfirmErr'), pwVal !== confirmVal || confirmVal.length === 0);
+        if (pwVal !== confirmVal || confirmVal.length === 0) valid = false;
+
+        setFieldError(termsEl, document.getElementById('regTermsErr'), !termsEl.checked);
+        if (!termsEl.checked) valid = false;
+
+        if (!valid) return;
+
+        isSubmittingAuth = true;
+        setButtonLoading(registerSubmitBtn, true, registerBtnDefaultHtml);
+
+        try {
+          const cred = await createUserWithEmailAndPassword(auth, emailVal, pwVal);
+          await updateProfile(cred.user, { displayName: nameVal });
+          await syncUserProfile(cred.user, nameVal, deptVal, studentIdVal);
+          try {
+            await sendEmailVerification(cred.user);
+          } catch (vErr) {
+            console.warn('Email verification notice skipped:', vErr);
+          }
+
+          showAlert('success', 'Account created successfully! A verification link has been sent to your email. Redirecting to dashboard...');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1100);
+        } catch (err) {
+          showAlert('error', mapAuthError(err));
+          isSubmittingAuth = false;
+          setButtonLoading(registerSubmitBtn, false, registerBtnDefaultHtml);
+        }
+      });
+
+      // ==================== GOOGLE SIGN-IN / SIGN-UP ====================
+      async function handleGoogleStudentAuth(btnEl) {
+        clearAlert();
+        isSubmittingAuth = true;
+        const origHtml = btnEl.innerHTML;
+        btnEl.disabled = true;
+        btnEl.innerHTML = `<span class="spinner dark"></span><span>Connecting with Google...</span>`;
+
+        try {
+          const cred = await signInWithPopup(auth, googleProvider);
+          const chosenDept = document.getElementById('regDept').value || 'Computer Science and Engineering (CSE)';
+          const studentIdVal = document.getElementById('regStudentId').value.trim();
+          await syncUserProfile(cred.user, cred.user.displayName, chosenDept, studentIdVal);
+
+          const isAdmin = await checkTrustedAdminRole(cred.user);
+          showAlert('success', isAdmin ? 'Administrator verified! Redirecting to Admin Dashboard...' : 'Signed in with Google! Redirecting to CampusConnect...');
+          setTimeout(() => {
+            window.location.href = isAdmin ? 'admin.html' : 'index.html';
+          }, 600);
+        } catch (err) {
+          showAlert('error', mapAuthError(err));
+          isSubmittingAuth = false;
+          btnEl.disabled = false;
+          btnEl.innerHTML = origHtml;
+        }
+      }
+
+      document.getElementById('googleLoginBtn').addEventListener('click', (e) => handleGoogleStudentAuth(e.currentTarget));
+      document.getElementById('googleRegisterBtn').addEventListener('click', (e) => handleGoogleStudentAuth(e.currentTarget));
+
+      // ==================== FORGOT PASSWORD ====================
+      const forgotForm = document.getElementById('forgotForm');
+      const forgotSubmitBtn = document.getElementById('forgotSubmitBtn');
+      const forgotBtnDefaultHtml = forgotSubmitBtn.innerHTML;
+
+      forgotForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert();
+        const emailEl = document.getElementById('forgotEmail');
+        const emailVal = emailEl.value.trim();
+
+        setFieldError(emailEl, document.getElementById('forgotEmailErr'), !isValidEmail(emailVal));
+        if (!isValidEmail(emailVal)) return;
+
+        setButtonLoading(forgotSubmitBtn, true, forgotBtnDefaultHtml);
+        try {
+          await sendPasswordResetEmail(auth, emailVal);
+          showAlert('success', 'Password reset email sent! Check your inbox and spam folder for instructions.');
+        } catch (err) {
+          showAlert('error', mapAuthError(err));
+        } finally {
+          setButtonLoading(forgotSubmitBtn, false, forgotBtnDefaultHtml);
+        }
+      });
+
+      // ==================== ADMIN LOGIN (STRICT ROLE GATE) ====================
+      const adminLoginForm = document.getElementById('adminLoginForm');
+      const adminSubmitBtn = document.getElementById('adminSubmitBtn');
+      const adminBtnDefaultHtml = adminSubmitBtn.innerHTML;
+
+      async function verifyAndRedirectAdmin(user) {
+        const authorized = await checkTrustedAdminRole(user);
+        if (!authorized) {
+          await signOut(auth);
+          throw new Error('Access Denied: Normal student or unverified accounts cannot access the Administrator Dashboard.');
+        }
+        showAlert('success', 'Administrator authorization verified. Redirecting to Admin Dashboard...');
+        setTimeout(() => {
+          window.location.href = 'admin.html';
+        }, 650);
+      }
+
+      adminLoginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearAlert();
+
+        const emailEl = document.getElementById('adminEmail');
+        const pwEl = document.getElementById('adminPassword');
+        const emailVal = emailEl.value.trim();
+        const pwVal = pwEl.value;
+        let valid = true;
+
+        setFieldError(emailEl, document.getElementById('adminEmailErr'), !isValidEmail(emailVal));
+        if (!isValidEmail(emailVal)) valid = false;
+
+        setFieldError(pwEl, document.getElementById('adminPasswordErr'), pwVal.length === 0);
+        if (pwVal.length === 0) valid = false;
+
+        if (!valid) return;
+
+        isSubmittingAuth = true;
+        setButtonLoading(adminSubmitBtn, true, adminBtnDefaultHtml);
+
+        try {
+          const cred = await signInWithEmailAndPassword(auth, emailVal, pwVal);
+          await verifyAndRedirectAdmin(cred.user);
+        } catch (err) {
+          showAlert('error', mapAuthError(err));
+          isSubmittingAuth = false;
+          setButtonLoading(adminSubmitBtn, false, adminBtnDefaultHtml);
+        }
+      });
+
+      document.getElementById('googleAdminBtn').addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        const origHtml = btn.innerHTML;
+        clearAlert();
+        isSubmittingAuth = true;
+        btn.disabled = true;
+        btn.innerHTML = `<span class="spinner dark"></span><span>Verifying Administrator...</span>`;
+
+        try {
+          const cred = await signInWithPopup(auth, googleProvider);
+          await verifyAndRedirectAdmin(cred.user);
+        } catch (err) {
+          showAlert('error', mapAuthError(err));
+          isSubmittingAuth = false;
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+        }
+      });
+
+      // ==================== SESSION MAINTENANCE ====================
+      onAuthStateChanged(auth, async (user) => {
+        if (isSubmittingAuth) return;
+        if (user) {
+          authViewsContainer.classList.add('hidden');
+          activeSessionView.classList.remove('hidden');
+          document.getElementById('sessionName').textContent = user.displayName || 'CampusConnect User';
+          document.getElementById('sessionEmail').textContent = user.email || '';
+          document.getElementById('sessionVerifyBox').classList.toggle('hidden', user.emailVerified);
+
+          const isAdmin = await checkTrustedAdminRole(user);
+          document.getElementById('sessionRoleNote').textContent = isAdmin
+            ? 'Verified Administrator Session'
+            : 'Student Account Session';
+          const continueBtn = document.getElementById('sessionContinueBtn');
+          continueBtn.href = isAdmin ? 'admin.html' : 'index.html';
+          continueBtn.textContent = isAdmin ? 'Open Admin Dashboard' : 'Go to Dashboard';
+        } else {
+          activeSessionView.classList.add('hidden');
+          authViewsContainer.classList.remove('hidden');
+        }
+      });
+
+      document.getElementById('sessionSignOutBtn').addEventListener('click', async () => {
+        await signOut(auth);
+        clearAlert();
+      });
+
+      document.getElementById('sessionResendBtn').addEventListener('click', async () => {
+        if (!auth.currentUser) return;
+        try {
+          await sendEmailVerification(auth.currentUser);
+          document.getElementById('sessionResendBtn').textContent = 'Sent!';
+        } catch {
+          document.getElementById('sessionResendBtn').textContent = 'Try again shortly';
+        }
+      });
+
+      document.getElementById('sessionReloadBtn').addEventListener('click', async () => {
+        if (!auth.currentUser) return;
+        await auth.currentUser.reload();
+        document.getElementById('sessionVerifyBox').classList.toggle('hidden', auth.currentUser.emailVerified);
+      });
+    </script>
+  </body>
+</html>

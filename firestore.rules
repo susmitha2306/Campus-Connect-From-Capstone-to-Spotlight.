@@ -1,0 +1,305 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Reusable Hardened Primitives
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidShortId(id) {
+      return id is string && id.size() >= 2 && id.size() <= 32 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        request.auth.token.email == 'sushmidhas4@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidStringList(arr, maxLen, maxItemLen) {
+      return arr is list &&
+        arr.size() <= maxLen &&
+        (arr.size() == 0 || (arr[0] is string && arr[0].size() <= maxItemLen));
+    }
+
+    // 3. Entity Validation Blueprints
+    function isValidAdminRecord(data, adminUid) {
+      return data.keys().hasAll(['uid', 'email', 'addedBy', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'email', 'addedBy', 'createdAt']) &&
+        data.uid == adminUid &&
+        isValidId(data.uid) &&
+        data.email is string && data.email.size() >= 5 && data.email.size() <= 200 &&
+        data.addedBy is string && data.addedBy.size() >= 1 && data.addedBy.size() <= 128 &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidUser(data, userId) {
+      return data.keys().hasAll(['uid', 'name', 'email', 'department', 'role', 'status', 'createdAt']) &&
+        data.keys().hasOnly(['uid', 'name', 'email', 'department', 'studentId', 'role', 'status', 'createdAt']) &&
+        data.uid == userId &&
+        isValidId(data.uid) &&
+        data.name is string && data.name.size() >= 2 && data.name.size() <= 120 &&
+        data.email is string && data.email.size() >= 5 && data.email.size() <= 200 &&
+        data.department is string && data.department.size() >= 2 && data.department.size() <= 120 &&
+        (!('studentId' in data) || (data.studentId is string && data.studentId.size() <= 40)) &&
+        data.role in ['student', 'admin'] &&
+        data.status in ['active', 'disabled'] &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidDepartment(data, deptId) {
+      return data.keys().hasAll(['departmentId', 'shortCode', 'departmentName', 'description', 'image', 'updatedAt']) &&
+        data.keys().hasOnly(['departmentId', 'shortCode', 'departmentName', 'description', 'headOfDepartment', 'image', 'updatedAt']) &&
+        data.departmentId == deptId &&
+        isValidShortId(data.departmentId) &&
+        data.shortCode is string && data.shortCode.size() >= 2 && data.shortCode.size() <= 16 &&
+        data.departmentName is string && data.departmentName.size() >= 3 && data.departmentName.size() <= 140 &&
+        data.description is string && data.description.size() <= 1000 &&
+        (!('headOfDepartment' in data) || (data.headOfDepartment is string && data.headOfDepartment.size() <= 120)) &&
+        data.image is string && data.image.size() <= 1500 &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidProject(data, projectId) {
+      return data.keys().hasAll([
+          'projectId', 'title', 'departmentId', 'department', 'domain',
+          'description', 'abstract', 'technologies', 'teamMembers', 'guide',
+          'projectImage', 'academicYear', 'status', 'featured', 'createdAt', 'updatedAt'
+        ]) &&
+        data.keys().hasOnly([
+          'projectId', 'title', 'departmentId', 'department', 'domain',
+          'description', 'abstract', 'problemStatement', 'proposedSolution',
+          'architecture', 'objectives', 'technologies', 'teamMembers', 'guide',
+          'projectImage', 'screenshots', 'githubLink', 'demoLink',
+          'documentationLink', 'videoDemoLink',
+          'academicYear', 'status', 'featured', 'createdAt', 'updatedAt'
+        ]) &&
+        data.projectId == projectId &&
+        isValidId(data.projectId) &&
+        data.title is string && data.title.size() >= 3 && data.title.size() <= 200 &&
+        isValidShortId(data.departmentId) &&
+        data.department is string && data.department.size() >= 2 && data.department.size() <= 140 &&
+        data.domain is string && data.domain.size() >= 2 && data.domain.size() <= 100 &&
+        data.description is string && data.description.size() >= 10 && data.description.size() <= 1000 &&
+        data.abstract is string && data.abstract.size() >= 10 && data.abstract.size() <= 4000 &&
+        (!('problemStatement' in data) || (data.problemStatement is string && data.problemStatement.size() <= 3000)) &&
+        (!('proposedSolution' in data) || (data.proposedSolution is string && data.proposedSolution.size() <= 3000)) &&
+        (!('architecture' in data) || (data.architecture is string && data.architecture.size() <= 3000)) &&
+        (!('objectives' in data) || isValidStringList(data.objectives, 15, 300)) &&
+        isValidStringList(data.technologies, 20, 80) &&
+        isValidStringList(data.teamMembers, 10, 120) &&
+        data.guide is string && data.guide.size() >= 2 && data.guide.size() <= 150 &&
+        data.projectImage is string && data.projectImage.size() <= 1500 &&
+        (!('screenshots' in data) || isValidStringList(data.screenshots, 8, 1500)) &&
+        (!('githubLink' in data) || (data.githubLink is string && data.githubLink.size() <= 500)) &&
+        (!('demoLink' in data) || (data.demoLink is string && data.demoLink.size() <= 500)) &&
+        (!('documentationLink' in data) || (data.documentationLink is string && data.documentationLink.size() <= 500)) &&
+        (!('videoDemoLink' in data) || (data.videoDemoLink is string && data.videoDemoLink.size() <= 500)) &&
+        data.academicYear is string && data.academicYear.size() >= 4 && data.academicYear.size() <= 30 &&
+        data.status in ['pending', 'approved', 'rejected'] &&
+        data.featured is bool &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidAchievement(data, achievementId) {
+      return data.keys().hasAll([
+          'achievementId', 'studentName', 'departmentId', 'department', 'category',
+          'achievementTitle', 'description', 'eventName', 'award', 'date',
+          'status', 'createdAt'
+        ]) &&
+        data.keys().hasOnly([
+          'achievementId', 'studentName', 'departmentId', 'department', 'category',
+          'achievementTitle', 'description', 'eventName', 'award', 'date',
+          'studentImage', 'certificateImage', 'sourceUrl', 'status', 'createdAt'
+        ]) &&
+        data.achievementId == achievementId &&
+        isValidId(data.achievementId) &&
+        data.studentName is string && data.studentName.size() >= 2 && data.studentName.size() <= 120 &&
+        isValidShortId(data.departmentId) &&
+        data.department is string && data.department.size() >= 2 && data.department.size() <= 140 &&
+        data.category is string && data.category.size() >= 2 && data.category.size() <= 80 &&
+        data.achievementTitle is string && data.achievementTitle.size() >= 3 && data.achievementTitle.size() <= 200 &&
+        data.description is string && data.description.size() <= 2000 &&
+        data.eventName is string && data.eventName.size() >= 2 && data.eventName.size() <= 200 &&
+        data.award is string && data.award.size() >= 2 && data.award.size() <= 150 &&
+        data.date is string && data.date.size() >= 4 && data.date.size() <= 40 &&
+        (!('studentImage' in data) || (data.studentImage is string && data.studentImage.size() <= 1500)) &&
+        (!('certificateImage' in data) || (data.certificateImage is string && data.certificateImage.size() <= 1500)) &&
+        (!('sourceUrl' in data) || (data.sourceUrl is string && data.sourceUrl.size() <= 500)) &&
+        data.status in ['pending', 'approved', 'rejected'] &&
+        data.createdAt is timestamp;
+    }
+
+    function isValidBookmark(data, userId) {
+      return data.keys().hasAll(['userId', 'projectIds', 'updatedAt']) &&
+        data.keys().hasOnly(['userId', 'projectIds', 'updatedAt']) &&
+        data.userId == userId &&
+        isValidId(data.userId) &&
+        isValidStringList(data.projectIds, 200, 128) &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidRecentlyViewed(data, userId) {
+      return data.keys().hasAll(['userId', 'projectIds', 'viewedAt']) &&
+        data.keys().hasOnly(['userId', 'projectIds', 'viewedAt']) &&
+        data.userId == userId &&
+        isValidId(data.userId) &&
+        isValidStringList(data.projectIds, 10, 128) &&
+        data.viewedAt is timestamp;
+    }
+
+    function isValidProjectContact(data, projectId) {
+      return data.keys().hasAll(['projectId', 'teamName', 'teamLeader', 'officialEmail', 'department', 'approved', 'updatedAt']) &&
+        data.keys().hasOnly(['projectId', 'teamName', 'teamLeader', 'officialEmail', 'department', 'guide', 'approved', 'updatedAt']) &&
+        data.projectId == projectId &&
+        isValidId(data.projectId) &&
+        data.teamName is string && data.teamName.size() >= 2 && data.teamName.size() <= 150 &&
+        data.teamLeader is string && data.teamLeader.size() >= 2 && data.teamLeader.size() <= 150 &&
+        data.officialEmail is string && data.officialEmail.size() >= 5 && data.officialEmail.size() <= 200 &&
+        data.department is string && data.department.size() >= 2 && data.department.size() <= 140 &&
+        (!('guide' in data) || (data.guide is string && data.guide.size() <= 150)) &&
+        data.approved is bool &&
+        data.updatedAt is timestamp;
+    }
+
+    function isValidPortalStats(data) {
+      return data.keys().hasAll(['totalProjects', 'totalDepartments', 'totalStudents', 'totalAchievements', 'updatedAt']) &&
+        data.keys().hasOnly(['totalProjects', 'totalDepartments', 'totalStudents', 'totalAchievements', 'updatedAt']) &&
+        data.totalProjects is int && data.totalProjects >= 0 && data.totalProjects <= 100000 &&
+        data.totalDepartments is int && data.totalDepartments >= 0 && data.totalDepartments <= 1000 &&
+        data.totalStudents is int && data.totalStudents >= 0 && data.totalStudents <= 500000 &&
+        data.totalAchievements is int && data.totalAchievements >= 0 && data.totalAchievements <= 100000 &&
+        data.updatedAt is timestamp;
+    }
+
+    // 4. Collection Rules
+
+    // Admins RBAC Registry
+    match /admins/{adminUid} {
+      allow get: if isValidId(adminUid) && (isOwner(adminUid) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isValidId(adminUid) && isAdmin() && isValidAdminRecord(incoming(), adminUid) && incoming().createdAt == request.time;
+      allow update: if false;
+      allow delete: if isValidId(adminUid) && isAdmin();
+    }
+
+    // Users (PII-isolated)
+    match /users/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if isAdmin();
+      allow create: if isValidId(userId) &&
+        isValidUser(incoming(), userId) &&
+        incoming().createdAt == request.time &&
+        (
+          isAdmin() ||
+          (isOwner(userId) && incoming().role == 'student' && incoming().status == 'active')
+        );
+      allow update: if isValidId(userId) &&
+        isAdmin() &&
+        isValidUser(incoming(), userId) &&
+        incoming().uid == existing().uid &&
+        incoming().email == existing().email &&
+        incoming().createdAt == existing().createdAt;
+      allow delete: if isValidId(userId) && isAdmin();
+    }
+
+    // Departments (Public Catalog, Admin Managed)
+    match /departments/{departmentId} {
+      allow get: if isValidShortId(departmentId);
+      allow list: if true;
+      allow create: if isValidShortId(departmentId) && isAdmin() && isValidDepartment(incoming(), departmentId) && incoming().updatedAt == request.time;
+      allow update: if isValidShortId(departmentId) && isAdmin() && isValidDepartment(incoming(), departmentId) && incoming().updatedAt == request.time;
+      allow delete: if isValidShortId(departmentId) && isAdmin();
+    }
+
+    // Projects (Approved Publicly Readable, Pending/Rejected Admin Only)
+    match /projects/{projectId} {
+      allow get: if isValidId(projectId) && (existing().status == 'approved' || isAdmin());
+      allow list: if resource.data.status == 'approved' || isAdmin();
+      allow create: if isValidId(projectId) && isAdmin() && isValidProject(incoming(), projectId) && incoming().createdAt == request.time && incoming().updatedAt == request.time;
+      allow update: if isValidId(projectId) && isAdmin() && isValidProject(incoming(), projectId) && incoming().createdAt == existing().createdAt && incoming().updatedAt == request.time;
+      allow delete: if isValidId(projectId) && isAdmin();
+    }
+
+    // Achievements (Approved Publicly Readable, Pending/Rejected Admin Only)
+    match /achievements/{achievementId} {
+      allow get: if isValidId(achievementId) && (existing().status == 'approved' || isAdmin());
+      allow list: if resource.data.status == 'approved' || isAdmin();
+      allow create: if isValidId(achievementId) && isAdmin() && isValidAchievement(incoming(), achievementId) && incoming().createdAt == request.time;
+      allow update: if isValidId(achievementId) && isAdmin() && isValidAchievement(incoming(), achievementId) && incoming().createdAt == existing().createdAt;
+      allow delete: if isValidId(achievementId) && isAdmin();
+    }
+
+    // Bookmarks (Strict Owner Isolation)
+    match /bookmarks/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if false;
+      allow create: if isValidId(userId) && isOwner(userId) && isVerifiedUser() && isValidBookmark(incoming(), userId) && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId) && isOwner(userId) && isVerifiedUser() && isValidBookmark(incoming(), userId) && incoming().userId == existing().userId && incoming().updatedAt == request.time && incoming().diff(existing()).affectedKeys().hasOnly(['projectIds', 'updatedAt']);
+      allow delete: if isValidId(userId) && (isOwner(userId) || isAdmin());
+    }
+
+    // Recently Viewed (Strict Owner Isolation, Max 10)
+    match /recentlyViewed/{userId} {
+      allow get: if isValidId(userId) && (isOwner(userId) || isAdmin());
+      allow list: if false;
+      allow create: if isValidId(userId) && isOwner(userId) && isVerifiedUser() && isValidRecentlyViewed(incoming(), userId) && incoming().viewedAt == request.time;
+      allow update: if isValidId(userId) && isOwner(userId) && isVerifiedUser() && isValidRecentlyViewed(incoming(), userId) && incoming().userId == existing().userId && incoming().viewedAt == request.time && incoming().diff(existing()).affectedKeys().hasOnly(['projectIds', 'viewedAt']);
+      allow delete: if isValidId(userId) && (isOwner(userId) || isAdmin());
+    }
+
+    // Project Contacts (Only Admin-Approved Contacts Readable by Users)
+    match /projectContacts/{projectId} {
+      allow get: if isValidId(projectId) && (existing().approved == true || isAdmin());
+      allow list: if resource.data.approved == true || isAdmin();
+      allow create: if isValidId(projectId) && isAdmin() && isValidProjectContact(incoming(), projectId) && incoming().updatedAt == request.time && exists(/databases/$(database)/documents/projects/$(projectId));
+      allow update: if isValidId(projectId) && isAdmin() && isValidProjectContact(incoming(), projectId) && incoming().projectId == existing().projectId && incoming().updatedAt == request.time;
+      allow delete: if isValidId(projectId) && isAdmin();
+    }
+
+    // Public Portal Statistics Summary (No PII)
+    match /portalStats/{statId} {
+      allow get: if statId == 'summary';
+      allow list: if false;
+      allow create: if statId == 'summary' && isAdmin() && isValidPortalStats(incoming()) && incoming().updatedAt == request.time;
+      allow update: if statId == 'summary' && isValidPortalStats(incoming()) && incoming().updatedAt == request.time && (
+        isAdmin() ||
+        (
+          isSignedIn() &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['totalStudents', 'updatedAt']) &&
+          incoming().totalStudents == existing().totalStudents + 1
+        )
+      );
+      allow delete: if false;
+    }
+  }
+}

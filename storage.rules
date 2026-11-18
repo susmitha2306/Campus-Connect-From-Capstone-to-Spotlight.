@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedAdmin() {
+      return isSignedIn() &&
+        request.auth.token.email_verified == true &&
+        (
+          request.auth.token.email == 'sushmidhas4@gmail.com' ||
+          firestore.exists(/databases/ai-studio-02bb0cf4-4d23-41ff-b141-f9e5ff88de89/documents/admins/$(request.auth.uid))
+        );
+    }
+
+    function isValidImageUpload() {
+      return request.resource != null &&
+        request.resource.size < 5 * 1024 * 1024 &&
+        request.resource.contentType.matches('image/.*');
+    }
+
+    function isValidProjectResourceUpload() {
+      return request.resource != null &&
+        request.resource.size < 15 * 1024 * 1024 &&
+        (
+          request.resource.contentType.matches('image/.*') ||
+          request.resource.contentType == 'application/pdf'
+        );
+    }
+
+    // Default deny
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // Project cover images, screenshots & PDF documentation
+    match /projects/{projectId}/{fileName} {
+      allow read: if true;
+      allow write: if isVerifiedAdmin() && isValidProjectResourceUpload();
+    }
+
+    // Department images
+    match /departments/{departmentId}/{fileName} {
+      allow read: if true;
+      allow write: if isVerifiedAdmin() && isValidImageUpload();
+    }
+
+    // Student achievement photos & certificates
+    match /achievements/{achievementId}/{fileName} {
+      allow read: if true;
+      allow write: if isVerifiedAdmin() && isValidImageUpload();
+    }
+  }
+}

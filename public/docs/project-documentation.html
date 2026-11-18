@@ -1,0 +1,994 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusConnect — Project Technical Documentation</title>
+    <meta name="description" content="Technical capstone project documentation and printable academic report on CampusConnect." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy-900: #0F172A;
+        --navy-800: #1E293B;
+        --cobalt-600: #1D4ED8;
+        --cobalt-700: #1E40AF;
+        --cobalt-50: #EFF6FF;
+        --bg-page: #F8FAFC;
+        --bg-surface: #FFFFFF;
+        --bg-subtle: #F1F5F9;
+        --border: #E2E8F0;
+        --text-primary: #0F172A;
+        --text-secondary: #475569;
+        --text-muted: #64748B;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-page);
+        color: var(--text-primary);
+        line-height: 1.65;
+      }
+
+      h1, h2, h3, h4 {
+        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        letter-spacing: -0.02em;
+        color: var(--navy-900);
+      }
+
+      .mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      .topbar {
+        background: var(--navy-900);
+        color: #FFFFFF;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        flex-wrap: wrap;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+      }
+
+      .brand {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1.08rem;
+        color: #FFFFFF;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand-tag {
+        font-size: 0.72rem;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.14);
+        padding: 3px 8px;
+        border-radius: 6px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn-light {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #FFFFFF;
+        text-decoration: none;
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+      }
+
+      .btn-light:hover {
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      .btn-primary-top {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        background: var(--cobalt-600);
+        color: #FFFFFF;
+        text-decoration: none;
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 600;
+        border: 1px solid var(--cobalt-600);
+        cursor: pointer;
+      }
+
+      .btn-primary-top:hover {
+        background: var(--cobalt-700);
+      }
+
+      .doc-shell {
+        max-width: 940px;
+        margin: 28px auto 64px;
+        padding: 0 20px;
+      }
+
+      .doc-paper {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 36px 40px;
+        box-shadow: 0 12px 30px -18px rgba(15, 23, 42, 0.12);
+      }
+
+      @media (max-width: 640px) {
+        .doc-paper {
+          padding: 24px 20px;
+        }
+      }
+
+      .doc-header {
+        border-bottom: 2px solid var(--navy-900);
+        padding-bottom: 22px;
+        margin-bottom: 28px;
+      }
+
+      .doc-kicker {
+        font-size: 0.78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--cobalt-600);
+        margin-bottom: 8px;
+      }
+
+      .doc-header h1 {
+        margin: 0 0 12px;
+        font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+        line-height: 1.2;
+      }
+
+      .doc-subtitle {
+        margin: 0 0 18px;
+        font-size: 1rem;
+        color: var(--text-secondary);
+      }
+
+      .meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 12px;
+        background: var(--bg-subtle);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+
+      .meta-cell-label {
+        font-size: 0.74rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        color: var(--text-muted);
+      }
+
+      .meta-cell-val {
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--navy-900);
+        margin-top: 2px;
+      }
+
+      .doc-section {
+        margin-bottom: 28px;
+      }
+
+      .doc-section h2 {
+        font-size: 1.15rem;
+        margin: 0 0 10px;
+        padding-bottom: 6px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .doc-section p {
+        margin: 0 0 10px;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+      }
+
+      .doc-list {
+        margin: 8px 0 0;
+        padding-left: 20px;
+        color: var(--text-secondary);
+        display: grid;
+        gap: 6px;
+        font-size: 0.94rem;
+      }
+
+      .arch-box {
+        background: var(--navy-900);
+        color: #E2E8F0;
+        border-radius: 10px;
+        padding: 14px 18px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.84rem;
+        overflow-x: auto;
+        margin-top: 8px;
+      }
+
+      .spec-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 0.9rem;
+      }
+
+      .spec-table th,
+      .spec-table td {
+        border: 1px solid var(--border);
+        padding: 10px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .spec-table th {
+        background: var(--bg-subtle);
+        color: var(--navy-900);
+        font-weight: 600;
+        width: 28%;
+      }
+
+      .spec-table td {
+        color: var(--text-secondary);
+      }
+
+      .tech-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .tech-item {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--cobalt-700);
+        background: var(--cobalt-50);
+        border: 1px solid #BFDBFE;
+        padding: 4px 10px;
+        border-radius: 6px;
+      }
+
+      .doc-footer {
+        margin-top: 32px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
+
+      @media print {
+        body {
+          background: #FFFFFF;
+        }
+        .topbar,
+        .no-print {
+          display: none !important;
+        }
+        .doc-shell {
+          margin: 0;
+          padding: 0;
+          max-width: 100%;
+        }
+        .doc-paper {
+          border: none;
+          box-shadow: none;
+          padding: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a href="../../index.html" class="brand">
+        <span>CampusConnect</span>
+        <span class="brand-tag">Project Documentation</span>
+      </a>
+      <div class="top-actions">
+        <a href="../../index.html" class="btn-light">&larr; Back to Portal</a>
+        <a id="topDemoBtn" href="#" class="btn-light" style="display:none;">Live Demo</a>
+        <a id="topGithubBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn-light" style="display:none;">GitHub Repo</a>
+        <button type="button" id="downloadHtmlBtn" class="btn-light">Download Report (.html)</button>
+        <button type="button" id="printPdfBtn" class="btn-primary-top">Print / Save PDF</button>
+      </div>
+    </header>
+
+    <main class="doc-shell">
+      <article id="docPaper" class="doc-paper">
+        <div class="doc-header">
+          <div class="doc-kicker" id="docKicker">CampusConnect Capstone Technical Report</div>
+          <h1 id="docTitle">Loading Project Documentation...</h1>
+          <p class="doc-subtitle" id="docSubtitle"></p>
+
+          <div class="meta-grid">
+            <div>
+              <div class="meta-cell-label">Department</div>
+              <div class="meta-cell-val" id="metaDept">—</div>
+            </div>
+            <div>
+              <div class="meta-cell-label">Domain</div>
+              <div class="meta-cell-val" id="metaDomain">—</div>
+            </div>
+            <div>
+              <div class="meta-cell-label">Team Members</div>
+              <div class="meta-cell-val" id="metaTeam">—</div>
+            </div>
+            <div>
+              <div class="meta-cell-label">Faculty Guide &amp; Year</div>
+              <div class="meta-cell-val" id="metaGuide">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="docSections"></div>
+
+        <footer class="doc-footer">
+          <span>Document ID: <span class="mono" id="metaDocId">—</span></span>
+          <span>CampusConnect Institutional Project Archive</span>
+        </footer>
+      </article>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const projectId = params.get('project') || 'proj_it_campusconnect_portal';
+      const customTitle = params.get('title') || '';
+      const customDept = params.get('dept') || '';
+      const customDomain = params.get('domain') || '';
+
+      const DOCS = {
+        proj_cse_healthcare_mgmt: {
+          title: 'Smart Healthcare Management System',
+          department: 'Computer Science and Engineering (CSE)',
+          domain: 'Healthcare Systems',
+          academicYear: '2025-26',
+          guide: 'Dr. Kavita Iyer',
+          teamMembers: ['Aarav Sharma', 'Neha Kulkarni', 'Rohan Verma'],
+          technologies: ['Node.js', 'JavaScript', 'HTML5', 'CSS3', 'REST API'],
+          githubLink: 'https://github.com/Savidya9800/Smart-Healthcare-Management-System',
+          demoLink: '/demos/project-demo.html?project=proj_cse_healthcare_mgmt',
+          abstract: 'Smart Healthcare Management System unifies electronic patient records, outpatient appointment workflows, pharmacy inventory tracking, and clinician analytics inside a responsive web architecture.',
+          problemStatement: 'Fragmented clinic software forces doctors and pharmacists to reconcile patient visits across disconnected spreadsheets and manual paper prescription pads.',
+          proposedSolution: 'A centralized Node.js and web application providing real-time appointment routing, patient visit history views, automated queue prioritization, and synchronized pharmacy fulfillment.',
+          architecture: 'Web Client -> Node.js REST Services -> Patient & Pharmacy Store -> Analytics Module',
+          objectives: [
+            'Streamline outpatient appointment booking and clinical triage',
+            'Track prescription fulfillment, stock expiry, and clinical vitals in real time',
+            'Provide role-separated portals for doctors, pharmacists, and clinic administrators'
+          ],
+          modules: [
+            ['Patient Registration & Triage', 'Captures demographics, allergy alerts, vital signs, and assigns outpatient token slots.'],
+            ['Doctor Consultation Workbench', 'Displays historical EHR notes, lab reports, and issues structured digital prescriptions.'],
+            ['Pharmacy Inventory & Billing', 'Deducts dispensed batches automatically and triggers low-stock restock alerts.'],
+            ['Clinical Analytics Dashboard', 'Aggregates daily consultation throughput and department workload metrics.']
+          ],
+          deploymentNotes: [
+            'Clone the GitHub repository and install Node.js dependencies using npm install.',
+            'Configure environment variables for database connectivity and session secrets.',
+            'Start the Express server and verify /api/health before testing outpatient and pharmacy workflows.'
+          ]
+        },
+
+        proj_it_campusconnect_portal: {
+          title: 'CampusConnect Project Portal',
+          department: 'Information Technology (IT)',
+          domain: 'Enterprise Web Platforms',
+          academicYear: '2025-26',
+          guide: 'Prof. Rajesh Kulkarni',
+          teamMembers: ['Simran Kaur', 'Aditya Joshi', 'Tanvi Patel'],
+          technologies: ['JavaScript', 'Firebase', 'Firestore', 'HTML5', 'CSS3'],
+          githubLink: '',
+          demoLink: 'https://ais-pre-3xdlhpd2tw5ww3zpzs6b6k-240855308410.asia-northeast1.run.app',
+          abstract: 'CampusConnect provides a searchable, department-indexed project repository backed by Firebase Authentication, Cloud Firestore role-based security rules, and automated related-project discovery.',
+          problemStatement: 'Final-year capstone projects are often lost in local folders after graduation, preventing future cohorts and faculty reviewers from building on prior institutional research.',
+          proposedSolution: 'A cloud-hosted web portal with departmental filtering, user bookmarks, recently viewed history, technical documentation archives, and moderated team contact channels.',
+          architecture: 'Modular Web UI (index, auth, admin) -> Firebase Authentication -> Cloud Firestore (ABAC Rules) -> Firebase Storage',
+          objectives: [
+            'Centralize capstone discovery across 6 academic engineering and computing departments',
+            'Enforce zero-trust role-based moderation and PII isolation via Firestore Security Rules',
+            'Deliver instant cross-filtering by department, domain, academic year, and technology stack'
+          ],
+          modules: [
+            ['Public Showcase (index.html)', 'Multi-view portal for exploring departments, featured capstones, bookmarks, and recently viewed items.'],
+            ['Authentication Gateway (auth.html)', 'Split-screen student registration, password strength validation, email verification, and role-checked admin login.'],
+            ['Administrator Console (admin.html)', 'Full CRUD catalog management, approval workflow, batch seeding, and Firebase Storage asset uploads.'],
+            ['Security & Data Layer', 'Attribute-based Firestore security rules validating schema constraints, timestamps, and verified admin access.']
+          ],
+          deploymentNotes: [
+            'Configure Firebase project credentials in firebase-applet-config.json.',
+            'Deploy firestore.rules and storage.rules to enforce schema and RBAC policies.',
+            'Build static bundle with npm run build and serve via Vite or Cloud Run.'
+          ]
+        },
+
+        proj_ra_agriculture_robot: {
+          title: 'Smart Agriculture Robot',
+          department: 'Robotics and Automation (R&A)',
+          domain: 'Autonomous Robotics',
+          academicYear: '2025-26',
+          guide: 'Dr. Vikram Deshmukh',
+          teamMembers: ['Kabir Sen', 'Anjali Nair', 'Siddharth Rao'],
+          technologies: ['ESP32', 'Arduino C++', 'IoT Sensors', 'L298N', 'WebServer'],
+          githubLink: 'https://github.com/gobinda789/Smart-Agriculture-Bot',
+          demoLink: '/demos/project-demo.html?project=proj_ra_agriculture_robot',
+          abstract: 'Smart Agriculture Robot integrates real-time soil and environmental sensors with an ESP32 web control interface and Rocker-Bogie mechanical suspension to automate ploughing, seed dispensing, and targeted watering.',
+          problemStatement: 'Small-scale agricultural plots face labor bottlenecks during repetitive seeding and uneven manual irrigation across rough soil rows.',
+          proposedSolution: 'An autonomous and manually steerable ESP32 rover equipped with environmental telemetry, servo seed actuation, and moisture-threshold irrigation.',
+          architecture: 'Soil & DHT Sensors -> ESP32 Controller -> L298N Motor Drivers & Servos -> Web Telemetry Dashboard',
+          objectives: [
+            'Navigate uneven soil beds smoothly using a 6-wheel Rocker-Bogie suspension',
+            'Automate uniform seed spacing and moisture-triggered drip irrigation',
+            'Expose a low-latency ESP32 Wi-Fi dashboard for field telemetry and manual override'
+          ],
+          modules: [
+            ['Chassis & Suspension', 'Passive Rocker-Bogie linkage maintaining continuous ground contact over furrows and clods.'],
+            ['Sensor Acquisition Unit', 'Polls capacitive soil moisture, DHT ambient temperature/humidity, and forward obstacle distance.'],
+            ['Actuation Subsystem', 'L298N dual H-bridge drive motors paired with servo-driven seed hopper and relay water pump.'],
+            ['ESP32 Web Console', 'Embedded HTTP server delivering live telemetry and directional joystick commands.']
+          ],
+          deploymentNotes: [
+            'Flash the Arduino C++ firmware onto the ESP32 DevKit with configured Wi-Fi SSID credentials.',
+            'Verify L298N 12V power rail isolation from the ESP32 3.3V logic supply.',
+            'Calibrate dry/wet capacitive soil thresholds before autonomous field runs.'
+          ]
+        },
+
+        proj_csecs_phishing_detection: {
+          title: 'Phishing Website Detection',
+          department: 'Computer Science and Cyber Security (CSECS)',
+          domain: 'Network & Web Security',
+          academicYear: '2025-26',
+          guide: 'Dr. Meera Krishnan',
+          teamMembers: ['Devika Menon', 'Pranav Gupta'],
+          technologies: ['Python', 'Scikit-learn', 'XGBoost', 'Pandas', 'Flask'],
+          githubLink: 'https://github.com/shreyagopal/Phishing-Website-Detection-by-Machine-Learning-Techniques',
+          demoLink: '/demos/project-demo.html?project=proj_csecs_phishing_detection',
+          abstract: 'Phishing Website Detection extracts lexical URL signatures, domain host attributes, and structural page features to classify suspicious links across machine learning and deep neural architectures.',
+          problemStatement: 'Credential-harvesting phishing domains rapidly rotate hostnames and SSL certificates, evading static signature blocklists.',
+          proposedSolution: 'Automated feature extraction pipeline evaluating URL structure, DNS characteristics, and HTML behavior using trained Scikit-learn and XGBoost classifiers.',
+          architecture: 'URL Feature Extractor (17+ Indicators) -> Preprocessing Pipeline -> XGBoost / Random Forest -> Real-Time Risk Scoring Output',
+          objectives: [
+            'Extract 17+ lexical, domain-age, and HTML structural phishing indicators',
+            'Compare Decision Tree, Random Forest, MLP, and XGBoost classification performance',
+            'Expose a real-time URL risk scoring endpoint for browser and SOC triage'
+          ],
+          modules: [
+            ['Lexical & Host Extractor', 'Checks IP-in-URL, @ symbol redirection, URL depth, prefix/suffix hyphens, and HTTPS token abuse.'],
+            ['DOM & Content Analyzer', 'Inspects iframe redirection, mouse-over status manipulation, and external favicon anomalies.'],
+            ['Ensemble Classifier', 'Trained XGBoost and Random Forest models pickled for sub-50ms inference latency.'],
+            ['Evaluation Suite', 'Confusion matrix, precision/recall, and ROC-AUC reporting against balanced URL benchmarks.']
+          ],
+          deploymentNotes: [
+            'Install Python dependencies (scikit-learn, xgboost, pandas, flask) inside a virtual environment.',
+            'Run the feature extraction and training notebook to generate model artifacts.',
+            'Launch the Flask inference service to score candidate URLs via REST API.'
+          ]
+        },
+
+        proj_ece_smart_home: {
+          title: 'Smart Home Automation',
+          department: 'Electronics and Communication Engineering (ECE)',
+          domain: 'Embedded Systems & IoT',
+          academicYear: '2024-25',
+          guide: 'Dr. Arjun Menon',
+          teamMembers: ['Harshvardhan Pillai', 'Meghna Das', 'Yashwant Kumar'],
+          technologies: ['ESP32', 'FreeRTOS', 'Embedded C', 'IoT Sensors', 'OLED'],
+          githubLink: 'https://github.com/parikshitpagare/smart-home-automation-rtos',
+          demoLink: '/demos/project-demo.html?project=proj_ece_smart_home',
+          abstract: 'Smart Home Automation leverages multitasking FreeRTOS tasks on an ESP32 microcontroller to monitor DHT11 climate, LDR lighting, and MQ-2 gas sensors while supporting manual and wireless appliance control.',
+          problemStatement: 'Single-loop microcontroller sketches stall during blocking sensor reads, causing missed safety alerts and unresponsive relay switching.',
+          proposedSolution: 'Concurrent FreeRTOS task architecture isolating sensor acquisition, OLED status rendering, safety interlocks, and wireless relay control.',
+          architecture: 'DHT11 / MQ-2 / LDR / Ultrasonic Sensors -> ESP32 FreeRTOS Tasks (Queues & Semaphores) -> Relay Actuators & OLED Display',
+          objectives: [
+            'Execute deterministic concurrent sensor polling and relay control tasks under FreeRTOS',
+            'Enforce hardware-level safety cutoffs when MQ-2 smoke/gas thresholds are exceeded',
+            'Synchronize manual wall switches with wireless telemetry status on an I2C OLED screen'
+          ],
+          modules: [
+            ['Sensor Polling Task', 'Periodically samples DHT11 temperature/humidity, LDR ambient lux, and MQ-2 gas analog levels.'],
+            ['Safety Interlock Controller', 'High-priority FreeRTOS task immediately triggers buzzer alarm and power relay cutoff on gas leak.'],
+            ['OLED Display Task', 'Renders real-time room telemetry and active relay states over I2C SSD1306 display.'],
+            ['Wireless Command Receiver', 'Processes Bluetooth/Wi-Fi switching packets with mutex-protected relay state updates.']
+          ],
+          deploymentNotes: [
+            'Compile and flash the ESP-IDF / FreeRTOS project via USB-UART to the ESP32 target.',
+            'Wire opto-isolated relay modules and verify MQ-2 sensor warm-up stabilization.',
+            'Monitor serial FreeRTOS task stack watermarks during stress testing.'
+          ]
+        },
+
+        proj_aids_student_performance: {
+          title: 'Student Performance Prediction',
+          department: 'Artificial Intelligence and Data Science (AI&DS)',
+          domain: 'Predictive Analytics',
+          academicYear: '2025-26',
+          guide: 'Dr. Ananya Rao',
+          teamMembers: ['Ishita Banerjee', 'Karan Malhotra', 'Nidhi Verma'],
+          technologies: ['Python', 'Scikit-learn', 'Pandas', 'NumPy', 'Jupyter'],
+          githubLink: 'https://github.com/william-laverty/ML-Student-Performance-Predictor',
+          demoLink: '/demos/project-demo.html?project=proj_aids_student_performance',
+          abstract: 'Student Performance Prediction applies exploratory data analysis, categorical feature encoding, and regression modeling to student demographic and study-habit datasets to estimate final exam scores.',
+          problemStatement: 'Academic advisors often detect at-risk student trajectories only after end-of-semester examinations are graded.',
+          proposedSolution: 'Supervised predictive pipeline identifying key attendance, prior-term grade, and study-pattern drivers early in the semester.',
+          architecture: 'UCI Student Dataset -> Preprocessing & One-Hot Encoding -> Scikit-Learn Regression Pipeline -> Score Forecast & Feature Importance',
+          objectives: [
+            'Benchmark Linear, Ridge, Random Forest, and Gradient Boosting regressors on UCI academic data',
+            'Surface interpretable risk drivers (absences, study hours, prior grades) for faculty advising',
+            'Minimize RMSE and MAE using k-fold cross-validation'
+          ],
+          modules: [
+            ['Exploratory Data Analysis', 'Analyzes grade distributions, absence correlations, and multicollinearity across academic features.'],
+            ['Preprocessing Pipeline', 'StandardScaler and OneHotEncoder wrapped inside Scikit-learn ColumnTransformer to prevent data leakage.'],
+            ['Model Training & Tuning', 'GridSearchCV optimization across ensemble regressors with R2 and RMSE tracking.'],
+            ['Advising Report Output', 'Generates predicted G3 score band and actionable intervention flags for faculty mentors.']
+          ],
+          deploymentNotes: [
+            'Create a Python 3.10+ environment and install pandas, numpy, scikit-learn, and jupyter.',
+            'Execute the training notebook to reproduce feature preprocessing and cross-validation scores.',
+            'Run batch or single-student inference via the exported pipeline artifact.'
+          ]
+        },
+
+        proj_aids_med_nlp: {
+          title: 'ClinSummarize: Bilingual Clinical Discharge Note Structuring',
+          department: 'Artificial Intelligence and Data Science (AI&DS)',
+          domain: 'Natural Language Processing',
+          academicYear: '2025-26',
+          guide: 'Dr. Ananya Rao',
+          teamMembers: ['Riya Chatterjee', 'Samarth Jain'],
+          technologies: ['PyTorch', 'HuggingFace', 'FastAPI', 'TypeScript'],
+          githubLink: '',
+          demoLink: '/demos/project-demo.html?project=proj_aids_med_nlp',
+          abstract: 'ClinSummarize converts unstructured physician dictation into patient-friendly bilingual care summaries with explicit dosage verification checks against standard pharmacology ontologies.',
+          problemStatement: 'Patients frequently misread abbreviated clinical discharge notes, leading to preventable post-discharge medication adherence errors.',
+          proposedSolution: 'Fine-tuned sequence-to-sequence transformer paired with deterministic entity-grounding checks for drug names, dosages, and follow-up dates.',
+          architecture: 'Clinical Note Input -> Medical NER & Ontology Validator -> Fine-Tuned Transformer -> Structured Bilingual Care Plan',
+          objectives: [
+            'Achieve 97%+ dosage and frequency entity recall on discharge summaries',
+            'Eliminate hallucinated contraindications via strict RxNorm ontology verification',
+            'Render clear bilingual discharge schedules for teaching clinic patients'
+          ],
+          modules: [
+            ['Clinical Tokenizer & NER', 'Extracts medication names, strength units, route, and schedule frequency.'],
+            ['Ontology Grounding Lock', 'Cross-checks generated dosage tokens against source note entities before output approval.'],
+            ['Bilingual Template Formatter', 'Produces structured English + regional language care instructions.'],
+            ['FastAPI Inference Service', 'Stateless REST endpoint returning validated JSON summaries and confidence flags.']
+          ],
+          deploymentNotes: [
+            'Install PyTorch, Transformers, and FastAPI dependencies in a GPU-enabled environment.',
+            'Load fine-tuned weights and verify RxNorm entity lookup dictionary.',
+            'Test discharge note extraction using anonymized synthetic clinical cases.'
+          ]
+        },
+
+        proj_cse_cloud_drive: {
+          title: 'CloudVault: Distributed Cloud File Storage Platform',
+          department: 'Computer Science and Engineering (CSE)',
+          domain: 'Distributed Systems & Cloud',
+          academicYear: '2025-26',
+          guide: 'Dr. Kavita Iyer',
+          teamMembers: ['Raghav Deshpande', 'Shruti Menon', 'Varun Nair'],
+          technologies: ['React', 'TypeScript', 'Node.js', 'MongoDB', 'S3 Storage'],
+          githubLink: 'https://github.com/subnub/myDrive',
+          demoLink: '/demos/project-demo.html?project=proj_cse_cloud_drive',
+          abstract: 'CloudVault provides an institutional file storage platform built with React, TypeScript, and Node.js, featuring refresh-token authentication, directory hierarchies, chunked file transfers, and S3-compatible object storage.',
+          problemStatement: 'Campus research labs need self-hosted, access-controlled storage capable of streaming large datasets without third-party SaaS lock-in.',
+          proposedSolution: 'A TypeScript and Node.js storage service pairing MongoDB metadata indexing with S3/filesystem block storage and a responsive React client.',
+          architecture: 'React TypeScript Client -> Node.js Auth & File API -> MongoDB Metadata -> S3 / Local Block Store',
+          objectives: [
+            'Support chunked upload and HTTP range streaming playback for large media and datasets',
+            'Enforce JWT access and refresh token session isolation with folder-level sharing',
+            'Provide pluggable backend adapters for Amazon S3 or local campus NAS storage'
+          ],
+          modules: [
+            ['Auth & Token Manager', 'Issues short-lived access tokens and HTTP-only refresh tokens with session revocation.'],
+            ['Chunked Transfer Engine', 'Splits multi-megabyte uploads into verifiable chunks with resume support.'],
+            ['Metadata & Folder Tree', 'MongoDB collections indexing hierarchical folders, MIME types, and thumbnails.'],
+            ['React Explorer UI', 'Drag-and-drop uploads, media preview modal, and share-link permissions.']
+          ],
+          deploymentNotes: [
+            'Configure MongoDB URI, JWT secrets, and storage adapter (FS or S3) in .env.',
+            'Build the TypeScript backend and React frontend bundle.',
+            'Start the Node.js server and verify upload/download streaming via browser.'
+          ]
+        },
+
+        proj_it_campus_events: {
+          title: 'EventoEMS: Campus Event & QR Check-In Portal',
+          department: 'Information Technology (IT)',
+          domain: 'Campus SaaS Platforms',
+          academicYear: '2025-26',
+          guide: 'Prof. Rajesh Kulkarni',
+          teamMembers: ['Meera Iyer', 'Siddharth Kulkarni', 'Pooja Nair'],
+          technologies: ['React', 'Node.js', 'Express', 'MongoDB', 'QR Code'],
+          githubLink: 'https://github.com/Bilal025/EventoEMS',
+          demoLink: '/demos/project-demo.html?project=proj_it_campus_events',
+          abstract: 'EventoEMS streamlines college fests, technical workshops, and club seminars with calendar scheduling, multi-role organizer approvals, digital pass booking, and instant QR check-in scanning.',
+          problemStatement: 'Student clubs rely on disconnected spreadsheets and paper sign-in sheets for university symposiums and workshops.',
+          proposedSolution: 'A MERN-stack campus event portal unifying event proposals, student registration, capacity tracking, and QR-verified attendance.',
+          architecture: 'React UI -> Express REST API -> MongoDB Event & Ticket Store -> QR Verification Service',
+          objectives: [
+            'Automate event approval queues for faculty coordinators and student councils',
+            'Generate tamper-resistant QR event passes for instant auditorium check-in',
+            'Track live seat capacity and post-event attendance exports'
+          ],
+          modules: [
+            ['Event Proposal & Approval', 'Allows club leads to submit venue, date, and capacity requests for coordinator sign-off.'],
+            ['Student Booking Portal', 'Browse upcoming workshops, reserve seats, and view issued digital passes.'],
+            ['QR Ticket Generator', 'Encodes signed ticket tokens into downloadable QR passes upon registration.'],
+            ['Check-In Scanner Desk', 'Validates attendee passes in real time and prevents duplicate entry.']
+          ],
+          deploymentNotes: [
+            'Install server and client dependencies across the MERN workspace.',
+            'Set MongoDB connection string and JWT signing secret.',
+            'Launch backend API and React client to test registration and QR check-in.'
+          ]
+        },
+
+        proj_ra_obstacle_bot: {
+          title: 'PathFinder: Autonomous Line-Following & Obstacle-Avoiding Robot',
+          department: 'Robotics and Automation (R&A)',
+          domain: 'Mobile Robotics',
+          academicYear: '2025-26',
+          guide: 'Dr. Vikram Deshmukh',
+          teamMembers: ['Arjun Bhat', 'Nandini Rao', 'Tejas Deshmukh'],
+          technologies: ['Arduino C++', 'IR Sensor Array', 'HC-SR04', 'L298N', 'Differential Drive'],
+          githubLink: 'https://github.com/Abhishek-2502/Line-Following_Obstacle_Avoidance_Robot',
+          demoLink: '/demos/project-demo.html?project=proj_ra_obstacle_bot',
+          abstract: 'PathFinder combines real-time infrared path tracking with ultrasonic forward-collision sensing on an Arduino/L298N differential-drive chassis to follow floor routes safely around dynamic obstacles.',
+          problemStatement: 'Factory-floor automated guided vehicles operating solely on optical line tracks stall or collide when unexpected objects block the route.',
+          proposedSolution: 'Priority-interrupt control loop combining HC-SR04 range gating with closed-loop IR differential steering.',
+          architecture: 'IR Array & HC-SR04 Ultrasonic -> Microcontroller Priority Loop -> L298N H-Bridge -> Dual DC Gear Motors',
+          objectives: [
+            'Detect forward obstacles within a 15 cm safety envelope in real time',
+            'Execute left/right differential track corrections with minimal overshoot',
+            'Resume optical line tracking smoothly once an obstacle clears or is bypassed'
+          ],
+          modules: [
+            ['Optical Line Array', 'Dual/multi-channel IR reflectance sensors distinguishing high-contrast floor track boundaries.'],
+            ['Ultrasonic Rangefinder', 'HC-SR04 echo timing loop computing obstacle distance at 20 Hz.'],
+            ['Priority Decision FSM', 'Halts forward motion immediately below 15 cm before executing evasion maneuver.'],
+            ['L298N Motor Stage', 'PWM speed control and H-bridge direction switching for left and right gear motors.']
+          ],
+          deploymentNotes: [
+            'Wire IR array outputs, HC-SR04 trigger/echo pins, and L298N PWM channels per pin map.',
+            'Upload Arduino C++ sketch and calibrate IR trimmer potentiometers on ambient floor lighting.',
+            'Verify emergency halt distance on a high-contrast test track.'
+          ]
+        },
+
+        proj_csecs_network_ids: {
+          title: 'NetShield ML: Network Intrusion Detection System',
+          department: 'Computer Science and Cyber Security (CSECS)',
+          domain: 'Intrusion Detection & Threat ML',
+          academicYear: '2025-26',
+          guide: 'Dr. Meera Krishnan',
+          teamMembers: ['Kunal Kapoor', 'Ananya Verma', 'Rishi Shetty'],
+          technologies: ['Python', 'Scikit-learn', 'XGBoost', 'Pandas', 'CIC-IDS2017'],
+          githubLink: 'https://github.com/Western-OC2-Lab/Intrusion-Detection-System-Using-Machine-Learning',
+          demoLink: '/demos/project-demo.html?project=proj_csecs_network_ids',
+          abstract: 'NetShield ML evaluates Decision Trees, Random Forests, Extra Trees, XGBoost, and stacking classifiers on CIC-IDS2017 and CAN-intrusion datasets to classify DoS, brute-force, port-scan, and botnet traffic.',
+          problemStatement: 'Static firewall signatures fail to generalize against multi-vector DoS floods, slowloris attacks, and mutated network intrusion traffic.',
+          proposedSolution: 'Ensemble machine learning pipeline pairing feature selection, SMOTE class balancing, and Bayesian hyperparameter tuning with multi-class attack classification.',
+          architecture: 'Packet Flow Features -> Preprocessing & SMOTE Balancing -> Ensemble ML Classifiers -> Attack Alert Report',
+          objectives: [
+            'Benchmark tree-based and stacking ensembles on CIC-IDS2017 traffic flows',
+            'Minimize false-positive alert fatigue on benign enterprise HTTPS traffic',
+            'Support multi-class attack categorization (DoS, PortScan, BruteForce, Botnet)'
+          ],
+          modules: [
+            ['Flow Feature Preprocessor', 'Cleans infinite/null flow statistics and normalizes packet rate and byte distributions.'],
+            ['Class Balancing & Feature Selection', 'Applies SMOTE oversampling and information-gain feature pruning.'],
+            ['Stacking Ensemble Engine', 'Combines Random Forest, Extra Trees, and XGBoost predictions via meta-learner.'],
+            ['Threat Classification Report', 'Outputs per-class F1 scores, confusion matrices, and latency benchmarks.']
+          ],
+          deploymentNotes: [
+            'Download CIC-IDS2017 or CAN-intrusion CSV slices and place them in the dataset directory.',
+            'Install scikit-learn, xgboost, imbalanced-learn, and scikit-optimize.',
+            'Execute the training and evaluation notebooks to reproduce ensemble metrics.'
+          ]
+        },
+
+        proj_ece_energy_monitor: {
+          title: 'ESPEM: Smart Energy Meter & MQTT Telemetry Monitor',
+          department: 'Electronics and Communication Engineering (ECE)',
+          domain: 'Smart Grid & Power IoT',
+          academicYear: '2025-26',
+          guide: 'Dr. Arjun Menon',
+          teamMembers: ['Vikramaditya Rao', 'Sneha Krishnan', 'Deepak Patel'],
+          technologies: ['ESP32', 'PZEM-004T', 'MQTT', 'Embedded C++', 'REST API'],
+          githubLink: 'https://github.com/vortigont/espem',
+          demoLink: '/demos/project-demo.html?project=proj_ece_energy_monitor',
+          abstract: 'ESPEM reads real-time AC electrical telemetry from PZEM-004T v3.0 modules via hardware serial and serves a self-hosted live gauge dashboard alongside MQTT and REST API exports.',
+          problemStatement: 'Conventional campus utility sub-meters lack real-time power-factor telemetry, harmonic awareness, and automated MQTT integration.',
+          proposedSolution: 'An embedded ESP32 telemetry node providing live web charts, REST endpoints, and MQTT broker publishing for lab power monitoring.',
+          architecture: 'PZEM-004T v3.0 Sensor -> ESP32 Hardware Serial (Modbus RTU) -> Embedded WebUI & MQTT Broker -> Energy Analytics',
+          objectives: [
+            'Sample RMS voltage, current, active power, apparent power, and power factor continuously',
+            'Publish structured JSON telemetry packets to MQTT topics and REST consumers',
+            'Visualize real-time load curves directly from an embedded ESP32 web dashboard'
+          ],
+          modules: [
+            ['Modbus RTU Reader', 'Polls PeaceFair PZEM-004T v3.0 registers over isolated UART serial.'],
+            ['Telemetry Aggregator', 'Computes rolling energy consumption, peak current, and apparent VA load.'],
+            ['MQTT Publisher', 'Streams JSON payloads to campus Home Assistant or InfluxDB/Grafana collectors.'],
+            ['Embedded WebUI', 'Serves responsive gauges and configuration controls directly from ESP32 flash.']
+          ],
+          deploymentNotes: [
+            'Ensure safe mains isolation around the split-core CT clamp and PZEM-004T AC terminals.',
+            'Flash ESPEM firmware with PlatformIO onto the ESP32 board.',
+            'Configure Wi-Fi and MQTT broker host via the captive WebUI.'
+          ]
+        },
+
+        proj_aids_plant_disease: {
+          title: 'LeafGuard AI: Plant Leaf Disease Detection via CNN',
+          department: 'Artificial Intelligence and Data Science (AI&DS)',
+          domain: 'Computer Vision & AgriTech',
+          academicYear: '2025-26',
+          guide: 'Dr. Ananya Rao',
+          teamMembers: ['Tanya Sharma', 'Nikhil Menon', 'Aisha Khan'],
+          technologies: ['Python', 'TensorFlow', 'Keras', 'Streamlit', 'OpenCV'],
+          githubLink: 'https://github.com/gokulnpc/Plant-Disease-Prediction',
+          demoLink: '/demos/project-demo.html?project=proj_aids_plant_disease',
+          abstract: 'LeafGuard AI uses a TensorFlow/Keras CNN trained on the PlantVillage dataset to diagnose foliar diseases across apple, tomato, potato, and corn leaves with confidence scores via Streamlit.',
+          problemStatement: 'Delayed manual crop disease inspection causes avoidable yield loss in regional agricultural extension centers.',
+          proposedSolution: 'Deep learning vision classifier accessible through a lightweight browser upload interface for instant leaf screening.',
+          architecture: 'Leaf Image Upload -> OpenCV Resize & Normalization -> TensorFlow Keras CNN -> Disease Prediction & Agronomy Guidance',
+          objectives: [
+            'Classify 38 crop-disease categories accurately from smartphone leaf photographs',
+            'Serve sub-second visual predictions and top-k confidence bars via Streamlit',
+            'Attach actionable treatment recommendations for detected foliar pathogens'
+          ],
+          modules: [
+            ['Image Preprocessing', 'Resizes uploaded RGB leaf frames, normalizes pixel tensors, and applies augmentation during training.'],
+            ['Convolutional Classifier', 'Multi-block Keras CNN extracting lesion texture, chlorosis, and spot morphology features.'],
+            ['Confidence Calibration', 'Computes softmax probability distribution across all 38 PlantVillage classes.'],
+            ['Streamlit Diagnostic App', 'Clean upload interface displaying predicted pathology and agronomy mitigation steps.']
+          ],
+          deploymentNotes: [
+            'Install tensorflow, keras, opencv-python, numpy, and streamlit.',
+            'Verify trained model weights (.h5 / .keras) are accessible in the app directory.',
+            'Run streamlit run app.py and upload test leaf images to inspect diagnostic output.'
+          ]
+        }
+      };
+
+      const ESC = (v) => String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+      function decodeFirestoreValue(val) {
+        if (!val || typeof val !== 'object') return '';
+        if ('stringValue' in val) return val.stringValue;
+        if ('booleanValue' in val) return val.booleanValue;
+        if ('integerValue' in val) return Number(val.integerValue);
+        if ('arrayValue' in val) {
+          return (val.arrayValue.values || []).map(decodeFirestoreValue);
+        }
+        return '';
+      }
+
+      async function fetchFirestoreProject(pid) {
+        if (!pid || !/^[a-zA-Z0-9_-]+$/.test(pid)) return null;
+        const url = `https://firestore.googleapis.com/v1/projects/fine-discipline-03kqt/databases/ai-studio-02bb0cf4-4d23-41ff-b141-f9e5ff88de89/documents/projects/${encodeURIComponent(pid)}`;
+        try {
+          const res = await fetch(url);
+          if (!res.ok) return null;
+          const json = await res.json();
+          if (!json.fields) return null;
+          const out = {};
+          for (const [k, v] of Object.entries(json.fields)) {
+            out[k] = decodeFirestoreValue(v);
+          }
+          return out;
+        } catch {
+          return null;
+        }
+      }
+
+      function renderDocument(docData) {
+        const title = docData.title || customTitle || 'Student Capstone Project';
+        const dept = docData.department || customDept || 'CampusConnect Engineering Showcase';
+        const domain = docData.domain || customDomain || 'Applied Engineering';
+        const year = docData.academicYear || '2025-26';
+        const guide = docData.guide || 'Faculty Review Board';
+        const team = Array.isArray(docData.teamMembers) && docData.teamMembers.length
+          ? docData.teamMembers.join(', ')
+          : 'Project Team';
+        const techs = Array.isArray(docData.technologies) ? docData.technologies : [];
+        const objectives = Array.isArray(docData.objectives) ? docData.objectives : [];
+        const modules = Array.isArray(docData.modules) ? docData.modules : [];
+        const deployNotes = Array.isArray(docData.deploymentNotes) ? docData.deploymentNotes : [];
+
+        document.title = `${title} — Technical Documentation`;
+        document.getElementById('docTitle').textContent = title;
+        document.getElementById('docSubtitle').textContent = docData.description || docData.abstract || 'Official technical documentation and capstone architecture report.';
+        document.getElementById('metaDept').textContent = dept;
+        document.getElementById('metaDomain').textContent = domain;
+        document.getElementById('metaTeam').textContent = team;
+        document.getElementById('metaGuide').textContent = `${guide} · ${year}`;
+        document.getElementById('metaDocId').textContent = projectId;
+
+        const demoBtn = document.getElementById('topDemoBtn');
+        const demoHref = docData.demoLink || `/demos/project-demo.html?project=${encodeURIComponent(projectId)}&title=${encodeURIComponent(title)}&dept=${encodeURIComponent(dept)}`;
+        if (demoHref) {
+          demoBtn.href = demoHref;
+          demoBtn.style.display = 'inline-flex';
+        }
+
+        const ghBtn = document.getElementById('topGithubBtn');
+        if (docData.githubLink && docData.githubLink.startsWith('http')) {
+          ghBtn.href = docData.githubLink;
+          ghBtn.style.display = 'inline-flex';
+        }
+
+        const sections = [];
+
+        sections.push(`
+          <section class="doc-section">
+            <h2>1. Executive Abstract</h2>
+            <p>${ESC(docData.abstract || docData.description || 'Complete technical abstract for this institutional capstone project.')}</p>
+          </section>
+        `);
+
+        if (docData.problemStatement) {
+          sections.push(`
+            <section class="doc-section">
+              <h2>2. Problem Statement</h2>
+              <p>${ESC(docData.problemStatement)}</p>
+            </section>
+          `);
+        }
+
+        if (docData.proposedSolution) {
+          sections.push(`
+            <section class="doc-section">
+              <h2>3. Proposed Solution &amp; Methodology</h2>
+              <p>${ESC(docData.proposedSolution)}</p>
+            </section>
+          `);
+        }
+
+        if (docData.architecture) {
+          sections.push(`
+            <section class="doc-section">
+              <h2>4. System Architecture &amp; Pipeline</h2>
+              <p>End-to-end structural flow connecting input interfaces, processing modules, and persistence/output layers:</p>
+              <div class="arch-box">${ESC(docData.architecture)}</div>
+            </section>
+          `);
+        }
+
+        if (objectives.length) {
+          sections.push(`
+            <section class="doc-section">
+              <h2>5. Key Objectives</h2>
+              <ul class="doc-list">
+                ${objectives.map((o) => `<li>${ESC(o)}</li>`).join('')}
+              </ul>
+            </section>
+          `);
+        }
+
+        if (techs.length) {
+          sections.push(`
+            <section class="doc-section">
+              <h2>6. Technology Stack</h2>
+              <div class="tech-strip">
+                ${techs.map((t) => `<span class="tech-item">${ESC(t)}</span>`).join('')}
+              </div>
+            </section>
+          `);
+        }
+
+        if (modules.length) {
+          sections.push(`
+            <section class="doc-section">
+              <h2>7. Core Module Specifications</h2>
+              <table class="spec-table">
+                <tbody>
+                  ${modules.map(([name, desc]) => `<tr><th>${ESC(name)}</th><td>${ESC(desc)}</td></tr>`).join('')}
+                </tbody>
+              </table>
+            </section>
+          `);
+        }
+
+        if (deployNotes.length) {
+          sections.push(`
+            <section class="doc-section">
+              <h2>8. Setup, Verification &amp; Deployment Notes</h2>
+              <ol class="doc-list">
+                ${deployNotes.map((n) => `<li>${ESC(n)}</li>`).join('')}
+              </ol>
+            </section>
+          `);
+        }
+
+        document.getElementById('docSections').innerHTML = sections.join('');
+      }
+
+      async function init() {
+        const staticDoc = DOCS[projectId];
+        if (staticDoc) {
+          renderDocument(staticDoc);
+          return;
+        }
+        const liveDoc = await fetchFirestoreProject(projectId);
+        if (liveDoc) {
+          renderDocument(liveDoc);
+          return;
+        }
+        renderDocument({
+          title: customTitle || 'Student Project Documentation',
+          department: customDept || 'CampusConnect Academic Showcase',
+          domain: customDomain || 'Capstone Engineering',
+          academicYear: '2025-26',
+          guide: 'Faculty Advisor',
+          teamMembers: ['Project Team'],
+          abstract: 'Structured technical documentation generated by CampusConnect for this approved student project.'
+        });
+      }
+
+      init();
+
+      document.getElementById('printPdfBtn').addEventListener('click', () => {
+        window.print();
+      });
+
+      document.getElementById('downloadHtmlBtn').addEventListener('click', () => {
+        const paperHtml = document.getElementById('docPaper').outerHTML;
+        const docTitle = document.getElementById('docTitle').textContent || 'project-documentation';
+        const safeSlug = docTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'project-documentation';
+        const styleCss = document.querySelector('style').innerHTML;
+        const fullHtml = `<!doctype html><html lang="en"><head><meta charset="UTF-8"><title>${ESC(docTitle)} — Documentation</title><style>${styleCss}</style></head><body><main class="doc-shell">${paperHtml}</main></body></html>`;
+        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${safeSlug}-documentation.html`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+    </script>
+  </body>
+</html>

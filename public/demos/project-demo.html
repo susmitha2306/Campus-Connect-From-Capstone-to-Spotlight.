@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CampusConnect — Interactive Project Demo</title>
+    <meta name="description" content="Interactive live demonstration sandbox for CampusConnect student capstone projects." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy-900: #0F172A;
+        --cobalt-600: #1D4ED8;
+        --cobalt-700: #1E40AF;
+        --bg-page: #F8FAFC;
+        --bg-surface: #FFFFFF;
+        --bg-subtle: #F1F5F9;
+        --border: #E2E8F0;
+        --text-primary: #0F172A;
+        --text-secondary: #475569;
+        --text-muted: #64748B;
+        --success: #047857;
+        --success-bg: #ECFDF5;
+        --warn: #B45309;
+        --warn-bg: #FFFBEB;
+        --danger: #B91C1C;
+        --danger-bg: #FEF2F2;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-page);
+        color: var(--text-primary);
+        line-height: 1.55;
+      }
+
+      h1, h2, h3, h4 {
+        font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+        letter-spacing: -0.02em;
+      }
+
+      .mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      .topbar {
+        background: var(--navy-900);
+        color: #FFFFFF;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-weight: 800;
+        font-size: 1.125rem;
+        color: #FFFFFF;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand-tag {
+        font-size: 0.72rem;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.14);
+        padding: 3px 8px;
+        border-radius: 6px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .btn-light {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.12);
+        color: #FFFFFF;
+        text-decoration: none;
+        font-size: 0.84rem;
+        font-weight: 600;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .btn-light:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .container {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 28px 20px 56px;
+      }
+
+      .hero-card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px 28px;
+        margin-bottom: 22px;
+      }
+
+      .meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 14px;
+        font-size: 0.82rem;
+        color: var(--cobalt-700);
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .hero-card h1 {
+        margin: 0 0 8px;
+        font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+        color: var(--navy-900);
+      }
+
+      .hero-card p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+      }
+
+      .workspace-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      @media (min-width: 820px) {
+        .workspace-grid {
+          grid-template-columns: 1.15fr 0.85fr;
+        }
+      }
+
+      .card {
+        background: var(--bg-surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 22px;
+      }
+
+      .card h2 {
+        margin: 0 0 14px;
+        font-size: 1.08rem;
+        color: var(--navy-900);
+      }
+
+      .field {
+        margin-bottom: 14px;
+      }
+
+      .field label {
+        display: block;
+        font-size: 0.82rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 5px;
+      }
+
+      .input, .select, .textarea {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1px solid #CBD5E1;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 0.9rem;
+        background: #FFFFFF;
+        color: var(--text-primary);
+      }
+
+      .textarea {
+        min-height: 92px;
+        resize: vertical;
+      }
+
+      .btn-primary {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 16px;
+        border: none;
+        border-radius: 8px;
+        background: var(--cobalt-600);
+        color: #FFFFFF;
+        font-family: inherit;
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .btn-primary:hover {
+        background: var(--cobalt-700);
+      }
+
+      .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 9px 14px;
+        border: 1px solid #CBD5E1;
+        border-radius: 8px;
+        background: #FFFFFF;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .btn-outline:hover {
+        background: var(--bg-subtle);
+      }
+
+      .kpi-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .kpi {
+        background: var(--bg-subtle);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 12px;
+      }
+
+      .kpi-label {
+        font-size: 0.74rem;
+        color: var(--text-muted);
+      }
+
+      .kpi-val {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: var(--navy-900);
+        margin-top: 2px;
+      }
+
+      .log-box {
+        background: #0F172A;
+        color: #E2E8F0;
+        border-radius: 10px;
+        padding: 14px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.78rem;
+        line-height: 1.55;
+        max-height: 240px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+      }
+
+      .status-pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 700;
+      }
+
+      .status-ok { background: var(--success-bg); color: var(--success); }
+      .status-warn { background: var(--warn-bg); color: var(--warn); }
+      .status-danger { background: var(--danger-bg); color: var(--danger); }
+
+      .list-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        font-size: 0.875rem;
+      }
+
+      .bar-track {
+        height: 10px;
+        background: var(--bg-subtle);
+        border-radius: 999px;
+        overflow: hidden;
+        margin-top: 4px;
+      }
+
+      .bar-fill {
+        height: 100%;
+        background: var(--cobalt-600);
+        border-radius: 999px;
+        transition: width 180ms ease;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <a href="/index.html" class="brand">
+        <span>CampusConnect</span>
+        <span class="brand-tag">Interactive Demo</span>
+      </a>
+      <div class="top-actions">
+        <a id="repoTopBtn" href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn-light" style="display:none;">View Source Code</a>
+        <a href="/index.html" class="btn-light">Back to Portal</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero-card">
+        <div class="meta-row">
+          <span id="demoDept">Department</span>
+          <span>&middot;</span>
+          <span id="demoDomain">Interactive Sandbox</span>
+          <span>&middot;</span>
+          <span id="demoProjectId" class="mono">project</span>
+        </div>
+        <h1 id="demoTitle">Project Live Demonstration</h1>
+        <p id="demoSubtitle">Interactive browser demonstration illustrating the core workflow, inputs, and live outputs of this project.</p>
+      </section>
+
+      <div id="demoContent"></div>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const projectId = params.get('project') || 'custom';
+      const customTitle = params.get('title') || '';
+      const customDept = params.get('dept') || '';
+
+      const DEMOS = {
+        proj_cse_healthcare_mgmt: {
+          title: 'Smart Healthcare Management System',
+          dept: 'CSE · Healthcare Systems',
+          domain: 'Appointment Triage & Pharmacy Fulfillment',
+          repo: 'https://github.com/Savidya9800/Smart-Healthcare-Management-System',
+          desc: 'Simulate outpatient intake, clinician queue priority, and live pharmacy prescription fulfillment.',
+          render(root) {
+            const queue = [
+              { id: 'PT-101', name: 'Ananya Nair', dept: 'Cardiology', triage: 'Urgent', rx: 'Atorvastatin 20mg', filled: false },
+              { id: 'PT-102', name: 'Vikram Joshi', dept: 'General Medicine', triage: 'Standard', rx: 'Amoxicillin 500mg', filled: true }
+            ];
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>Outpatient Intake &amp; Triage Registration</h2>
+                  <div class="field"><label>Patient Name</label><input id="hcName" class="input" value="Rohan Kulkarni" /></div>
+                  <div class="field"><label>Specialty Clinic</label>
+                    <select id="hcDept" class="select">
+                      <option>General Medicine</option><option>Cardiology</option><option>Orthopedics</option><option>Pediatrics</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>Triage Priority</label>
+                    <select id="hcTriage" class="select">
+                      <option>Standard</option><option>Urgent</option><option>Follow-up</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>Prescribed Medication</label><input id="hcRx" class="input" value="Metformin 500mg" /></div>
+                  <button type="button" id="hcAddBtn" class="btn-primary">Admit Patient to Queue</button>
+                </div>
+                <div class="card">
+                  <h2>Live Clinic &amp; Pharmacy Queue</h2>
+                  <div class="kpi-row">
+                    <div class="kpi"><div class="kpi-label">Active Patients</div><div class="kpi-val" id="hcCount">2</div></div>
+                    <div class="kpi"><div class="kpi-label">Rx Pending</div><div class="kpi-val" id="hcPending">1</div></div>
+                  </div>
+                  <div id="hcList"></div>
+                </div>
+              </div>
+            `;
+            const renderList = () => {
+              document.getElementById('hcCount').textContent = queue.length;
+              document.getElementById('hcPending').textContent = queue.filter((q) => !q.filled).length;
+              document.getElementById('hcList').innerHTML = queue.map((q, idx) => `
+                <div class="list-row">
+                  <div>
+                    <strong>${q.id} · ${q.name}</strong>
+                    <div style="font-size:0.78rem;color:var(--text-muted);">${q.dept} · ${q.triage} · Rx: ${q.rx}</div>
+                  </div>
+                  <button type="button" class="btn-outline" data-rx="${idx}">${q.filled ? 'Dispensed' : 'Dispense Rx'}</button>
+                </div>
+              `).join('');
+              root.querySelectorAll('[data-rx]').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                  const i = Number(btn.getAttribute('data-rx'));
+                  queue[i].filled = !queue[i].filled;
+                  renderList();
+                });
+              });
+            };
+            renderList();
+            document.getElementById('hcAddBtn').addEventListener('click', () => {
+              const name = document.getElementById('hcName').value.trim() || 'Patient';
+              queue.unshift({
+                id: `PT-${103 + queue.length}`,
+                name,
+                dept: document.getElementById('hcDept').value,
+                triage: document.getElementById('hcTriage').value,
+                rx: document.getElementById('hcRx').value.trim() || 'Saline',
+                filled: false
+              });
+              renderList();
+            });
+          }
+        },
+
+        proj_ra_agriculture_robot: {
+          title: 'Smart Agriculture Robot',
+          dept: 'R&A · Autonomous Robotics',
+          domain: 'ESP32 Field Rover & Soil Telemetry',
+          repo: 'https://github.com/gobinda789/Smart-Agriculture-Bot',
+          desc: 'Control rover motion, trigger precision seed sowing, and simulate soil-moisture threshold irrigation.',
+          render(root) {
+            let moisture = 34;
+            let pumpOn = true;
+            let seedsDropped = 12;
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>ESP32 Rover &amp; Actuator Controls</h2>
+                  <div class="field">
+                    <label>Simulated Soil Moisture: <span id="agMoistLbl" class="mono">34%</span> (Auto-irrigate below 40%)</label>
+                    <input type="range" id="agMoist" min="5" max="95" value="34" style="width:100%;" />
+                  </div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+                    <button type="button" class="btn-primary" data-cmd="FORWARD">Move Forward</button>
+                    <button type="button" class="btn-outline" data-cmd="LEFT">Steer Left</button>
+                    <button type="button" class="btn-outline" data-cmd="RIGHT">Steer Right</button>
+                    <button type="button" class="btn-outline" data-cmd="SOW">Dispense Seed</button>
+                    <button type="button" class="btn-outline" data-cmd="PLOUGH">Toggle Plough</button>
+                  </div>
+                  <div class="kpi-row">
+                    <div class="kpi"><div class="kpi-label">Irrigation Valve</div><div class="kpi-val" id="agValve">OPEN</div></div>
+                    <div class="kpi"><div class="kpi-label">Seeds Sown</div><div class="kpi-val" id="agSeeds">12</div></div>
+                  </div>
+                </div>
+                <div class="card">
+                  <h2>ESP32 WebSocket Telemetry Stream</h2>
+                  <div id="agLog" class="log-box"></div>
+                </div>
+              </div>
+            `;
+            const logEl = document.getElementById('agLog');
+            const pushLog = (msg) => {
+              const t = new Date().toLocaleTimeString();
+              logEl.textContent = `[${t}] ${msg}\n` + logEl.textContent;
+            };
+            pushLog('ESP32 Rocker-Bogie Rover online. DHT22: 28.4C | Soil: 34% | Auto-pump ON');
+            document.getElementById('agMoist').addEventListener('input', (e) => {
+              moisture = Number(e.target.value);
+              pumpOn = moisture < 40;
+              document.getElementById('agMoistLbl').textContent = `${moisture}%`;
+              document.getElementById('agValve').textContent = pumpOn ? 'OPEN' : 'CLOSED';
+              pushLog(`ADC Soil Moisture = ${moisture}% -> Irrigation relay ${pumpOn ? 'OPEN' : 'CLOSED'}`);
+            });
+            root.querySelectorAll('[data-cmd]').forEach((b) => {
+              b.addEventListener('click', () => {
+                const cmd = b.getAttribute('data-cmd');
+                if (cmd === 'SOW') {
+                  seedsDropped += 1;
+                  document.getElementById('agSeeds').textContent = seedsDropped;
+                  pushLog(`Servo actuator pulsed: Seed #${seedsDropped} planted.`);
+                } else {
+                  pushLog(`L298N Motor Command dispatched: ${cmd}`);
+                }
+              });
+            });
+          }
+        },
+
+        proj_csecs_phishing_detection: {
+          title: 'Phishing Website Detection',
+          dept: 'CSECS · Network & Web Security',
+          domain: 'Lexical & Host Feature Classifier',
+          repo: 'https://github.com/shreyagopal/Phishing-Website-Detection-by-Machine-Learning-Techniques',
+          desc: 'Test suspicious vs. legitimate URLs against lexical phishing indicators extracted in real time.',
+          render(root) {
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>URL Feature Inspector</h2>
+                  <div class="field">
+                    <label>Enter URL to Evaluate</label>
+                    <input id="phUrl" class="input mono" value="http://192.168.1.44/secure-login-verify-bank/update.php?session=991" />
+                  </div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+                    <button type="button" id="phScanBtn" class="btn-primary">Analyze URL Features</button>
+                    <button type="button" id="phSafeBtn" class="btn-outline">Load Legitimate URL</button>
+                  </div>
+                  <div id="phVerdict"></div>
+                </div>
+                <div class="card">
+                  <h2>Extracted Feature Vector</h2>
+                  <div id="phFeatures"></div>
+                </div>
+              </div>
+            `;
+            const analyze = () => {
+              const raw = document.getElementById('phUrl').value.trim();
+              let score = 0;
+              const isHttps = raw.startsWith('https://');
+              const hasIp = /\b\d{1,3}(\.\d{1,3}){3}\b/.test(raw);
+              const hasAt = raw.includes('@');
+              const longUrl = raw.length > 54;
+              const hasSuspicious = /(verify|update|secure-login|signin|account|bank)/i.test(raw);
+              const hyphenCount = (raw.match(/-/g) || []).length;
+
+              if (!isHttps) score += 25;
+              if (hasIp) score += 30;
+              if (hasAt) score += 20;
+              if (longUrl) score += 15;
+              if (hasSuspicious) score += 20;
+              if (hyphenCount >= 2) score += 10;
+              score = Math.min(100, score);
+
+              const cls = score >= 50 ? 'status-danger' : score >= 25 ? 'status-warn' : 'status-ok';
+              const label = score >= 50 ? 'HIGH PHISHING RISK' : score >= 25 ? 'SUSPICIOUS' : 'LIKELY BENIGN';
+              document.getElementById('phVerdict').innerHTML = `
+                <div class="kpi">
+                  <div class="kpi-label">Classifier Verdict</div>
+                  <div style="margin-top:6px;display:flex;align-items:center;gap:10px;">
+                    <span class="status-pill ${cls}">${label}</span>
+                    <span class="mono">Risk Score: ${score}/100</span>
+                  </div>
+                </div>
+              `;
+              document.getElementById('phFeatures').innerHTML = [
+                ['Protocol HTTPS', isHttps ? 'Yes (0)' : 'No (+25)'],
+                ['IP Address in Host', hasIp ? 'Detected (+30)' : 'None (0)'],
+                ['URL Length > 54 chars', `${raw.length} chars (${longUrl ? '+15' : '0'})`],
+                ['@ Symbol Redirect', hasAt ? 'Detected (+20)' : 'None (0)'],
+                ['Credential Lure Tokens', hasSuspicious ? 'Matched (+20)' : 'None (0)'],
+                ['Domain Hyphens', `${hyphenCount} (${hyphenCount >= 2 ? '+10' : '0'})`]
+              ].map(([k, v]) => `<div class="list-row"><span>${k}</span><strong class="mono">${v}</strong></div>`).join('');
+            };
+            analyze();
+            document.getElementById('phScanBtn').addEventListener('click', analyze);
+            document.getElementById('phSafeBtn').addEventListener('click', () => {
+              document.getElementById('phUrl').value = 'https://github.com/shreyagopal';
+              analyze();
+            });
+          }
+        },
+
+        proj_ece_smart_home: {
+          title: 'Smart Home Automation',
+          dept: 'ECE · Embedded Systems & FreeRTOS',
+          domain: 'ESP32 Multitasking Relay & Safety Panel',
+          repo: 'https://github.com/parikshitpagare/smart-home-automation-rtos',
+          desc: 'Toggle household relay loads and simulate DHT11 temperature & MQ-2 smoke safety overrides.',
+          render(root) {
+            const relays = { lights: true, fan: false, alarm: false };
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>FreeRTOS Sensor &amp; Relay Controls</h2>
+                  <div class="field">
+                    <label>Ambient Temperature (DHT11): <span id="shTempLbl" class="mono">26°C</span></label>
+                    <input type="range" id="shTemp" min="16" max="45" value="26" style="width:100%;" />
+                  </div>
+                  <div class="field">
+                    <label>Gas / Smoke Level (MQ-2): <span id="shGasLbl" class="mono">180 ppm</span></label>
+                    <input type="range" id="shGas" min="80" max="900" value="180" style="width:100%;" />
+                  </div>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button type="button" class="btn-primary" id="shToggleLight">Toggle Lighting Relay</button>
+                    <button type="button" class="btn-outline" id="shToggleFan">Toggle Cooling Fan</button>
+                  </div>
+                </div>
+                <div class="card">
+                  <h2>ESP32 OLED &amp; Task Status</h2>
+                  <div id="shStatus"></div>
+                </div>
+              </div>
+            `;
+            const render = () => {
+              const temp = Number(document.getElementById('shTemp').value);
+              const gas = Number(document.getElementById('shGas').value);
+              if (temp >= 32) relays.fan = true;
+              relays.alarm = gas >= 500;
+              document.getElementById('shTempLbl').textContent = `${temp}°C`;
+              document.getElementById('shGasLbl').textContent = `${gas} ppm`;
+              document.getElementById('shStatus').innerHTML = `
+                <div class="list-row"><span>Task 1 · Lighting Relay</span><span class="status-pill ${relays.lights ? 'status-ok' : 'status-warn'}">${relays.lights ? 'ON' : 'OFF'}</span></div>
+                <div class="list-row"><span>Task 2 · Cooling Fan (Auto >= 32°C)</span><span class="status-pill ${relays.fan ? 'status-ok' : 'status-warn'}">${relays.fan ? 'RUNNING' : 'IDLE'}</span></div>
+                <div class="list-row"><span>Task 3 · MQ-2 Smoke Cutoff (>= 500 ppm)</span><span class="status-pill ${relays.alarm ? 'status-danger' : 'status-ok'}">${relays.alarm ? 'ALERT TRIPPED' : 'SAFE'}</span></div>
+              `;
+            };
+            render();
+            document.getElementById('shTemp').addEventListener('input', render);
+            document.getElementById('shGas').addEventListener('input', render);
+            document.getElementById('shToggleLight').addEventListener('click', () => { relays.lights = !relays.lights; render(); });
+            document.getElementById('shToggleFan').addEventListener('click', () => { relays.fan = !relays.fan; render(); });
+          }
+        },
+
+        proj_aids_student_performance: {
+          title: 'Student Performance Prediction',
+          dept: 'AI&DS · Predictive Analytics',
+          domain: 'Regression Score Forecaster',
+          repo: 'https://github.com/william-laverty/ML-Student-Performance-Predictor',
+          desc: 'Adjust study habits, attendance, and prior exam scores to forecast final academic performance.',
+          render(root) {
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>Student Feature Inputs</h2>
+                  <div class="field"><label>Prior Midterm Score (0–20): <span id="spG1Lbl" class="mono">14</span></label><input type="range" id="spG1" min="0" max="20" value="14" style="width:100%;" /></div>
+                  <div class="field"><label>Weekly Study Hours: <span id="spStudyLbl" class="mono">8 hrs</span></label><input type="range" id="spStudy" min="1" max="25" value="8" style="width:100%;" /></div>
+                  <div class="field"><label>Attendance Rate: <span id="spAttLbl" class="mono">88%</span></label><input type="range" id="spAtt" min="30" max="100" value="88" style="width:100%;" /></div>
+                  <div class="field"><label>Past Course Failures: <span id="spFailLbl" class="mono">0</span></label><input type="range" id="spFail" min="0" max="4" value="0" style="width:100%;" /></div>
+                </div>
+                <div class="card">
+                  <h2>Predicted Final Grade</h2>
+                  <div class="kpi-row">
+                    <div class="kpi"><div class="kpi-label">Predicted Score</div><div class="kpi-val" id="spPred">15.1 / 20</div></div>
+                    <div class="kpi"><div class="kpi-label">Advising Tier</div><div class="kpi-val" id="spTier">On Track</div></div>
+                  </div>
+                  <div class="bar-track"><div id="spBar" class="bar-fill" style="width:75%;"></div></div>
+                </div>
+              </div>
+            `;
+            const update = () => {
+              const g1 = Number(document.getElementById('spG1').value);
+              const study = Number(document.getElementById('spStudy').value);
+              const att = Number(document.getElementById('spAtt').value);
+              const fail = Number(document.getElementById('spFail').value);
+              document.getElementById('spG1Lbl').textContent = g1;
+              document.getElementById('spStudyLbl').textContent = `${study} hrs`;
+              document.getElementById('spAttLbl').textContent = `${att}%`;
+              document.getElementById('spFailLbl').textContent = fail;
+              const pred = Math.max(0, Math.min(20, 0.78 * g1 + 0.14 * study + 0.035 * att - 1.4 * fail));
+              document.getElementById('spPred').textContent = `${pred.toFixed(1)} / 20`;
+              document.getElementById('spTier').textContent = pred >= 14 ? 'Honors Track' : pred >= 10 ? 'On Track' : 'Needs Support';
+              document.getElementById('spBar').style.width = `${(pred / 20) * 100}%`;
+            };
+            update();
+            ['spG1', 'spStudy', 'spAtt', 'spFail'].forEach((id) => document.getElementById(id).addEventListener('input', update));
+          }
+        },
+
+        proj_aids_med_nlp: {
+          title: 'ClinSummarize: Bilingual Clinical Discharge Note Structuring',
+          dept: 'AI&DS · Natural Language Processing',
+          domain: 'Clinical Entity Grounding',
+          repo: '',
+          desc: 'Extract structured medication schedules and follow-up instructions from sample physician discharge notes.',
+          render(root) {
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>Physician Discharge Dictation</h2>
+                  <textarea id="csInput" class="textarea">Dx: Community-acquired pneumonia. Rx: Amoxicillin-Clavulanate 625mg PO BID x 7 days; Paracetamol 500mg SOS fever. Follow-up chest clinic in 5 days. Red flags: shortness of breath.</textarea>
+                  <button type="button" id="csRunBtn" class="btn-primary" style="margin-top:10px;">Extract Care Plan</button>
+                </div>
+                <div class="card">
+                  <h2>Structured Patient Care Summary</h2>
+                  <div id="csOut"></div>
+                </div>
+              </div>
+            `;
+            const parse = () => {
+              const txt = document.getElementById('csInput').value;
+              const meds = txt.match(/([A-Z][a-zA-Z-]+\s+\d+mg[^.;]*)/g) || ['No explicit dosage detected'];
+              const followup = (txt.match(/Follow-up[^.]*/i) || ['Consult physician as scheduled'])[0];
+              document.getElementById('csOut').innerHTML = `
+                <div class="list-row"><span>Verified Medications</span><strong>${meds.join(' | ')}</strong></div>
+                <div class="list-row"><span>Follow-Up Plan</span><strong>${followup}</strong></div>
+                <div class="list-row"><span>Ontology Guard</span><span class="status-pill status-ok">Dosage Grounded</span></div>
+              `;
+            };
+            parse();
+            document.getElementById('csRunBtn').addEventListener('click', parse);
+          }
+        },
+
+        proj_cse_cloud_drive: {
+          title: 'CloudVault: Distributed Cloud File Storage Platform',
+          dept: 'CSE · Distributed Systems & Cloud',
+          domain: 'Chunked File Uploads & S3 Object Metadata',
+          repo: 'https://github.com/subnub/myDrive',
+          desc: 'Simulate chunked file uploads, SHA-256 block verification, and object bucket indexing.',
+          render(root) {
+            const files = [
+              { name: 'capstone-thesis-v2.pdf', size: '4.2 MB', chunks: 5, hash: '8f4b2c...91a' },
+              { name: 'dataset-benchmarks.parquet', size: '18.6 MB', chunks: 19, hash: '3d9a10...44e' }
+            ];
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>Chunked Object Upload Simulator</h2>
+                  <div class="field"><label>File Name</label><input id="cvName" class="input" value="experiment-logs.csv" /></div>
+                  <div class="field"><label>Simulated Size (MB)</label><input id="cvSize" type="number" class="input" value="12" min="1" max="500" /></div>
+                  <button type="button" id="cvUpBtn" class="btn-primary">Upload in 1 MB Chunks</button>
+                </div>
+                <div class="card">
+                  <h2>Distributed Object Store Index</h2>
+                  <div id="cvList"></div>
+                </div>
+              </div>
+            `;
+            const render = () => {
+              document.getElementById('cvList').innerHTML = files.map((f) => `
+                <div class="list-row">
+                  <div><strong>${f.name}</strong><div class="mono" style="font-size:0.76rem;color:var(--text-muted);">${f.size} · ${f.chunks} chunks · SHA256 ${f.hash}</div></div>
+                  <span class="status-pill status-ok">Replicated</span>
+                </div>
+              `).join('');
+            };
+            render();
+            document.getElementById('cvUpBtn').addEventListener('click', () => {
+              const name = document.getElementById('cvName').value.trim() || 'artifact.bin';
+              const mb = Math.max(1, Number(document.getElementById('cvSize').value) || 4);
+              const randHex = Math.random().toString(16).slice(2, 8);
+              files.unshift({ name, size: `${mb}.0 MB`, chunks: mb, hash: `${randHex}...e7b` });
+              render();
+            });
+          }
+        },
+
+        proj_it_campus_events: {
+          title: 'EventoEMS: Campus Event & QR Check-In Portal',
+          dept: 'IT · Campus SaaS Platforms',
+          domain: 'Event Ticketing & QR Attendance',
+          repo: 'https://github.com/Bilal025/EventoEMS',
+          desc: 'Register for campus events, generate a digital QR pass, and verify attendee check-in.',
+          render(root) {
+            const attendees = [];
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>Student Event Registration</h2>
+                  <div class="field"><label>Select Campus Event</label>
+                    <select id="evEvent" class="select">
+                      <option>Annual Engineering Project Expo 2026</option>
+                      <option>National Robotics &amp; IoT Workshop</option>
+                      <option>CyberShield CTF Security Summit</option>
+                    </select>
+                  </div>
+                  <div class="field"><label>Student Name</label><input id="evStudent" class="input" value="Meera Iyer" /></div>
+                  <button type="button" id="evRegBtn" class="btn-primary">Issue QR Event Pass</button>
+                </div>
+                <div class="card">
+                  <h2>Digital QR Pass &amp; Check-In Desk</h2>
+                  <div id="evPassArea"></div>
+                </div>
+              </div>
+            `;
+            const issue = () => {
+              const ev = document.getElementById('evEvent').value;
+              const name = document.getElementById('evStudent').value.trim() || 'Student';
+              const code = `EVT-${Math.floor(100000 + Math.random() * 899999)}`;
+              attendees.unshift({ ev, name, code, checked: false });
+              document.getElementById('evPassArea').innerHTML = attendees.slice(0, 4).map((a, i) => `
+                <div class="list-row">
+                  <div><strong>${a.name}</strong><div class="mono" style="font-size:0.75rem;color:var(--text-muted);">${a.code} · ${a.ev}</div></div>
+                  <button type="button" class="btn-outline" data-chk="${i}">${a.checked ? 'Checked In' : 'Scan Check-In'}</button>
+                </div>
+              `).join('');
+              root.querySelectorAll('[data-chk]').forEach((b) => {
+                b.addEventListener('click', () => {
+                  const idx = Number(b.getAttribute('data-chk'));
+                  attendees[idx].checked = true;
+                  b.textContent = 'Checked In';
+                  b.disabled = true;
+                });
+              });
+            };
+            issue();
+            document.getElementById('evRegBtn').addEventListener('click', issue);
+          }
+        },
+
+        proj_ra_obstacle_bot: {
+          title: 'PathFinder: Autonomous Line-Following & Obstacle-Avoiding Robot',
+          dept: 'R&A · Mobile Robotics',
+          domain: 'IR Line Tracking & HC-SR04 Priority Loop',
+          repo: 'https://github.com/Abhishek-2502/Line-Following_Obstacle_Avoidance_Robot',
+          desc: 'Test how the robot prioritizes ultrasonic obstacle halting over left/right infrared line-tracking inputs.',
+          render(root) {
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>Sensor Array Simulator</h2>
+                  <div class="field"><label>HC-SR04 Ultrasonic Distance: <span id="pfDistLbl" class="mono">42 cm</span> (Safe threshold: 15 cm)</label><input type="range" id="pfDist" min="2" max="100" value="42" style="width:100%;" /></div>
+                  <div class="field"><label>Left IR Sensor</label><select id="pfLeft" class="select"><option value="0">On Black Line (LOW)</option><option value="1">Off Line (HIGH)</option></select></div>
+                  <div class="field"><label>Right IR Sensor</label><select id="pfRight" class="select"><option value="0">On Black Line (LOW)</option><option value="1">Off Line (HIGH)</option></select></div>
+                </div>
+                <div class="card">
+                  <h2>L298N Motor Controller Decision</h2>
+                  <div id="pfOut"></div>
+                </div>
+              </div>
+            `;
+            const evalBot = () => {
+              const dist = Number(document.getElementById('pfDist').value);
+              const l = document.getElementById('pfLeft').value;
+              const r = document.getElementById('pfRight').value;
+              document.getElementById('pfDistLbl').textContent = `${dist} cm`;
+              let state = 'MOVE FORWARD';
+              let cls = 'status-ok';
+              if (dist < 15) { state = 'OBSTACLE DETECTED — HALT & EVADE'; cls = 'status-danger'; }
+              else if (l === '0' && r === '1') { state = 'TURN LEFT (Track Correction)'; cls = 'status-warn'; }
+              else if (l === '1' && r === '0') { state = 'TURN RIGHT (Track Correction)'; cls = 'status-warn'; }
+              else if (l === '1' && r === '1') { state = 'LINE LOST — SEARCH STOP'; cls = 'status-warn'; }
+              document.getElementById('pfOut').innerHTML = `
+                <div class="kpi"><div class="kpi-label">Active Actuator State</div><div style="margin-top:8px;"><span class="status-pill ${cls}">${state}</span></div></div>
+              `;
+            };
+            evalBot();
+            ['pfDist', 'pfLeft', 'pfRight'].forEach((id) => document.getElementById(id).addEventListener('input', evalBot));
+          }
+        },
+
+        proj_csecs_network_ids: {
+          title: 'NetShield ML: Network Intrusion Detection System',
+          dept: 'CSECS · Intrusion Detection & Threat ML',
+          domain: 'CIC-IDS2017 Ensemble Packet Classifier',
+          repo: 'https://github.com/Western-OC2-Lab/Intrusion-Detection-System-Using-Machine-Learning',
+          desc: 'Inspect simulated network traffic profiles and see ensemble classifier threat classifications.',
+          render(root) {
+            const profiles = {
+              benign: { rate: '120 pkt/s', syn: '0.18', entropy: '4.1', cls: 'status-ok', label: 'BENIGN TRAFFIC (99.4% confidence)' },
+              dos: { rate: '18,400 pkt/s', syn: '0.96', entropy: '1.3', cls: 'status-danger', label: 'DoS SYN FLOOD DETECTED (98.9%)' },
+              portscan: { rate: '2,950 pkt/s', syn: '0.91', entropy: '2.2', cls: 'status-warn', label: 'PORT SCAN ANOMALY (97.2%)' }
+            };
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>Traffic Capture Profile</h2>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button type="button" class="btn-outline" data-prof="benign">Normal HTTPS Flow</button>
+                    <button type="button" class="btn-primary" data-prof="dos">Simulate DoS Flood</button>
+                    <button type="button" class="btn-outline" data-prof="portscan">Simulate Port Scan</button>
+                  </div>
+                </div>
+                <div class="card">
+                  <h2>XGBoost + Random Forest Output</h2>
+                  <div id="idsOut"></div>
+                </div>
+              </div>
+            `;
+            const showProf = (key) => {
+              const p = profiles[key];
+              document.getElementById('idsOut').innerHTML = `
+                <div style="margin-bottom:10px;"><span class="status-pill ${p.cls}">${p.label}</span></div>
+                <div class="list-row"><span>Flow Packet Rate</span><strong class="mono">${p.rate}</strong></div>
+                <div class="list-row"><span>SYN Flag Ratio</span><strong class="mono">${p.syn}</strong></div>
+                <div class="list-row"><span>Payload Entropy</span><strong class="mono">${p.entropy}</strong></div>
+              `;
+            };
+            showProf('dos');
+            root.querySelectorAll('[data-prof]').forEach((b) => b.addEventListener('click', () => showProf(b.getAttribute('data-prof'))));
+          }
+        },
+
+        proj_ece_energy_monitor: {
+          title: 'ESPEM: Smart Energy Meter & MQTT Telemetry Monitor',
+          dept: 'ECE · Smart Grid & Power IoT',
+          domain: 'PZEM-004T v3.0 & MQTT Telemetry',
+          repo: 'https://github.com/vortigont/espem',
+          desc: 'Adjust RMS load current and power factor to inspect computed AC power and live MQTT JSON telemetry.',
+          render(root) {
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>PZEM-004T Load Parameters</h2>
+                  <div class="field"><label>Line Current: <span id="emAmpLbl" class="mono">6.4 A</span></label><input type="range" id="emAmp" min="1" max="30" step="0.2" value="6.4" style="width:100%;" /></div>
+                  <div class="field"><label>Power Factor: <span id="emPfLbl" class="mono">0.94</span></label><input type="range" id="emPf" min="0.5" max="1" step="0.01" value="0.94" style="width:100%;" /></div>
+                  <div class="kpi-row">
+                    <div class="kpi"><div class="kpi-label">Active Power</div><div class="kpi-val" id="emWatts">1384 W</div></div>
+                    <div class="kpi"><div class="kpi-label">Apparent Power</div><div class="kpi-val" id="emVa">1472 VA</div></div>
+                  </div>
+                </div>
+                <div class="card">
+                  <h2>Published MQTT JSON Payload</h2>
+                  <div id="emJson" class="log-box"></div>
+                </div>
+              </div>
+            `;
+            const calc = () => {
+              const v = 230.0;
+              const i = Number(document.getElementById('emAmp').value);
+              const pf = Number(document.getElementById('emPf').value);
+              const va = v * i;
+              const w = va * pf;
+              document.getElementById('emAmpLbl').textContent = `${i.toFixed(1)} A`;
+              document.getElementById('emPfLbl').textContent = pf.toFixed(2);
+              document.getElementById('emWatts').textContent = `${Math.round(w)} W`;
+              document.getElementById('emVa').textContent = `${Math.round(va)} VA`;
+              document.getElementById('emJson').textContent = JSON.stringify({
+                topic: 'espem/campus-lab/tele',
+                voltage_V: v,
+                current_A: Number(i.toFixed(2)),
+                active_power_W: Number(w.toFixed(1)),
+                power_factor: Number(pf.toFixed(2)),
+                freq_Hz: 50.0
+              }, null, 2);
+            };
+            calc();
+            ['emAmp', 'emPf'].forEach((id) => document.getElementById(id).addEventListener('input', calc));
+          }
+        },
+
+        proj_aids_plant_disease: {
+          title: 'LeafGuard AI: Plant Leaf Disease Detection via CNN',
+          dept: 'AI&DS · Computer Vision & AgriTech',
+          domain: '38-Class PlantVillage CNN Inference',
+          repo: 'https://github.com/gokulnpc/Plant-Disease-Prediction',
+          desc: 'Choose a crop leaf sample to inspect top-3 CNN classification probabilities and agronomy guidance.',
+          render(root) {
+            const samples = {
+              blight: { crop: 'Tomato — Late Blight', probs: [['Tomato___Late_blight', 96.4], ['Tomato___Early_blight', 2.8], ['Tomato___healthy', 0.8]], tip: 'Remove infected lower leaves and apply copper-based fungicide.' },
+              scab: { crop: 'Apple — Apple Scab', probs: [['Apple___Apple_scab', 94.1], ['Apple___Black_rot', 4.3], ['Apple___healthy', 1.6]], tip: 'Prune canopy for airflow and treat during wet spring cycles.' },
+              healthy: { crop: 'Potato — Healthy Leaf', probs: [['Potato___healthy', 98.7], ['Potato___Early_blight', 0.9], ['Potato___Late_blight', 0.4]], tip: 'No foliar pathology detected. Continue routine irrigation.' }
+            };
+            root.innerHTML = `
+              <div class="workspace-grid">
+                <div class="card">
+                  <h2>Select Leaf Specimen</h2>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <button type="button" class="btn-primary" data-leaf="blight">Tomato Late Blight</button>
+                    <button type="button" class="btn-outline" data-leaf="scab">Apple Scab</button>
+                    <button type="button" class="btn-outline" data-leaf="healthy">Healthy Potato Leaf</button>
+                  </div>
+                </div>
+                <div class="card">
+                  <h2>Keras CNN Confidence Scores</h2>
+                  <div id="lgOut"></div>
+                </div>
+              </div>
+            `;
+            const showLeaf = (key) => {
+              const s = samples[key];
+              document.getElementById('lgOut').innerHTML = `
+                <div style="font-weight:700;margin-bottom:10px;">${s.crop}</div>
+                ${s.probs.map(([name, pct]) => `
+                  <div style="margin-bottom:10px;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;"><span class="mono">${name}</span><strong>${pct}%</strong></div>
+                    <div class="bar-track"><div class="bar-fill" style="width:${pct}%;"></div></div>
+                  </div>
+                `).join('')}
+                <div style="margin-top:12px;padding:10px;background:var(--bg-subtle);border-radius:8px;font-size:0.84rem;color:var(--text-secondary);"><strong>Guidance:</strong> ${s.tip}</div>
+              `;
+            };
+            showLeaf('blight');
+            root.querySelectorAll('[data-leaf]').forEach((b) => b.addEventListener('click', () => showLeaf(b.getAttribute('data-leaf'))));
+          }
+        }
+      };
+
+      const cfg = DEMOS[projectId];
+      const root = document.getElementById('demoContent');
+      document.getElementById('demoProjectId').textContent = projectId;
+
+      if (cfg) {
+        document.title = `${cfg.title} — Interactive Demo`;
+        document.getElementById('demoDept').textContent = cfg.dept;
+        document.getElementById('demoDomain').textContent = cfg.domain;
+        document.getElementById('demoTitle').textContent = cfg.title;
+        document.getElementById('demoSubtitle').textContent = cfg.desc;
+        if (cfg.repo) {
+          const rBtn = document.getElementById('repoTopBtn');
+          rBtn.href = cfg.repo;
+          rBtn.style.display = 'inline-flex';
+        }
+        cfg.render(root);
+      } else {
+        const title = customTitle || 'Student Project Interactive Preview';
+        document.title = `${title} — Interactive Demo`;
+        document.getElementById('demoDept').textContent = customDept || 'CampusConnect Showcase';
+        document.getElementById('demoTitle').textContent = title;
+        document.getElementById('demoSubtitle').textContent = 'Interactive execution sandbox hosted on CampusConnect.';
+        root.innerHTML = `
+          <div class="card">
+            <h2>Project Execution Sandbox</h2>
+            <p style="color:var(--text-secondary);">Run a quick validation check for <strong>${title.replace(/</g, '&lt;')}</strong>.</p>
+            <button type="button" id="genericRunBtn" class="btn-primary">Run Sample Test Pipeline</button>
+            <div id="genericLog" class="log-box" style="margin-top:14px;">Ready. Click "Run Sample Test Pipeline" to test sample output.</div>
+          </div>
+        `;
+        document.getElementById('genericRunBtn').addEventListener('click', () => {
+          document.getElementById('genericLog').textContent =
+            `[${new Date().toLocaleTimeString()}] Initialized ${title}\n[${new Date().toLocaleTimeString()}] Health check: OK (200)\n[${new Date().toLocaleTimeString()}] Verification complete.`;
+        });
+      }
+    </script>
+  </body>
+</html>
